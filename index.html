@@ -36,6 +36,7 @@
       --coin-gold: #ffd700;
     }
 
+    /* Light Mode Variables */
     body.light-mode {
       --bg: #f5f7fa;
       --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
@@ -51,8 +52,15 @@
       --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     }
 
-    * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
@@ -63,6 +71,7 @@
       transition: background 0.3s ease, color 0.3s ease;
     }
 
+    /* Performance Mode */
     body.performance-mode .bg-container * {
       animation: none !important;
       transition: none !important;
@@ -75,6 +84,7 @@
       display: none !important;
     }
 
+    /* Enhanced Animated Background */
     .bg-container {
       position: fixed;
       top: 0;
@@ -100,8 +110,11 @@
       z-index: 1;
     }
 
-    .custom-bg.active { display: block; }
+    .custom-bg.active {
+      display: block;
+    }
 
+    /* Animated gradient waves */
     .gradient-wave {
       position: absolute;
       width: 200%;
@@ -113,11 +126,21 @@
     }
 
     @keyframes waveMove {
-      0%, 100% { transform: translate(-25%, -25%) rotate(0deg); opacity: 0.6; }
-      33% { transform: translate(-30%, -20%) rotate(120deg); opacity: 0.8; }
-      66% { transform: translate(-20%, -30%) rotate(240deg); opacity: 0.7; }
+      0%, 100% { 
+        transform: translate(-25%, -25%) rotate(0deg);
+        opacity: 0.6;
+      }
+      33% { 
+        transform: translate(-30%, -20%) rotate(120deg);
+        opacity: 0.8;
+      }
+      66% { 
+        transform: translate(-20%, -30%) rotate(240deg);
+        opacity: 0.7;
+      }
     }
 
+    /* Advanced Floating orbs with trails */
     .orb {
       position: absolute;
       border-radius: 50%;
@@ -168,12 +191,21 @@
     }
 
     @keyframes floatOrb {
-      0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
-      25% { transform: translate(150px, -150px) scale(1.2) rotate(90deg); }
-      50% { transform: translate(-150px, 150px) scale(0.9) rotate(180deg); }
-      75% { transform: translate(100px, 100px) scale(1.1) rotate(270deg); }
+      0%, 100% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+      }
+      25% {
+        transform: translate(150px, -150px) scale(1.2) rotate(90deg);
+      }
+      50% {
+        transform: translate(-150px, 150px) scale(0.9) rotate(180deg);
+      }
+      75% {
+        transform: translate(100px, 100px) scale(1.1) rotate(270deg);
+      }
     }
 
+    /* Enhanced particle system */
     .particles {
       position: absolute;
       width: 100%;
@@ -191,12 +223,23 @@
     }
 
     @keyframes particleFloat {
-      0% { transform: translateY(100vh) translateX(0) scale(0); opacity: 0; }
-      10% { opacity: 1; }
-      90% { opacity: 1; }
-      100% { transform: translateY(-100vh) translateX(var(--drift)) scale(1); opacity: 0; }
+      0% {
+        transform: translateY(100vh) translateX(0) scale(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(var(--drift)) scale(1);
+        opacity: 0;
+      }
     }
 
+    /* Advanced grid pattern overlay with pulse */
     .grid-overlay {
       position: absolute;
       width: 100%;
@@ -212,24 +255,39 @@
     }
 
     @keyframes gridPulse {
-      0%, 100% { opacity: 0.3; transform: perspective(500px) rotateX(0deg); }
-      50% { opacity: 0.6; transform: perspective(500px) rotateX(2deg); }
+      0%, 100% {
+        opacity: 0.3;
+        transform: perspective(500px) rotateX(0deg);
+      }
+      50% {
+        opacity: 0.6;
+        transform: perspective(500px) rotateX(2deg);
+      }
     }
 
+    /* Animated scanlines */
     .scanline {
       position: absolute;
       width: 100%;
       height: 3px;
-      background: linear-gradient(90deg, transparent 0%, rgba(91, 141, 239, 0.5) 50%, transparent 100%);
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(91, 141, 239, 0.5) 50%, 
+        transparent 100%);
       animation: scanlineMove 4s linear infinite;
       box-shadow: 0 0 15px rgba(91, 141, 239, 0.7);
     }
 
     @keyframes scanlineMove {
-      0% { top: -3px; }
-      100% { top: 100%; }
+      0% {
+        top: -3px;
+      }
+      100% {
+        top: 100%;
+      }
     }
 
+    /* Energy rings */
     .energy-ring {
       position: absolute;
       top: 50%;
@@ -241,12 +299,27 @@
       animation: energyExpand 6s ease-out infinite;
     }
 
-    .energy-ring:nth-child(2) { animation-delay: 2s; }
-    .energy-ring:nth-child(3) { animation-delay: 4s; }
+    .energy-ring:nth-child(2) {
+      animation-delay: 2s;
+    }
+
+    .energy-ring:nth-child(3) {
+      animation-delay: 4s;
+    }
 
     @keyframes energyExpand {
-      0% { width: 100px; height: 100px; opacity: 1; transform: translate(-50%, -50%); }
-      100% { width: 1000px; height: 1000px; opacity: 0; transform: translate(-50%, -50%); }
+      0% {
+        width: 100px;
+        height: 100px;
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+      100% {
+        width: 1000px;
+        height: 1000px;
+        opacity: 0;
+        transform: translate(-50%, -50%);
+      }
     }
 
     .app {
@@ -258,7 +331,10 @@
       z-index: 1;
     }
 
-    body.grid-mode .app { grid-template-columns: 280px 1fr; }
+    /* Grid View Mode */
+    body.grid-mode .app {
+      grid-template-columns: 280px 1fr;
+    }
 
     body.grid-mode .scroller {
       display: grid !important;
@@ -287,7 +363,9 @@
       gap: 20px;
     }
 
-    body.light-mode header { background: rgba(255, 255, 255, 0.9); }
+    body.light-mode header {
+      background: rgba(255, 255, 255, 0.9);
+    }
 
     .brand {
       font-weight: 800;
@@ -384,11 +462,22 @@
       box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
     }
 
-    body.light-mode aside { background: rgba(255, 255, 255, 0.8); }
+    body.light-mode aside {
+      background: rgba(255, 255, 255, 0.8);
+    }
 
-    aside::-webkit-scrollbar { width: 6px; }
-    aside::-webkit-scrollbar-track { background: transparent; }
-    aside::-webkit-scrollbar-thumb { background: rgba(91, 141, 239, 0.3); border-radius: 3px; }
+    aside::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    aside::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    aside::-webkit-scrollbar-thumb {
+      background: rgba(91, 141, 239, 0.3);
+      border-radius: 3px;
+    }
 
     .nav-title {
       font-size: 11px;
@@ -434,7 +523,10 @@
       transition: width 0.6s ease, height 0.6s ease;
     }
 
-    .nav a:hover::before { width: 300px; height: 300px; }
+    .nav a:hover::before {
+      width: 300px;
+      height: 300px;
+    }
 
     .nav a:hover {
       background: var(--hover);
@@ -484,10 +576,22 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .page-section::-webkit-scrollbar { width: 8px; }
-    .page-section::-webkit-scrollbar-track { background: transparent; }
-    .page-section::-webkit-scrollbar-thumb { background: rgba(91, 141, 239, 0.3); border-radius: 4px; }
-    .page-section.active { display: block; }
+    .page-section::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .page-section::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .page-section::-webkit-scrollbar-thumb {
+      background: rgba(91, 141, 239, 0.3);
+      border-radius: 4px;
+    }
+
+    .page-section.active {
+      display: block;
+    }
 
     .card {
       max-width: 100%;
@@ -501,7 +605,9 @@
       margin-bottom: 24px;
     }
 
-    body.light-mode .card { background: rgba(255, 255, 255, 0.8); }
+    body.light-mode .card {
+      background: rgba(255, 255, 255, 0.8);
+    }
 
     .card:hover {
       border-color: rgba(91, 141, 239, 0.3);
@@ -570,7 +676,10 @@
       transition: width 0.6s ease, height 0.6s ease;
     }
 
-    .btn:hover::before { width: 300px; height: 300px; }
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
 
     .btn:hover {
       background: rgba(91, 141, 239, 0.2);
@@ -579,7 +688,9 @@
       box-shadow: 0 8px 24px rgba(91, 141, 239, 0.3), 0 0 40px rgba(91, 141, 239, 0.2);
     }
 
-    .btn:active { transform: translateY(0); }
+    .btn:active {
+      transform: translateY(0);
+    }
 
     .btn:disabled {
       opacity: 0.5;
@@ -587,8 +698,14 @@
       transform: none;
     }
 
-    .settings-container { max-width: 800px; }
-    .settings-group { margin-bottom: 32px; }
+    /* Settings Page Styles */
+    .settings-container {
+      max-width: 800px;
+    }
+
+    .settings-group {
+      margin-bottom: 32px;
+    }
 
     .settings-group h2 {
       font-size: 20px;
@@ -616,7 +733,9 @@
       background: rgba(91, 141, 239, 0.1);
     }
 
-    .setting-info { flex: 1; }
+    .setting-info {
+      flex: 1;
+    }
 
     .setting-title {
       font-weight: 700;
@@ -629,6 +748,7 @@
       color: var(--muted);
     }
 
+    /* Toggle Switch */
     .toggle-switch {
       position: relative;
       width: 54px;
@@ -658,8 +778,11 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
-    .toggle-switch.active::after { left: 28px; }
+    .toggle-switch.active::after {
+      left: 28px;
+    }
 
+    /* File Input Styling */
     .file-input-wrapper {
       position: relative;
       display: inline-block;
@@ -688,6 +811,7 @@
       box-shadow: 0 4px 16px rgba(91, 141, 239, 0.3);
     }
 
+    /* Search */
     .search-wrap {
       margin-top: 16px;
       display: flex;
@@ -730,7 +854,10 @@
       box-shadow: 0 4px 16px rgba(255, 68, 68, 0.3);
     }
 
-    .row { margin-top: 24px; }
+    /* Rows */
+    .row {
+      margin-top: 24px;
+    }
 
     .row-title {
       font-size: 13px;
@@ -753,9 +880,19 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    .scroller::-webkit-scrollbar { height: 6px; }
-    .scroller::-webkit-scrollbar-track { background: rgba(91, 141, 239, 0.05); border-radius: 3px; }
-    .scroller::-webkit-scrollbar-thumb { background: rgba(91, 141, 239, 0.3); border-radius: 3px; }
+    .scroller::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .scroller::-webkit-scrollbar-track {
+      background: rgba(91, 141, 239, 0.05);
+      border-radius: 3px;
+    }
+
+    .scroller::-webkit-scrollbar-thumb {
+      background: rgba(91, 141, 239, 0.3);
+      border-radius: 3px;
+    }
 
     .game, .movie, .tvshow, .shop-item {
       width: 260px;
@@ -831,26 +968,6 @@
     .game strong, .movie strong, .tvshow strong, .shop-item strong {
       font-size: 15px;
       font-weight: 700;
-    }
-
-    /* Game Stats Display */
-    .game-stats {
-      font-size: 11px;
-      color: var(--muted);
-      padding: 8px;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 8px;
-      margin-top: 4px;
-    }
-
-    .game-stats div {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 4px;
-    }
-
-    .game-stats div:last-child {
-      margin-bottom: 0;
     }
 
     .shop-item .price {
@@ -929,6 +1046,7 @@
       font-size: 14px;
     }
 
+    /* Notification Styles */
     .notification {
       position: fixed;
       bottom: 20px;
@@ -948,12 +1066,25 @@
       max-width: 400px;
     }
 
-    .notification.show { transform: translateX(0); }
-    .notification.success { border-color: var(--success); }
-    .notification.warning { border-color: #ffaa00; }
-    .notification.error { border-color: var(--alert); }
+    .notification.show {
+      transform: translateX(0);
+    }
 
-    .notification-icon { font-size: 24px; }
+    .notification.success {
+      border-color: var(--success);
+    }
+
+    .notification.warning {
+      border-color: #ffaa00;
+    }
+
+    .notification.error {
+      border-color: var(--alert);
+    }
+
+    .notification-icon {
+      font-size: 24px;
+    }
 
     .notification-text {
       font-weight: 700;
@@ -961,6 +1092,7 @@
       color: var(--text);
     }
 
+    /* Badge Styles */
     .badge-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -988,7 +1120,9 @@
       filter: grayscale(100%);
     }
 
-    .badge:hover { transform: translateY(-4px); }
+    .badge:hover {
+      transform: translateY(-4px);
+    }
 
     .badge-icon {
       font-size: 48px;
@@ -1006,6 +1140,7 @@
       color: var(--muted);
     }
 
+    /* Status Update Styles */
     .status-update {
       display: flex;
       align-items: center;
@@ -1026,6 +1161,7 @@
       font-weight: 500;
     }
 
+    /* Keyboard Shortcut Display */
     .shortcut-key {
       display: inline-block;
       padding: 4px 8px;
@@ -1049,13 +1185,16 @@
       margin-bottom: 8px;
     }
 
-    .shortcut-action { font-weight: 600; }
+    .shortcut-action {
+      font-weight: 600;
+    }
 
     .shortcut-keys {
       display: flex;
       gap: 4px;
     }
 
+    /* Category Filter */
     .category-filter {
       display: flex;
       gap: 8px;
@@ -1085,6 +1224,7 @@
       border-color: var(--accent);
     }
 
+    /* Daily Reward Modal */
     .modal {
       position: fixed;
       inset: 0;
@@ -1097,7 +1237,9 @@
       animation: fadeIn 0.3s ease;
     }
 
-    .modal.show { display: flex; }
+    .modal.show {
+      display: flex;
+    }
 
     .modal-content {
       background: rgba(19, 23, 41, 0.95);
@@ -1109,13 +1251,17 @@
       text-align: center;
       box-shadow: 0 16px 64px rgba(255, 215, 0, 0.4);
       animation: slideUp 0.5s ease;
-      max-height: 80vh;
-      overflow-y: auto;
     }
 
     @keyframes slideUp {
-      from { opacity: 0; transform: translateY(50px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .reward-icon {
@@ -1142,54 +1288,7 @@
       margin-bottom: 24px;
     }
 
-    /* Leaderboard Styles */
-    .leaderboard-list {
-      margin-top: 20px;
-    }
-
-    .leaderboard-item {
-      display: flex;
-      align-items: center;
-      padding: 16px;
-      background: rgba(19, 23, 41, 0.6);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      margin-bottom: 12px;
-      transition: all 0.3s ease;
-    }
-
-    .leaderboard-item:hover {
-      border-color: var(--accent);
-      transform: translateX(4px);
-    }
-
-    .leaderboard-rank {
-      font-size: 24px;
-      font-weight: 800;
-      width: 50px;
-      text-align: center;
-    }
-
-    .leaderboard-rank.gold { color: #ffd700; }
-    .leaderboard-rank.silver { color: #c0c0c0; }
-    .leaderboard-rank.bronze { color: #cd7f32; }
-
-    .leaderboard-info {
-      flex: 1;
-      margin-left: 16px;
-    }
-
-    .leaderboard-name {
-      font-weight: 700;
-      font-size: 16px;
-      margin-bottom: 4px;
-    }
-
-    .leaderboard-score {
-      font-size: 14px;
-      color: var(--muted);
-    }
-
+    /* Player Overlay */
     .player {
       position: fixed;
       inset: 0;
@@ -1199,7 +1298,9 @@
       animation: fadeIn 0.3s ease;
     }
 
-    .player.open { display: block; }
+    .player.open {
+      display: block;
+    }
 
     .player-topbar {
       position: absolute;
@@ -1243,7 +1344,11 @@
       border: 0;
     }
 
-    form { max-width: 600px; margin-top: 12px; }
+    /* Form Styling */
+    form {
+      max-width: 600px;
+      margin-top: 12px;
+    }
 
     label {
       display: inline-block;
@@ -1306,6 +1411,7 @@
       border: 1px solid rgba(255, 68, 68, 0.3);
     }
 
+    /* Google Sites Button */
     .google-sites-button {
       font-family: 'Inter', 'Roboto', Arial, sans-serif;
       font-size: 14px;
@@ -1348,8 +1454,11 @@
       transform: translateY(-4px);
     }
 
-    .google-sites-button:active { transform: translateY(-2px); }
+    .google-sites-button:active {
+      transform: translateY(-2px);
+    }
 
+    /* Chat Styles */
     .chat-layout {
       display: flex;
       width: 100%;
@@ -1366,10 +1475,18 @@
       overflow-y: auto;
     }
 
-    body.light-mode .sidebar { background: rgba(255, 255, 255, 0.8); }
+    body.light-mode .sidebar {
+      background: rgba(255, 255, 255, 0.8);
+    }
 
-    .sidebar::-webkit-scrollbar { width: 6px; }
-    .sidebar::-webkit-scrollbar-thumb { background: rgba(91, 141, 239, 0.3); border-radius: 3px; }
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(91, 141, 239, 0.3);
+      border-radius: 3px;
+    }
 
     .contact-item {
       padding: 14px 18px;
@@ -1448,8 +1565,14 @@
       background: rgba(11, 18, 32, 0.4);
     }
 
-    .chat-msgs-box::-webkit-scrollbar { width: 8px; }
-    .chat-msgs-box::-webkit-scrollbar-thumb { background: rgba(91, 141, 239, 0.3); border-radius: 4px; }
+    .chat-msgs-box::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .chat-msgs-box::-webkit-scrollbar-thumb {
+      background: rgba(91, 141, 239, 0.3);
+      border-radius: 4px;
+    }
 
     .msg {
       padding: 12px 18px;
@@ -1569,6 +1692,7 @@
       filter: drop-shadow(0 0 8px var(--accent-glow));
     }
 
+    /* Profile Styles */
     .profile-container {
       max-width: 700px;
       margin: 0 auto;
@@ -1581,7 +1705,9 @@
       margin-bottom: 32px;
     }
 
-    .profile-pic-wrapper { position: relative; }
+    .profile-pic-wrapper {
+      position: relative;
+    }
 
     .profile-pic {
       width: 140px;
@@ -1633,7 +1759,9 @@
       font-weight: 600;
     }
 
-    .requests-section { margin-top: 32px; }
+    .requests-section {
+      margin-top: 32px;
+    }
 
     .requests-section h3 {
       font-size: 20px;
@@ -1653,7 +1781,9 @@
       transition: all 0.3s ease;
     }
 
-    body.light-mode .request-item { background: rgba(255, 255, 255, 0.8); }
+    body.light-mode .request-item {
+      background: rgba(255, 255, 255, 0.8);
+    }
 
     .request-item:hover {
       border-color: var(--accent);
@@ -1706,16 +1836,29 @@
       transform: translateY(-2px);
     }
 
+    /* Responsive */
     @media (max-width: 768px) {
-      .app { grid-template-columns: 1fr; }
-      aside { display: none; }
-      .sidebar { width: 100%; }
-      .header-info { display: none; }
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      .sidebar {
+        width: 100%;
+      }
+
+      .header-info {
+        display: none;
+      }
     }
   </style>
 </head>
 
 <body>
+  <!-- Enhanced Animated Background -->
   <div class="bg-container">
     <div class="custom-bg" id="customBg"></div>
     <div class="gradient-wave"></div>
@@ -1758,19 +1901,42 @@
     <aside>
       <div class="nav-title">Pages</div>
       <nav class="nav" id="nav">
-        <a data-page="home"><span class="dot"></span><span>Home</span></a>
-        <a data-page="unblocked-google"><span class="dot"></span><span>Unblocked Google</span></a>
-        <a data-page="games"><span class="dot"></span><span>Games</span></a>
-        <a data-page="leaderboards"><span class="dot"></span><span>Leaderboards</span></a>
-        <a data-page="shop"><span class="dot"></span><span>Shop</span></a>
-        <a data-page="achievements"><span class="dot"></span><span>Achievements</span></a>
-        <a data-page="requests"><span class="dot"></span><span>Requests</span></a>
-        <a data-page="water"><span class="dot"></span><span>Water</span></a>
-        <a data-page="movies"><span class="dot"></span><span>Movies</span></a>
-        <a data-page="tvshows"><span class="dot"></span><span>TV Shows</span></a>
-        <a data-page="chat"><span class="dot"></span><span>Chat</span></a>
-        <a data-page="profile"><span class="dot"></span><span>Profile</span></a>
-        <a data-page="settings"><span class="dot"></span><span>Settings</span></a>
+        <a data-page="home">
+          <span class="dot"></span><span>Home</span>
+        </a>
+        <a data-page="unblocked-google">
+          <span class="dot"></span><span>Unblocked Google</span>
+        </a>
+        <a data-page="games">
+          <span class="dot"></span><span>Games</span>
+        </a>
+        <a data-page="shop">
+          <span class="dot"></span><span>Shop</span>
+        </a>
+        <a data-page="achievements">
+          <span class="dot"></span><span>Achievements</span>
+        </a>
+        <a data-page="requests">
+          <span class="dot"></span><span>Requests</span>
+        </a>
+        <a data-page="water">
+          <span class="dot"></span><span>Water</span>
+        </a>
+        <a data-page="movies">
+          <span class="dot"></span><span>Movies</span>
+        </a>
+        <a data-page="tvshows">
+          <span class="dot"></span><span>TV Shows</span>
+        </a>
+        <a data-page="chat">
+          <span class="dot"></span><span>Chat</span>
+        </a>
+        <a data-page="profile">
+          <span class="dot"></span><span>Profile</span>
+        </a>
+        <a data-page="settings">
+          <span class="dot"></span><span>Settings</span>
+        </a>
       </nav>
     </aside>
 
@@ -1779,14 +1945,16 @@
       <div id="home" class="page-section active">
         <div class="card">
           <h1>Welcome to Nova</h1>
-          <p>Your enhanced gaming and entertainment hub with progress tracking and leaderboards</p>
+          <p>Your enhanced gaming and entertainment hub</p>
           
+          <!-- Recently Played Section -->
           <div class="row">
             <div class="row-title"><span>🕐 Recently Played</span></div>
             <p class="empty" id="recentlyPlayedEmpty">No recent activity</p>
             <div class="scroller" id="recentlyPlayedScroller"></div>
           </div>
 
+          <!-- Favorites Section -->
           <div class="row" style="margin-top: 32px;">
             <div class="row-title"><span>⭐ Your Favorites</span></div>
             <p class="empty" id="favoritesEmpty">No favorites yet. Click the star on any game or movie!</p>
@@ -1800,39 +1968,13 @@
         </div>
       </div>
 
-      <!-- LEADERBOARDS PAGE -->
-      <div id="leaderboards" class="page-section">
-        <div class="card">
-          <h1>🏆 Leaderboards</h1>
-          <p>Global rankings for all games</p>
-
-          <div class="category-filter">
-            <button class="category-btn active" onclick="filterLeaderboard('all')">All Games</button>
-            <button class="category-btn" onclick="filterLeaderboard('action')">Action</button>
-            <button class="category-btn" onclick="filterLeaderboard('horror')">Horror</button>
-            <button class="category-btn" onclick="filterLeaderboard('sports')">Sports</button>
-            <button class="category-btn" onclick="filterLeaderboard('puzzle')">Puzzle</button>
-          </div>
-
-          <div style="margin-top: 24px;">
-            <label style="display: block; margin-bottom: 12px;">Select Game:</label>
-            <select id="leaderboard-game-select" onchange="loadLeaderboard()" style="width: 100%; max-width: 400px;">
-              <option value="">Choose a game...</option>
-            </select>
-          </div>
-
-          <div id="leaderboard-content" style="margin-top: 32px;">
-            <p class="empty">Select a game to view its leaderboard</p>
-          </div>
-        </div>
-      </div>
-
       <!-- ACHIEVEMENTS PAGE -->
       <div id="achievements" class="page-section">
         <div class="card">
           <h1>🏆 Achievements & Rewards</h1>
           <p>Track your progress and claim daily rewards</p>
 
+          <!-- Daily Reward Section -->
           <div style="margin-top: 24px; padding: 24px; background: rgba(255, 215, 0, 0.1); border: 2px solid rgba(255, 215, 0, 0.3); border-radius: 16px;">
             <h2 style="margin: 0 0 12px 0; color: var(--coin-gold);">💰 Daily Rewards</h2>
             <p style="margin: 0 0 16px 0;">Claim your reward every 12 hours!</p>
@@ -1842,17 +1984,10 @@
             </div>
           </div>
 
+          <!-- Badges Section -->
           <div style="margin-top: 32px;">
-            <h2>🎖️ Global Badges</h2>
+            <h2>🎖️ Your Badges</h2>
             <div class="badge-container" id="badgeContainer"></div>
-          </div>
-
-          <div style="margin-top: 32px;">
-            <h2>🎮 Game Achievements</h2>
-            <p style="color: var(--muted);">Track your progress in individual games</p>
-            <div id="gameAchievementsContainer" style="margin-top: 16px;">
-              <p class="empty">Play games to unlock achievements!</p>
-            </div>
           </div>
         </div>
       </div>
@@ -1871,7 +2006,8 @@
                 <div class="setting-title">Dark Mode / Light Mode</div>
                 <div class="setting-desc">Toggle between dark and light themes</div>
               </div>
-              <div class="toggle-switch" id="theme-toggle" onclick="toggleTheme()"></div>
+              <div class="toggle-switch" id="theme-toggle" onclick="toggleTheme()">
+              </div>
             </div>
 
             <div class="setting-item">
@@ -1902,7 +2038,8 @@
                 <div class="setting-title">Performance Mode</div>
                 <div class="setting-desc">Disable animations for better performance</div>
               </div>
-              <div class="toggle-switch" id="performance-toggle" onclick="togglePerformance()"></div>
+              <div class="toggle-switch" id="performance-toggle" onclick="togglePerformance()">
+              </div>
             </div>
           </div>
 
@@ -1914,7 +2051,8 @@
                 <div class="setting-title">Scroll or Grid Mode</div>
                 <div class="setting-desc">Display games in scrollable row or grid layout</div>
               </div>
-              <div class="toggle-switch" id="grid-toggle" onclick="toggleGridMode()"></div>
+              <div class="toggle-switch" id="grid-toggle" onclick="toggleGridMode()">
+              </div>
             </div>
           </div>
 
@@ -1926,7 +2064,8 @@
                 <div class="setting-title">Enable Notifications</div>
                 <div class="setting-desc">Receive notifications for rewards and achievements</div>
               </div>
-              <div class="toggle-switch active" id="notifications-toggle" onclick="toggleNotifications()"></div>
+              <div class="toggle-switch active" id="notifications-toggle" onclick="toggleNotifications()">
+              </div>
             </div>
 
             <div class="setting-item">
@@ -1951,7 +2090,8 @@
                 <div class="setting-title">Enable Keyboard Shortcuts</div>
                 <div class="setting-desc">Use keyboard shortcuts to navigate</div>
               </div>
-              <div class="toggle-switch active" id="shortcuts-toggle" onclick="toggleShortcuts()"></div>
+              <div class="toggle-switch active" id="shortcuts-toggle" onclick="toggleShortcuts()">
+              </div>
             </div>
 
             <div style="margin-top: 16px;">
@@ -2006,7 +2146,8 @@
                 <div class="setting-title">Prevent Ctrl+W</div>
                 <div class="setting-desc">Block accidental tab closing with Ctrl+W</div>
               </div>
-              <div class="toggle-switch" id="ctrlw-toggle" onclick="toggleCtrlW()"></div>
+              <div class="toggle-switch" id="ctrlw-toggle" onclick="toggleCtrlW()">
+              </div>
             </div>
           </div>
 
@@ -2062,6 +2203,7 @@
             <button id="games-clear" class="clear-btn" type="button">Clear</button>
           </div>
 
+          <!-- Category Filter -->
           <div class="category-filter">
             <button class="category-btn active" onclick="filterGamesByCategory('all')">All</button>
             <button class="category-btn" onclick="filterGamesByCategory('action')">Action</button>
@@ -2236,6 +2378,7 @@
               <h2 id="profile-username">Guest</h2>
               <p class="status" id="profile-status">Offline</p>
               
+              <!-- Status Update -->
               <div class="status-update" style="margin-top: 12px;">
                 <input type="text" id="status-input" class="status-input" placeholder="What's on your mind?" maxlength="100">
                 <button class="btn" onclick="updateStatus()" style="padding: 8px 16px;">Update</button>
@@ -2289,6 +2432,7 @@
     </main>
   </div>
 
+  <!-- PLAYER OVERLAY -->
   <div class="player" id="player">
     <div class="player-topbar">
       <div id="playerName">Content</div>
@@ -2297,27 +2441,19 @@
     <iframe id="playerFrame" class="player-frame"></iframe>
   </div>
 
+  <!-- NOTIFICATION -->
   <div class="notification" id="notification">
     <div class="notification-icon">📢</div>
     <div class="notification-text" id="notificationText">Notification</div>
   </div>
 
+  <!-- DAILY REWARD MODAL -->
   <div class="modal" id="rewardModal">
     <div class="modal-content">
       <div class="reward-icon">🎉</div>
       <div class="reward-title">Daily Reward Claimed!</div>
       <div class="reward-text">You received <strong>5 Nova Coins</strong></div>
       <button class="btn" onclick="closeRewardModal()">Awesome!</button>
-    </div>
-  </div>
-
-  <!-- Game Achievement Modal -->
-  <div class="modal" id="achievementModal">
-    <div class="modal-content">
-      <div class="reward-icon" id="achievement-icon">🏆</div>
-      <div class="reward-title" id="achievement-title">Achievement Unlocked!</div>
-      <div class="reward-text" id="achievement-desc">You earned a new achievement</div>
-      <button class="btn" onclick="closeAchievementModal()">Cool!</button>
     </div>
   </div>
 
@@ -2329,6 +2465,7 @@ console.log('========================================');
 // ============================================
 // INITIALIZE EMAILJS
 // ============================================
+
 (function() {
   emailjs.init("WVn4FyckWoY68y1Kp");
 })();
@@ -2336,6 +2473,7 @@ console.log('========================================');
 // ============================================
 // FIREBASE CONFIG
 // ============================================
+
 const firebaseConfig = {
   apiKey: "AIzaSyB-IbnRdC9RwT4eZPtpgH9F1fj5OKeRw9U",
   authDomain: "unblocked-hub-chat.firebaseapp.com",
@@ -2355,234 +2493,16 @@ let viewedUserName = null;
 let previousPage = null;
 
 // ============================================
-// GAME TRACKING SYSTEM
-// ============================================
-let gameStats = {};
-let gameTimers = {};
-let currentGame = null;
-let gameStartTime = null;
-
-// Game Achievements System
-const GAME_ACHIEVEMENTS = {
-  'first_play': { name: 'First Play', icon: '🎮', desc: 'Play for the first time' },
-  'veteran': { name: 'Veteran', icon: '⭐', desc: 'Play for 1 hour total' },
-  'dedicated': { name: 'Dedicated', icon: '🏆', desc: 'Play for 5 hours total' },
-  'score_100': { name: 'Century', icon: '💯', desc: 'Score 100 points' },
-  'score_500': { name: 'High Roller', icon: '🎯', desc: 'Score 500 points' },
-  'score_1000': { name: 'Legend', icon: '👑', desc: 'Score 1000 points' },
-  'streak_5': { name: '5-Day Streak', icon: '🔥', desc: 'Play 5 days in a row' },
-  'streak_10': { name: '10-Day Streak', icon: '⚡', desc: 'Play 10 days in a row' }
-};
-
-function initGameStats(gameId) {
-  if (!window.myName) return;
-  
-  const statsPath = `gameStats/${window.myName}/${gameId}`;
-  db.ref(statsPath).once('value', (snap) => {
-    if (!snap.exists()) {
-      // Initialize new game stats
-      const initialStats = {
-        timePlayed: 0,
-        highScore: 0,
-        totalSessions: 0,
-        achievements: {},
-        lastPlayed: Date.now(),
-        firstPlayed: Date.now()
-      };
-      db.ref(statsPath).set(initialStats);
-      gameStats[gameId] = initialStats;
-    } else {
-      gameStats[gameId] = snap.val();
-    }
-  });
-}
-
-function startGameTimer(gameId, gameName) {
-  if (!window.myName) {
-    showNotification('Login to track your progress!', 'warning');
-    return;
-  }
-  
-  currentGame = gameId;
-  gameStartTime = Date.now();
-  
-  // Initialize stats if needed
-  initGameStats(gameId);
-  
-  // Update session count
-  if (gameStats[gameId]) {
-    gameStats[gameId].totalSessions++;
-    gameStats[gameId].lastPlayed = Date.now();
-    saveGameStats(gameId);
-  }
-  
-  // Check first play achievement
-  checkGameAchievement(gameId, 'first_play');
-}
-
-function stopGameTimer(gameId) {
-  if (!currentGame || currentGame !== gameId) return;
-  if (!gameStartTime) return;
-  
-  const sessionTime = Math.floor((Date.now() - gameStartTime) / 1000); // seconds
-  
-  if (gameStats[gameId]) {
-    gameStats[gameId].timePlayed += sessionTime;
-    saveGameStats(gameId);
-    
-    // Check time-based achievements
-    const totalMinutes = Math.floor(gameStats[gameId].timePlayed / 60);
-    if (totalMinutes >= 60) checkGameAchievement(gameId, 'veteran');
-    if (totalMinutes >= 300) checkGameAchievement(gameId, 'dedicated');
-  }
-  
-  currentGame = null;
-  gameStartTime = null;
-}
-
-function updateGameScore(gameId, score) {
-  if (!window.myName || !gameStats[gameId]) return;
-  
-  if (score > gameStats[gameId].highScore) {
-    gameStats[gameId].highScore = score;
-    saveGameStats(gameId);
-    
-    // Update leaderboard
-    updateLeaderboard(gameId, score);
-    
-    // Check score achievements
-    if (score >= 100) checkGameAchievement(gameId, 'score_100');
-    if (score >= 500) checkGameAchievement(gameId, 'score_500');
-    if (score >= 1000) checkGameAchievement(gameId, 'score_1000');
-    
-    showNotification(`New high score: ${score}!`, 'success');
-  }
-}
-
-function saveGameStats(gameId) {
-  if (!window.myName) return;
-  db.ref(`gameStats/${window.myName}/${gameId}`).set(gameStats[gameId]);
-}
-
-function checkGameAchievement(gameId, achievementId) {
-  if (!gameStats[gameId]) return;
-  
-  if (!gameStats[gameId].achievements) {
-    gameStats[gameId].achievements = {};
-  }
-  
-  if (!gameStats[gameId].achievements[achievementId]) {
-    gameStats[gameId].achievements[achievementId] = true;
-    saveGameStats(gameId);
-    
-    const achievement = GAME_ACHIEVEMENTS[achievementId];
-    if (achievement) {
-      showGameAchievement(achievement);
-    }
-  }
-}
-
-function showGameAchievement(achievement) {
-  document.getElementById('achievement-icon').textContent = achievement.icon;
-  document.getElementById('achievement-title').textContent = achievement.name;
-  document.getElementById('achievement-desc').textContent = achievement.desc;
-  document.getElementById('achievementModal').classList.add('show');
-}
-
-function closeAchievementModal() {
-  document.getElementById('achievementModal').classList.remove('show');
-}
-
-// ============================================
-// LEADERBOARD SYSTEM
-// ============================================
-function updateLeaderboard(gameId, score) {
-  if (!window.myName) return;
-  
-  db.ref(`leaderboards/${gameId}/${window.myName}`).set({
-    username: window.myName,
-    score: score,
-    timestamp: Date.now()
-  });
-}
-
-function loadLeaderboard() {
-  const gameId = document.getElementById('leaderboard-game-select').value;
-  if (!gameId) return;
-  
-  db.ref(`leaderboards/${gameId}`).orderByChild('score').limitToLast(50).once('value', (snap) => {
-    const leaderboard = [];
-    snap.forEach((child) => {
-      leaderboard.push(child.val());
-    });
-    
-    // Sort by score descending
-    leaderboard.sort((a, b) => b.score - a.score);
-    
-    renderLeaderboard(leaderboard);
-  });
-}
-
-function renderLeaderboard(leaderboard) {
-  const container = document.getElementById('leaderboard-content');
-  
-  if (leaderboard.length === 0) {
-    container.innerHTML = '<p class="empty">No scores yet. Be the first!</p>';
-    return;
-  }
-  
-  container.innerHTML = '<div class="leaderboard-list"></div>';
-  const listEl = container.querySelector('.leaderboard-list');
-  
-  leaderboard.forEach((entry, index) => {
-    const rank = index + 1;
-    let rankClass = '';
-    if (rank === 1) rankClass = 'gold';
-    else if (rank === 2) rankClass = 'silver';
-    else if (rank === 3) rankClass = 'bronze';
-    
-    const div = document.createElement('div');
-    div.className = 'leaderboard-item';
-    div.innerHTML = `
-      <div class="leaderboard-rank ${rankClass}">#${rank}</div>
-      <div class="leaderboard-info">
-        <div class="leaderboard-name">${entry.username}</div>
-        <div class="leaderboard-score">Score: ${entry.score.toLocaleString()}</div>
-      </div>
-    `;
-    listEl.appendChild(div);
-  });
-}
-
-function filterLeaderboard(category) {
-  // Update active button
-  document.querySelectorAll('.category-filter .category-btn').forEach(btn => {
-    btn.classList.remove('active');
-  });
-  event.target.classList.add('active');
-  
-  // Populate game select based on category
-  const select = document.getElementById('leaderboard-game-select');
-  select.innerHTML = '<option value="">Choose a game...</option>';
-  
-  let games = category === 'all' ? ALL_GAMES : ALL_GAMES.filter(g => g.category === category);
-  games.forEach(game => {
-    const option = document.createElement('option');
-    option.value = game.id;
-    option.textContent = game.name;
-    select.appendChild(option);
-  });
-}
-
-// ============================================
 // SETTINGS SYSTEM
 // ============================================
+
 const SETTINGS_KEY = 'nova_settings';
 let preventCtrlW = false;
 let keyboardShortcutsEnabled = true;
 let notificationsEnabled = true;
 let notificationFrequency = 'all';
 
+// Load settings on startup
 function loadSettings() {
   const saved = localStorage.getItem(SETTINGS_KEY);
   if (saved) {
@@ -2771,7 +2691,9 @@ function resetAllSettings() {
 // ============================================
 // KEYBOARD SHORTCUTS
 // ============================================
+
 document.addEventListener('keydown', (e) => {
+  // Ctrl+W Prevention
   if (preventCtrlW && e.ctrlKey && e.key === 'w') {
     e.preventDefault();
     showNotification('Closing tabs is disabled in settings!', 'warning');
@@ -2780,6 +2702,7 @@ document.addEventListener('keydown', (e) => {
 
   if (!keyboardShortcutsEnabled) return;
 
+  // Ctrl+K for search
   if (e.ctrlKey && e.key === 'k') {
     e.preventDefault();
     const searchInput = document.querySelector('.page-section.active .search-input');
@@ -2787,6 +2710,7 @@ document.addEventListener('keydown', (e) => {
     return;
   }
 
+  // Alt + Letter shortcuts
   if (e.altKey) {
     switch(e.key.toLowerCase()) {
       case 'h':
@@ -2812,6 +2736,7 @@ document.addEventListener('keydown', (e) => {
 // ============================================
 // NOTIFICATION SYSTEM
 // ============================================
+
 function showNotification(text, type = 'success') {
   if (!notificationsEnabled) return;
   if (notificationFrequency === 'none') return;
@@ -2834,6 +2759,7 @@ function showNotification(text, type = 'success') {
 // ============================================
 // DEVICE & SYSTEM INFO
 // ============================================
+
 function detectDevice() {
   const ua = navigator.userAgent;
   let device = 'PC';
@@ -2877,6 +2803,7 @@ updateMemoryUsage();
 // ============================================
 // PARTICLE SYSTEM
 // ============================================
+
 function createParticles() {
   const particlesContainer = document.getElementById('particles');
   const particleCount = 30;
@@ -2914,6 +2841,7 @@ createParticles();
 // ============================================
 // FAVORITES & RECENTLY PLAYED SYSTEM
 // ============================================
+
 let favorites = [];
 let recentlyPlayed = [];
 
@@ -2952,6 +2880,7 @@ function toggleFavorite(id, name, url, thumb, type) {
   saveFavorites();
   renderFavorites();
   
+  // Update the star icon
   const btn = document.querySelector(`[data-fav-id="${id}"]`);
   if (btn) {
     btn.textContent = index > -1 ? '☆' : '⭐';
@@ -2960,9 +2889,13 @@ function toggleFavorite(id, name, url, thumb, type) {
 }
 
 function addToRecentlyPlayed(id, name, url, thumb, type) {
+  // Remove if already exists
   recentlyPlayed = recentlyPlayed.filter(r => r.id !== id);
+  
+  // Add to beginning
   recentlyPlayed.unshift({ id, name, url, thumb, type, playedAt: Date.now() });
   
+  // Keep only last 10
   if (recentlyPlayed.length > 10) {
     recentlyPlayed = recentlyPlayed.slice(0, 10);
   }
@@ -3034,6 +2967,7 @@ function renderRecentlyPlayed() {
 // ============================================
 // DAILY REWARDS SYSTEM
 // ============================================
+
 function checkDailyReward() {
   const lastClaim = localStorage.getItem('last_reward_claim');
   const now = Date.now();
@@ -3097,6 +3031,7 @@ function closeRewardModal() {
 // ============================================
 // ACHIEVEMENTS/BADGES SYSTEM
 // ============================================
+
 const BADGES = {
   'first-game': { name: 'First Steps', icon: '🎮', desc: 'Play your first game' },
   'first-favorite': { name: 'Favorite Found', icon: '⭐', desc: 'Add your first favorite' },
@@ -3151,53 +3086,10 @@ function renderBadges() {
   });
 }
 
-function renderGameAchievements() {
-  if (!window.myName) return;
-  
-  const container = document.getElementById('gameAchievementsContainer');
-  container.innerHTML = '';
-  
-  Object.keys(gameStats).forEach(gameId => {
-    const stats = gameStats[gameId];
-    const game = ALL_GAMES.find(g => g.id === gameId);
-    if (!game) return;
-    
-    const div = document.createElement('div');
-    div.className = 'card';
-    div.style.marginBottom = '16px';
-    
-    const achievementProgress = stats.achievements ? Object.keys(stats.achievements).length : 0;
-    const totalAchievements = Object.keys(GAME_ACHIEVEMENTS).length;
-    
-    div.innerHTML = `
-      <h3>${game.name}</h3>
-      <div class="game-stats">
-        <div><span>Time Played:</span><span>${formatTime(stats.timePlayed)}</span></div>
-        <div><span>High Score:</span><span>${stats.highScore}</span></div>
-        <div><span>Sessions:</span><span>${stats.totalSessions}</span></div>
-        <div><span>Achievements:</span><span>${achievementProgress}/${totalAchievements}</span></div>
-      </div>
-    `;
-    container.appendChild(div);
-  });
-  
-  if (Object.keys(gameStats).length === 0) {
-    container.innerHTML = '<p class="empty">Play games to unlock achievements!</p>';
-  }
-}
-
-function formatTime(seconds) {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  if (hours > 0) {
-    return `${hours}h ${minutes}m`;
-  }
-  return `${minutes}m`;
-}
-
 // ============================================
 // STATUS UPDATES
 // ============================================
+
 function updateStatus() {
   if (!window.myName) {
     showNotification('Please login first', 'warning');
@@ -3217,6 +3109,7 @@ function updateStatus() {
 // ============================================
 // NOVA COIN SYSTEM
 // ============================================
+
 let novaCoins = 0;
 let purchasedGames = [];
 let coinInterval = null;
@@ -3282,6 +3175,7 @@ updateCoinDisplay();
 // ============================================
 // SHOP DATA
 // ============================================
+
 const SHOP_ITEMS = [
   { 
     id: "minecraft-download", 
@@ -3429,7 +3323,972 @@ function redownloadGame(filename, gameName) {
     });
 }
 
-// Continue in next message due to length...
+// ============================================
+// NAVIGATION
+// ============================================
+
+function showPage(pageId) {
+  console.log('[SHOWPAGE] Function called with pageId:', pageId);
+  
+  // Remove active from all pages
+  const allPages = document.querySelectorAll('.page-section');
+  console.log('[SHOWPAGE] Found', allPages.length, 'total pages');
+  allPages.forEach(p => p.classList.remove('active'));
+  
+  // Activate target page
+  const targetPage = document.getElementById(pageId);
+  if (targetPage) {
+    targetPage.classList.add('active');
+    console.log('[SHOWPAGE] ✓ Page activated:', pageId);
+  } else {
+    console.error('[SHOWPAGE] ✗ ERROR: Page element not found:', pageId);
+    return;
+  }
+  
+  // Update navigation active state
+  document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+  const navLink = document.querySelector(`.nav a[data-page="${pageId}"]`);
+  if (navLink) {
+    navLink.classList.add('active');
+    console.log('[SHOWPAGE] ✓ Nav link activated');
+  } else {
+    console.warn('[SHOWPAGE] ⚠ Nav link not found for:', pageId);
+  }
+
+  // Page-specific initialization
+  if (pageId === 'chat' && window.myName) {
+    console.log('[SHOWPAGE] Initializing chat...');
+    setupChat();
+  } else if (pageId === 'profile') {
+    console.log('[SHOWPAGE] Loading profile...');
+    loadProfile();
+  } else if (pageId === 'shop') {
+    console.log('[SHOWPAGE] Rendering shop...');
+    renderShop();
+  } else if (pageId === 'achievements') {
+    console.log('[SHOWPAGE] Checking daily reward...');
+    checkDailyReward();
+  }
+  
+  console.log('[SHOWPAGE] Complete!');
+}
+
+window.addEventListener('load', () => {
+  loadSettings();
+  loadUserData();
+  loadBadges();
+  
+  // Set up navigation click handlers
+  console.log('[INIT] Setting up navigation...');
+  const allNavLinks = document.querySelectorAll('.nav a');
+  console.log('[INIT] Found', allNavLinks.length, 'navigation links');
+  
+  allNavLinks.forEach((link, idx) => {
+    const pageId = link.dataset.page;
+    console.log('[INIT] Nav link ' + idx + ': ' + pageId);
+    
+    link.addEventListener('click', function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      console.log('[CLICK] Navigation clicked: ' + pageId);
+      
+      if (pageId) {
+        showPage(pageId);
+      } else {
+        console.error('[CLICK] No page ID found on link!');
+      }
+    });
+  });
+  
+  console.log('[INIT] Navigation setup complete!');
+  
+  const hash = window.location.hash.substring(1);
+  if (hash && document.getElementById(hash)) {
+    showPage(hash);
+  } else {
+    showPage('home');
+  }
+  
+  const storedUsername = localStorage.getItem("nexus_user");
+  if (storedUsername) {
+    db.ref("users/" + storedUsername).once("value", (snap) => {
+      if (snap.exists()) {
+        window.myName = storedUsername;
+        updateProfileDisplay();
+        loadCoinData();
+        startCoinEarning();
+      }
+    });
+  }
+  
+  checkDailyReward();
+  setInterval(checkDailyReward, 60000);
+});
+
+// ============================================
+// GAMES DATA WITH CATEGORIES
+// ============================================
+
+const TOP_GAMES = [
+  { id:"roblox", name:"Roblox", url:"https://jeremyryanknight2012.github.io/My-Website/games/roblox.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/roblox.png", category:"adventure" },
+  { id:"1v1lol", name:"1v1.LOL", url:"https://jeremyryanknight2012.github.io/My-Website/games/1v1lol.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/1v1lol.png", category:"action" },
+  { id:"retrobowl", name:"Retro Bowl", url:"https://jeremyryanknight2012.github.io/My-Website/games/retrobowl.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/retrobowl.png", category:"sports" },
+  { id:"ultrakill", name:"Ultrakill", url:"https://jeremyryanknight2012.github.io/My-Website/games/ultrakill.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/ultrakill.png", category:"action" }
+];
+
+const ALL_GAMES = [
+  { id:"2playerbattle", name:"2 Player Battle", url:"https://turbowarp.org/292728003/embed", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/2playerbattle.png", category:"action" },
+  { id:"3dtuning", name:"3D Tuning", url:"https://www.3dtuning.com/en-US/", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/3dtuning.png", category:"puzzle" },
+  { id:"10minutestilldawn", name:"10 Minutes Till Dawn", url:"https://jeremyryanknight2012.github.io/My-Website/games/10minutestilldawn.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/10minutestilldawn.png", category:"action" },
+  { id:"amongus", name:"Among Us", url:"https://jeremyryanknight2012.github.io/My-Website/games/amongus.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/amongus.png", category:"puzzle" },
+  { id:"armedforces", name:"Armed Forces", url:"https://jeremyryanknight2012.github.io/My-Website/games/armedforces.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/armedforces.png", category:"action" },
+  { id:"badparenting", name:"Bad Parenting", url:"https://jeremyryanknight2012.github.io/My-Website/games/badparenting.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/badparenting.png", category:"horror" },
+  { id:"balatro", name:"Balatro", url:"https://jeremyryanknight2012.github.io/My-Website/games/balatro.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/balatro.png", category:"puzzle" },
+  { id:"bankrobbery2", name:"Bank Robbery 2", url:"https://jeremyryanknight2012.github.io/My-Website/games/bankrobbery2.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/bankrobbery2.png", category:"action" },
+  { id:"baseballbros", name:"Baseball Bros", url:"https://jeremyryanknight2012.github.io/My-Website/games/baseballbros.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/baseballbros.png", category:"sports" },
+  { id:"basketbros", name:"Basket Bros", url:"https://jeremyryanknight2012.github.io/My-Website/games/basketbros.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/basketbros.png", category:"sports" },
+  { id:"basketrandom", name:"Basket Random", url:"https://jeremyryanknight2012.github.io/My-Website/games/basketrandom.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/basketrandom.png", category:"sports" },
+  { id:"bendyandtheinkmachine", name:"Bendy and the Ink Machine", url:"https://jeremyryanknight2012.github.io/My-Website/games/bendy.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/bendy.png", category:"horror" },
+  { id:"thebindingofisaac", name:"The Binding of Isaac", url:"https://jeremyryanknight2012.github.io/My-Website/games/bindingofisaac.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/bindingofisaac.png", category:"adventure" },
+  { id:"bitlife", name:"Bitlife", url:"https://jeremyryanknight2012.github.io/My-Website/games/bitlife.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/bitlife.png", category:"puzzle" },
+  { id:"buckshotroulette", name:"Buckshot Roulette", url:"https://jeremyryanknight2012.github.io/My-Website/games/buckshotroulette.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/buckshotroulette.png", category:"horror" },
+  { id:"buildnow", name:"Build Now", url:"https://jeremyryanknight2012.github.io/My-Website/games/buildnow.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/buildnow.png", category:"action" },
+  { id:"callofduty", name:"Call of Duty", url:"https://jeremyryanknight2012.github.io/My-Website/games/callofduty.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/callofduty.png", category:"action" },
+  { id:"cookieclicker", name:"Cookie Clicker", url:"https://jeremyryanknight2012.github.io/My-Website/games/cookieclicker.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/cookieclicker.png", category:"puzzle" },
+  { id:"coreball", name:"Coreball", url:"https://jeremyryanknight2012.github.io/My-Website/games/coreball.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/coreball.png", category:"puzzle" },
+  { id:"crossyroad", name:"Crossy Road", url:"https://jeremyryanknight2012.github.io/My-Website/games/crossyroad.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/crossyroad.png", category:"adventure" },
+  { id:"cuphead", name:"Cuphead", url:"https://jeremyryanknight2012.github.io/My-Website/games/cuphead.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/cuphead.png", category:"adventure" },
+  { id:"cuttherope", name:"Cut the Rope", url:"https://jeremyryanknight2012.github.io/My-Website/games/cuttherope.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/cuttherope.png", category:"puzzle" },
+  { id:"doodlejump", name:"Doodle Jump", url:"https://jeremyryanknight2012.github.io/My-Website/games/doodlejump.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/doodlejump.png", category:"adventure" },
+  { id:"doom", name:"Doom", url:"https://jeremyryanknight2012.github.io/My-Website/games/doom.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/doom.png", category:"action" },
+  { id:"doom2", name:"Doom 2", url:"https://jeremyryanknight2012.github.io/My-Website/games/doom2.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/doom2.png", category:"action" },
+  { id:"drifthunters", name:"Drift Hunters", url:"https://jeremyryanknight2012.github.io/My-Website/games/drifthunters.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/drifthunters.png", category:"sports" },
+  { id:"drivemad", name:"Drive Mad", url:"https://jeremyryanknight2012.github.io/My-Website/games/drivemad.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/drivemad.png", category:"adventure" },
+  { id:"endoparasitic", name:"Endoparasitic", url:"https://jeremyryanknight2012.github.io/My-Website/games/endoparasitic.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/endoparasitic.png", category:"horror" },
+  { id:"escaperoad", name:"Escape Road", url:"https://jeremyryanknight2012.github.io/My-Website/games/escaperoad.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/escaperoad.png", category:"action" },
+  { id:"fallout", name:"Fallout", url:"https://jeremyryanknight2012.github.io/My-Website/games/fallout.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/fallout.png", category:"adventure" },
+  { id:"flappybird", name:"Flappy Bird", url:"https://jeremyryanknight2012.github.io/My-Website/games/flappybird.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/flappybird.png", category:"adventure" },
+  { id:"fnaf1", name:"FNAF 1", url:"https://jeremyryanknight2012.github.io/My-Website/games/fnaf1.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/fnaf1.png", category:"horror" },
+  { id:"fnaf2", name:"FNAF 2", url:"https://jeremyryanknight2012.github.io/My-Website/games/fnaf2.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/fnaf2.png", category:"horror" },
+  { id:"fnaf3", name:"FNAF 3", url:"https://jeremyryanknight2012.github.io/My-Website/games/fnaf3.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/fnaf3.png", category:"horror" },
+  { id:"fnaf4", name:"FNAF 4", url:"https://jeremyryanknight2012.github.io/My-Website/games/fnaf4.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/fnaf4.png", category:"horror" },
+  { id:"fnaf4halloween", name:"FNAF 4 Halloween Edition", url:"https://jeremyryanknight2012.github.io/My-Website/games/fnaf4halloween.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/fnaf4halloween.png", category:"horror" },
+  { id:"footballbros", name:"Football Bros", url:"https://jeremyryanknight2012.github.io/My-Website/games/footballbros.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/footballbros.png", category:"sports" },
+  { id:"fruitninja", name:"Fruit Ninja", url:"https://jeremyryanknight2012.github.io/My-Website/games/fruitninja.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/fruitninja.png", category:"action" },
+  { id:"geometrydash", name:"Geometry Dash", url:"https://jeremyryanknight2012.github.io/My-Website/games/geometrydash.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/geometrydash.png", category:"adventure" },
+  { id:"granny1", name:"Granny", url:"https://jeremyryanknight2012.github.io/My-Website/games/granny1.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/granny1.png", category:"horror" },
+  { id:"granny2", name:"Granny Chapter 2", url:"https://jeremyryanknight2012.github.io/My-Website/games/granny2.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/granny2.png", category:"horror" },
+  { id:"granny3", name:"Granny Chapter 3", url:"https://jeremyryanknight2012.github.io/My-Website/games/granny3.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/granny3.png", category:"horror" },
+  { id:"halflife", name:"Half-Life", url:"https://jeremyryanknight2012.github.io/My-Website/games/halflife.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/halflife.png", category:"action" },
+  { id:"hollowknight", name:"Hollow Knight", url:"https://jeremyryanknight2012.github.io/My-Website/games/hollowknight.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/hollowknight.png", category:"adventure" },
+  { id:"jetpackjoyride", name:"Jetpack Joyride", url:"https://jeremyryanknight2012.github.io/My-Website/games/jetpackjoyride.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/jetpackjoyride.png", category:"adventure" },
+  { id:"johnnytrigger", name:"Johnny Trigger", url:"https://jeremyryanknight2012.github.io/My-Website/games/johnnytrigger.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/johnnytrigger.png", category:"action" },
+  { id:"kindergarten", name:"Kindergarten", url:"https://jeremyryanknight2012.github.io/My-Website/games/kindergarten.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/kindergarten.png", category:"adventure" },
+  { id:"kindergarten2", name:"Kindergarten 2", url:"https://jeremyryanknight2012.github.io/My-Website/games/kindergarten2.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/kindergarten2.png", category:"adventure" },
+  { id:"kindergarten3", name:"Kindergarten 3", url:"https://jeremyryanknight2012.github.io/My-Website/games/kindergarten3.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/kindergarten3.png", category:"adventure" },
+  { id:"learntofly", name:"Learn to Fly", url:"https://jeremyryanknight2012.github.io/My-Website/games/learntofly.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/learntofly.png", category:"adventure" },
+  { id:"melonplayground", name:"Melon Playground", url:"https://jeremyryanknight2012.github.io/My-Website/games/melonplayground.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/melonplayground.png", category:"puzzle" },
+  { id:"minecraft", name:"Minecraft", url:"https://jeremyryanknight2012.github.io/My-Website/games/minecraft.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/minecraft.png", category:"adventure" },
+  { id:"nazizombies", name:"Nazi Zombies", url:"https://jeremyryanknight2012.github.io/My-Website/games/nazizombies.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/nazizombies.png", category:"action" },
+  { id:"papersplease", name:"Papers Please", url:"https://jeremyryanknight2012.github.io/My-Website/games/papersplease.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/papersplease.png", category:"puzzle" },
+  { id:"pixelgun3d", name:"Pixel Gun 3D", url:"https://jeremyryanknight2012.github.io/My-Website/games/pixelgun.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/pixelgun.png", category:"action" },
+  { id:"poppyplaytime", name:"Poppy Playtime", url:"https://jeremyryanknight2012.github.io/My-Website/games/poppyplaytime.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/poppyplaytime.png", category:"horror" },
+  { id:"freddyfazbearspizzeriasimulator", name:"Freddy Fazbear's Pizzeria Simulator", url:"https://jeremyryanknight2012.github.io/My-Website/games/pizzeriasimulator.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/pizzeriasimulator.png", category:"horror" },
+  { id:"plantsvszombies", name:"Plants vs Zombies", url:"https://jeremyryanknight2012.github.io/My-Website/games/plantsvszombies.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/plantsvszombies.png", category:"puzzle" },
+  { id:"plantsvszombies2", name:"Plants vs Zombies 2", url:"https://jeremyryanknight2012.github.io/My-Website/games/plantsvszombies2.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/plantsvszombies2.png", category:"puzzle" },
+  { id:"pokemon", name:"Pokemon", url:"https://jeremyryanknight2012.github.io/My-Website/games/pokemon.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/pokemon.png", category:"adventure" },
+  { id:"raft", name:"Raft", url:"https://jeremyryanknight2012.github.io/My-Website/games/raft.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/raft.png", category:"adventure" },
+  { id:"ragdollarchers", name:"Ragdoll Archers", url:"https://jeremyryanknight2012.github.io/My-Website/games/ragdollarchers.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/ragdollarchers.png", category:"action" },
+  { id:"retrobowlcollege", name:"Retro Bowl College", url:"https://jeremyryanknight2012.github.io/My-Website/games/retrobowlcollege.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/retrobowlcollege.png", category:"sports" },
+  { id:"schoolboyrunaway", name:"Schoolboy Runaway", url:"https://jeremyryanknight2012.github.io/My-Website/games/schoolboyrunaway.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/schoolboyrunaway.png", category:"adventure" },
+  { id:"sisterlocation", name:"Sister Location", url:"https://jeremyryanknight2012.github.io/My-Website/games/sisterlocation.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/sisterlocation.png", category:"horror" },
+  { id:"slenderman", name:"Slenderman", url:"https://jeremyryanknight2012.github.io/My-Website/games/slenderman.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/slenderman.png", category:"horror" },
+  { id:"slimerancher", name:"Slime Rancher", url:"https://jeremyryanknight2012.github.io/My-Website/games/slimerancher.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/slimerancher.png", category:"adventure" },
+  { id:"slitherio", name:"Slither.io", url:"https://jeremyryanknight2012.github.io/My-Website/games/slitherio.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/slitherio.png", category:"action" },
+  { id:"slope", name:"Slope", url:"https://jeremyryanknight2012.github.io/My-Website/games/slope.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/slope.png", category:"adventure" },
+  { id:"smashkarts", name:"Smash Karts", url:"https://jeremyryanknight2012.github.io/My-Website/games/smashkarts.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/smashkarts.png", category:"action" },
+  { id:"snowrider", name:"Snow Rider", url:"https://jeremyryanknight2012.github.io/My-Website/games/snowrider.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/snowrider.png", category:"adventure" },
+  { id:"superhot", name:"SUPERHOT", url:"https://jeremyryanknight2012.github.io/My-Website/games/superhot.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/superhot.png", category:"action" },
+  { id:"supermario64", name:"Super Mario 64", url:"https://jeremyryanknight2012.github.io/My-Website/games/supermario64.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/supermario64.png", category:"adventure" },
+  { id:"supermariobros", name:"Super Mario Bros", url:"https://jeremyryanknight2012.github.io/My-Website/games/supermariobros.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/supermariobros.png", category:"adventure" },
+  { id:"survivalrace", name:"Survival Race", url:"https://jeremyryanknight2012.github.io/My-Website/games/survivalrace.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/survivalrace.png", category:"sports" },
+  { id:"templerun2", name:"Temple Run 2", url:"https://jeremyryanknight2012.github.io/My-Website/games/templerun2.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/templerun2.png", category:"adventure" },
+  { id:"terraria", name:"Terraria", url:"https://jeremyryanknight2012.github.io/Terraria", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/terraria.png", category:"adventure" },
+  { id:"theyarecoming", name:"They are Coming", url:"https://jeremyryanknight2012.github.io/My-Website/games/theyarecoming.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/theyarecoming.png", category:"action" },
+  { id:"tinyfishing", name:"Tiny Fishing", url:"https://jeremyryanknight2012.github.io/My-Website/games/tinyfishing.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/tinyfishing.png", category:"adventure" },
+  { id:"tombofthemask", name:"Tomb of the Mask", url:"https://jeremyryanknight2012.github.io/My-Website/games/tombofthemask.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/tombofthemask.png", category:"adventure" },
+  { id:"ultimatecustomnight", name:"Ultimate Custom Night", url:"https://jeremyryanknight2012.github.io/My-Website/games/ultimatecustomnight.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/ultimatecustomnight.png", category:"horror" },
+  { id:"undertale", name:"Undertale", url:"https://jeremyryanknight2012.github.io/My-Website/games/undertale.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/undertale.png", category:"adventure" }
+];
+
+let currentCategory = 'all';
+
+// ============================================
+// MOVIES DATA
+// ============================================
+
+const TOP_MOVIES = [
+  { id:"thesimpsonsmovie", name:"The Simpsons Movie", url:"https://jeremyryanknight2012.github.io/My-Website/movies/simpsonsmovie.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/simpsonsmovie.png" },
+  { id:"jurassicpark", name:"Jurassic Park", url:"https://jeremyryanknight2012.github.io/My-Website/movies/jurassicpark.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/jurassicpark.png" }
+];
+
+const ALL_MOVIES = [
+  { id:"acharliebrownchristmas", name:"A Charlie Brown Christmas", url:"https://jeremyryanknight2012.github.io/My-Website/movies/acharliebrownchristmas.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/acharliebrownchristmas.png" },
+  { id:"avengersendgame", name:"Avengers Endgame", url:"https://jeremyryanknight2012.github.io/My-Website/movies/avengersendgame.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/avengersendgame.png" }
+];
+
+// ============================================
+// TV SHOWS DATA
+// ============================================
+
+const ALL_TVSHOWS = [
+  { name:"Adventure Time", url:"https://drive.google.com/drive/folders/1OwoKydzUQUUp6n-Nh7CCAQXGLfchU8Ta", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/adventuretime.png" },
+  { name:"Amazing World of Gumball", url:"https://drive.google.com/drive/folders/1jhdpF65hUXwCRjOZKqquWB4z8L1ZpII7", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/amazingworldofgumball.png" }
+];
+
+// ============================================
+// RENDER FUNCTIONS WITH FAVORITES
+// ============================================
+
+function renderGames() {
+  const topScroller = document.getElementById('topGamesScroller');
+  const allScroller = document.getElementById('allGamesScroller');
+
+  function cardHTML(g) {
+    const isFavorite = favorites.some(f => f.id === g.id);
+    return `
+      <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-fav-id="${g.id}" onclick="event.stopPropagation(); toggleFavorite('${g.id}', '${g.name}', '${g.url}', '${g.thumb}', 'game')">${isFavorite ? '⭐' : '☆'}</button>
+      <img class="thumb" src="${g.thumb}" alt="${g.name}">
+      <strong>${g.name}</strong>
+      <button class="game-btn" data-url="${g.url}" data-title="${g.name}" data-id="${g.id}" data-thumb="${g.thumb}">Launch</button>
+    `;
+  }
+
+  topScroller.innerHTML = '';
+  TOP_GAMES.forEach(g => {
+    const d = document.createElement('div');
+    d.className = 'game';
+    d.innerHTML = cardHTML(g);
+    topScroller.appendChild(d);
+  });
+
+  allScroller.innerHTML = '';
+  const filteredGames = currentCategory === 'all' ? ALL_GAMES : ALL_GAMES.filter(g => g.category === currentCategory);
+  
+  filteredGames.forEach(g => {
+    const d = document.createElement('div');
+    d.className = 'game';
+    d.innerHTML = cardHTML(g);
+    allScroller.appendChild(d);
+  });
+}
+
+function filterGamesByCategory(category) {
+  currentCategory = category;
+  
+  // Update button states
+  document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  renderGames();
+}
+
+function renderMovies() {
+  const topScroller = document.getElementById('topMoviesScroller');
+  const allScroller = document.getElementById('allMoviesScroller');
+
+  function cardHTML(m) {
+    const isFavorite = favorites.some(f => f.id === m.id);
+    return `
+      <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-fav-id="${m.id}" onclick="event.stopPropagation(); toggleFavorite('${m.id}', '${m.name}', '${m.url}', '${m.thumb}', 'movie')">${isFavorite ? '⭐' : '☆'}</button>
+      <img class="thumb" src="${m.thumb}">
+      <strong>${m.name}</strong>
+      <button class="movie-btn" data-url="${m.url}" data-title="${m.name}" data-id="${m.id}" data-thumb="${m.thumb}">Watch</button>
+    `;
+  }
+
+  topScroller.innerHTML = '';
+  TOP_MOVIES.forEach(m => {
+    const d = document.createElement('div');
+    d.className = 'movie';
+    d.innerHTML = cardHTML(m);
+    topScroller.appendChild(d);
+  });
+
+  allScroller.innerHTML = '';
+  ALL_MOVIES.forEach(m => {
+    const d = document.createElement('div');
+    d.className = 'movie';
+    d.innerHTML = cardHTML(m);
+    allScroller.appendChild(d);
+  });
+}
+
+function renderTVShows() {
+  const allScroller = document.getElementById('allTVShowsScroller');
+  allScroller.innerHTML = '';
+  ALL_TVSHOWS.forEach(t => {
+    const d = document.createElement('div');
+    d.className = 'tvshow';
+    d.innerHTML = `
+      <img class="thumb" src="${t.thumb}" alt="${t.name}">
+      <strong>${t.name}</strong>
+      <button class="tvshow-btn" onclick="location.href='${t.url}'">Watch</button>
+    `;
+    allScroller.appendChild(d);
+  });
+}
+
+renderGames();
+renderMovies();
+renderTVShows();
+
+// ============================================
+// SEARCH FUNCTIONS
+// ============================================
+
+document.getElementById('games-search').addEventListener('input', (e) => {
+  const term = e.target.value.toLowerCase();
+  const filtered = ALL_GAMES.filter(g => 
+    g.name.toLowerCase().includes(term) && 
+    (currentCategory === 'all' || g.category === currentCategory)
+  );
+  const allScroller = document.getElementById('allGamesScroller');
+  const empty = document.getElementById('gamesEmpty');
+  
+  if (filtered.length === 0) {
+    empty.style.display = 'block';
+    allScroller.innerHTML = '';
+  } else {
+    empty.style.display = 'none';
+    allScroller.innerHTML = '';
+    filtered.forEach(g => {
+      const isFavorite = favorites.some(f => f.id === g.id);
+      const d = document.createElement('div');
+      d.className = 'game';
+      d.innerHTML = `
+        <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-fav-id="${g.id}" onclick="event.stopPropagation(); toggleFavorite('${g.id}', '${g.name}', '${g.url}', '${g.thumb}', 'game')">${isFavorite ? '⭐' : '☆'}</button>
+        <img class="thumb" src="${g.thumb}" alt="${g.name}">
+        <strong>${g.name}</strong>
+        <button class="game-btn" data-url="${g.url}" data-title="${g.name}" data-id="${g.id}" data-thumb="${g.thumb}">Launch</button>
+      `;
+      allScroller.appendChild(d);
+    });
+  }
+});
+
+document.getElementById('games-clear').addEventListener('click', () => {
+  document.getElementById('games-search').value = '';
+  document.getElementById('gamesEmpty').style.display = 'none';
+  renderGames();
+});
+
+document.getElementById('movies-search').addEventListener('input', (e) => {
+  const v = e.target.value.toLowerCase();
+  const f = ALL_MOVIES.filter(m => m.name.toLowerCase().includes(v));
+  const empty = document.getElementById('moviesEmpty');
+  const allScroller = document.getElementById('allMoviesScroller');
+  
+  empty.style.display = f.length ? 'none' : 'block';
+  allScroller.innerHTML = '';
+  f.forEach(m => {
+    const isFavorite = favorites.some(fav => fav.id === m.id);
+    const d = document.createElement('div');
+    d.className = 'movie';
+    d.innerHTML = `
+      <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-fav-id="${m.id}" onclick="event.stopPropagation(); toggleFavorite('${m.id}', '${m.name}', '${m.url}', '${m.thumb}', 'movie')">${isFavorite ? '⭐' : '☆'}</button>
+      <img class="thumb" src="${m.thumb}">
+      <strong>${m.name}</strong>
+      <button class="movie-btn" data-url="${m.url}" data-title="${m.name}" data-id="${m.id}" data-thumb="${m.thumb}">Watch</button>
+    `;
+    allScroller.appendChild(d);
+  });
+});
+
+document.getElementById('movies-clear').addEventListener('click', () => {
+  document.getElementById('movies-search').value = '';
+  document.getElementById('moviesEmpty').style.display = 'none';
+  renderMovies();
+});
+
+document.getElementById('tvshows-search').addEventListener('input', (e) => {
+  const v = e.target.value.toLowerCase();
+  const f = ALL_TVSHOWS.filter(t => t.name.toLowerCase().includes(v));
+  const allScroller = document.getElementById('allTVShowsScroller');
+  allScroller.innerHTML = '';
+  f.forEach(t => {
+    const d = document.createElement('div');
+    d.className = 'tvshow';
+    d.innerHTML = `
+      <img class="thumb" src="${t.thumb}" alt="${t.name}">
+      <strong>${t.name}</strong>
+      <button class="tvshow-btn" onclick="location.href='${t.url}'">Watch</button>
+    `;
+    allScroller.appendChild(d);
+  });
+});
+
+document.getElementById('tvshows-clear').addEventListener('click', () => {
+  document.getElementById('tvshows-search').value = '';
+  renderTVShows();
+});
+
+// ============================================
+// PLAYER OVERLAY WITH RECENTLY PLAYED TRACKING
+// ============================================
+
+const player = document.getElementById('player');
+const frame = document.getElementById('playerFrame');
+const nameEl = document.getElementById('playerName');
+const closeBtn = document.getElementById('closeBtn');
+
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.game-btn, .movie-btn');
+  if (!btn) return;
+  
+  const id = btn.dataset.id || btn.dataset.title;
+  const title = btn.dataset.title;
+  const url = btn.dataset.url;
+  const thumb = btn.dataset.thumb;
+  const type = btn.classList.contains('game-btn') ? 'game' : 'movie';
+  
+  // Add to recently played
+  if (id && title && url && thumb) {
+    addToRecentlyPlayed(id, title, url, thumb, type);
+  }
+  
+  nameEl.textContent = title;
+  frame.src = url;
+  player.classList.add('open');
+  try {
+    if (!document.fullscreenElement) player.requestFullscreen();
+  } catch {}
+});
+
+closeBtn.onclick = () => {
+  player.classList.remove('open');
+  frame.src = '';
+  if (document.fullscreenElement) document.exitFullscreen();
+};
+
+// ============================================
+// UTILITY FUNCTIONS
+// ============================================
+
+function openWaterGame() {
+  const win = window.open("about:blank");
+  const url = "https://cgxlyxnlynjpbmdiywnrc3rhcnrtewvkdwnhdglvbml0d2fzc29sawdtv2.familyguy.in/signin.html";
+  const iframe = win.document.createElement("iframe");
+  iframe.style.width = "100%";
+  iframe.style.height = "100%";
+  iframe.style.border = "none";
+  iframe.src = url;
+  win.document.body.style.margin = "0";
+  win.document.body.appendChild(iframe);
+}
+
+function openUnblockedGoogle() {
+  const win = window.open("about:blank");
+  const url = "https://browse.familyguy.in";
+  const iframe = win.document.createElement("iframe");
+  iframe.style.width = "100%";
+  iframe.style.height = "100%";
+  iframe.style.border = "none";
+  iframe.src = url;
+  win.document.body.style.margin = "0";
+  win.document.body.appendChild(iframe);
+}
+
+// ============================================
+// REQUEST FORM
+// ============================================
+
+document.getElementById('requestForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const statusEl = document.getElementById('status');
+  statusEl.className = '';
+  statusEl.textContent = 'Sending...';
+
+  emailjs.sendForm('service_4caoubc', 'template_67jfhnb', this).then(
+    function() {
+      statusEl.textContent = '✅ Your request has been sent!';
+      statusEl.classList.add('status-ok');
+      document.getElementById('requestForm').reset();
+    },
+    function(error) {
+      statusEl.textContent = '❌ Failed to send request. Please try again.';
+      statusEl.classList.add('status-bad');
+      console.error('EmailJS Error:', error);
+    }
+  );
+});
+
+// ============================================
+// CHAT FUNCTIONS
+// ============================================
+
+function setupChat() {
+  if (!window.myName) {
+    showNotification('Please login via Profile page first.', 'warning');
+    return;
+  }
+  
+  db.ref("users/" + window.myName + "/status").set("online");
+  db.ref("users/" + window.myName + "/status").onDisconnect().set("offline");
+  listenFriends();
+  listenGroups();
+}
+
+function listenFriends() {
+  db.ref("users/" + window.myName + "/friends").on("value", (snap) => {
+    const list = document.getElementById("friend-list");
+    list.innerHTML = "";
+    myFriends = [];
+
+    snap.forEach((f) => {
+      const fName = f.key;
+      myFriends.push(fName);
+
+      const div = document.createElement("div");
+      div.className = "contact-item";
+      div.innerHTML = `
+        <img id="sidebar-pfp-${fName}" class="avatar-circle" src="https://via.placeholder.com/34" style="cursor:pointer;" onclick="event.stopPropagation(); viewUserProfile('${fName}', 'chat');">
+        <span style="flex:1;cursor:pointer;" onclick="openChat('${fName}', this.parentElement, 'private')">${fName}</span>
+        <button onclick="event.stopPropagation(); unfriend('${fName}')" style="background:none;border:none;color:var(--alert);font-size:12px;cursor:pointer;">✖</button>
+      `;
+
+      div.onclick = () => openChat(fName, div, "private");
+      list.appendChild(div);
+
+      db.ref("users/" + fName + "/pfp").on("value", (s) => {
+        const img = document.getElementById(`sidebar-pfp-${fName}`);
+        if (img) img.src = s.val() || "https://via.placeholder.com/34";
+      });
+    });
+    
+    if (myFriends.length >= 5 && !unlockedBadges.includes('social-butterfly')) {
+      unlockBadge('social-butterfly');
+    }
+  });
+}
+
+function listenGroups() {
+  db.ref("groups").on("value", (snap) => {
+    const box = document.getElementById("group-list");
+    box.innerHTML = "";
+
+    snap.forEach((g) => {
+      const data = g.val();
+      if (data.members && data.members[window.myName]) {
+        const div = document.createElement("div");
+        div.className = "contact-item";
+        div.innerHTML = `
+          <div class="avatar-circle" style="background:#222;text-align:center;line-height:34px;">G</div>
+          <span style="flex:1">${data.name}</span>
+          <button onclick="leaveGroup('${g.key}')" style="background:none;border:none;color:var(--alert);font-size:12px;cursor:pointer;">✖</button>
+        `;
+
+        div.onclick = () => openChat(g.key, div, "group");
+        box.appendChild(div);
+      }
+    });
+  });
+}
+
+function addFriend() {
+  const f = prompt("Enter username:");
+  if (f && f !== window.myName) {
+    db.ref("requests/" + f.toLowerCase() + "/" + window.myName).set(true);
+    showNotification('Friend request sent!', 'success');
+  }
+}
+
+function unfriend(name) {
+  if (!confirm(`Remove ${name} from friends?`)) return;
+  db.ref("users/" + window.myName + "/friends/" + name).remove();
+  db.ref("users/" + name + "/friends/" + window.myName).remove();
+
+  if (activeChat === name) {
+    activeChat = null;
+    chatType = "none";
+    document.getElementById("active-chat-user").innerText = "Select a contact";
+    document.getElementById("chat-msgs").innerHTML = "";
+  }
+}
+
+function leaveGroup(groupId) {
+  if (!confirm("Leave this group?")) return;
+  db.ref("groups/" + groupId + "/members/" + window.myName).remove();
+
+  if (activeChat === groupId) {
+    activeChat = null;
+    chatType = "none";
+    document.getElementById("active-chat-user").innerText = "Select a contact";
+    document.getElementById("chat-msgs").innerHTML = "";
+  }
+}
+
+function openChat(id, el, type) {
+  activeChat = id;
+  chatType = type;
+
+  const hPfp = document.getElementById("header-pfp");
+  const groupBtn = document.getElementById("make-group-btn");
+  const manageBtn = document.getElementById("manage-group-btn");
+
+  hPfp.style.display = "block";
+  groupBtn.style.display = type === "private" ? "block" : "none";
+  manageBtn.style.display = "none";
+
+  if (type === "global") {
+    hPfp.style.display = "none";
+    document.getElementById("active-chat-user").innerText = "Public Channel";
+  } else if (type === "private") {
+    document.getElementById("active-chat-user").innerText = "Chat with " + id;
+    db.ref("users/" + id + "/pfp").on("value", (snap) => {
+      hPfp.src = snap.val() || "https://via.placeholder.com/34";
+    });
+  } else if (type === "group") {
+    db.ref("groups/" + id).on("value", (snap) => {
+      const data = snap.val();
+      if (!data) return;
+      document.getElementById("active-chat-user").innerText = "Group: " + data.name;
+      hPfp.src = "https://via.placeholder.com/34?text=GC";
+      if (data.owner === window.myName) manageBtn.style.display = "block";
+    });
+  }
+
+  document.querySelectorAll(".contact-item").forEach((i) => i.classList.remove("selected"));
+  if (el) el.classList.add("selected");
+
+  const chatId = type === "global" ? "GLOBAL_CHAT" : type === "group" ? id : [window.myName, id].sort().join("_");
+
+  db.ref("messages/" + chatId).off();
+  const msgRef = db.ref("messages/" + chatId).limitToLast(50);
+
+  const box = document.getElementById("chat-msgs");
+  box.innerHTML = "";
+
+  msgRef.on("child_added", (snap) => {
+    const d = snap.val();
+    renderMessage(box, snap.key, d);
+    box.scrollTop = box.scrollHeight;
+  });
+}
+
+function sendMsg() {
+  const inp = document.getElementById("chat-input");
+  if (!activeChat || !inp.value.trim()) return;
+
+  const text = inp.value;
+  inp.value = "";
+
+  const chatId = chatType === "global" ? "GLOBAL_CHAT" : chatType === "group" ? activeChat : [window.myName, activeChat].sort().join("_");
+
+  db.ref("messages/" + chatId).push({
+    sender: window.myName,
+    text,
+    timestamp: Date.now(),
+    seen: { [window.myName]: true },
+  });
+}
+
+function renderMessage(box, key, d) {
+  const isMe = d.sender === window.myName;
+  const div = document.createElement("div");
+  div.className = `msg ${isMe ? "user" : "other"}`;
+
+  if (!isMe) {
+    div.innerHTML = `
+      <img class="chat-pfp-trigger" id="msg-pfp-${key}" src="https://via.placeholder.com/24" onclick="viewUserProfile('${d.sender}', 'chat')">
+      <span style="color:var(--accent);font-weight:bold;display:block;font-size:10px;cursor:pointer;" onclick="viewUserProfile('${d.sender}', 'chat')">${d.sender}</span>
+      ${d.text}
+    `;
+
+    db.ref("users/" + d.sender + "/pfp").once("value", (pSnap) => {
+      const img = document.getElementById(`msg-pfp-${key}`);
+      if (img && pSnap.val()) img.src = pSnap.val();
+    });
+  } else {
+    div.innerHTML = `
+      ${d.text}
+      <div style="font-size:10px;opacity:0.6;text-align:right;margin-top:3px;">
+        ${d.seen && Object.keys(d.seen).length > 1 ? "Seen" : "Sent"}
+      </div>
+    `;
+  }
+
+  box.appendChild(div);
+}
+
+function createGroup() {
+  const gn = prompt("Enter Group Name:");
+  if (!gn) return;
+
+  const gid = "group_" + Date.now();
+  db.ref("groups/" + gid).set({
+    name: gn,
+    owner: window.myName,
+    members: { [window.myName]: true, [activeChat]: true },
+  });
+
+  showNotification('Group created!', 'success');
+}
+
+function changeChatBG() {
+  const url = prompt("Enter Background Image URL:");
+  if (url) document.getElementById("chat-pane").style.background = `url('${url}')`;
+}
+
+function viewProfileFromChat() {
+  if (chatType === 'private' && activeChat) {
+    viewUserProfile(activeChat, 'chat');
+  } else if (chatType === 'global') {
+    showNotification('This is the public channel', 'warning');
+  } else if (chatType === 'group') {
+    showNotification('Group profiles coming soon!', 'warning');
+  }
+}
+
+function filterFriends() {
+  const search = document.getElementById("friend-search").value.toLowerCase();
+  document.querySelectorAll("#friend-list .contact-item").forEach((el) => {
+    const name = el.textContent.toLowerCase();
+    el.style.display = name.includes(search) ? "flex" : "none";
+  });
+}
+
+// ============================================
+// USER PROFILE VIEWING
+// ============================================
+
+function viewUserProfile(username, fromPage) {
+  if (!username) return;
+  
+  viewedUserName = username;
+  previousPage = fromPage || 'chat';
+  
+  db.ref("users/" + username).once("value", (snap) => {
+    if (!snap.exists()) {
+      showNotification('User not found', 'error');
+      return;
+    }
+    
+    const userData = snap.val();
+    
+    document.getElementById('user-profile-username').textContent = username;
+    document.getElementById('user-profile-status').textContent = userData.status === 'online' ? 'Online' : 'Offline';
+    document.getElementById('user-profile-pic').src = userData.pfp || 'https://via.placeholder.com/120';
+    document.getElementById('user-profile-custom-status').textContent = userData.customStatus || '';
+    
+    showPage('user-profile');
+  });
+}
+
+function goBackFromUserProfile() {
+  if (previousPage) {
+    showPage(previousPage);
+  } else {
+    showPage('chat');
+  }
+}
+
+function sendFriendRequestToUser() {
+  if (!window.myName) {
+    showNotification('Please login first', 'warning');
+    return;
+  }
+  
+  if (!viewedUserName) return;
+  
+  db.ref("requests/" + viewedUserName + "/" + window.myName).set(true);
+  showNotification(`Friend request sent to ${viewedUserName}!`, 'success');
+}
+
+function messageUser() {
+  if (!window.myName) {
+    showNotification('Please login first', 'warning');
+    return;
+  }
+  
+  if (!viewedUserName) return;
+  
+  showPage('chat');
+  
+  setTimeout(() => {
+    const contactItems = document.querySelectorAll('#friend-list .contact-item');
+    let found = false;
+    
+    contactItems.forEach(item => {
+      if (item.textContent.includes(viewedUserName)) {
+        item.click();
+        found = true;
+      }
+    });
+    
+    if (!found) {
+      showNotification('You need to be friends to send messages!', 'warning');
+    }
+  }, 500);
+}
+
+// ============================================
+// PROFILE FUNCTIONS
+// ============================================
+
+function loginUser() {
+  const username = document.getElementById('login-username').value.trim();
+  if (!username) {
+    showNotification('Please enter a username', 'warning');
+    return;
+  }
+
+  db.ref("users/" + username).once("value", (snap) => {
+    if (snap.exists()) {
+      window.myName = username;
+      localStorage.setItem("nexus_user", username);
+      updateProfileDisplay();
+      loadCoinData();
+      startCoinEarning();
+      showNotification('Logged in successfully!', 'success');
+    } else {
+      showNotification('User not found. Please register first.', 'warning');
+    }
+  });
+}
+
+function registerUser() {
+  const username = document.getElementById('login-username').value.trim();
+  if (!username) {
+    showNotification('Please enter a username', 'warning');
+    return;
+  }
+
+  db.ref("users/" + username).once("value", (snap) => {
+    if (snap.exists()) {
+      showNotification('Username already taken', 'warning');
+    } else {
+      db.ref("users/" + username).set({
+        status: "online",
+        pfp: "https://via.placeholder.com/120",
+        customStatus: "",
+        friends: {},
+        coins: 0,
+        purchasedGames: []
+      });
+      window.myName = username;
+      localStorage.setItem("nexus_user", username);
+      updateProfileDisplay();
+      loadCoinData();
+      startCoinEarning();
+      showNotification('Registered successfully!', 'success');
+    }
+  });
+}
+
+function logoutUser() {
+  if (window.myName) {
+    db.ref("users/" + window.myName + "/status").set("offline");
+  }
+  stopCoinEarning();
+  window.myName = null;
+  localStorage.removeItem("nexus_user");
+  novaCoins = 0;
+  purchasedGames = [];
+  updateCoinDisplay();
+  updateProfileDisplay();
+  showNotification('Logged out', 'success');
+}
+
+function updateProfileDisplay() {
+  if (window.myName) {
+    document.getElementById('profile-username').textContent = window.myName;
+    document.getElementById('profile-status').textContent = 'Online';
+    
+    db.ref("users/" + window.myName + "/pfp").on("value", (snap) => {
+      const pfpUrl = snap.val() || "https://via.placeholder.com/120";
+      document.getElementById('profile-pic').src = pfpUrl;
+    });
+    
+    db.ref("users/" + window.myName + "/customStatus").on("value", (snap) => {
+      const status = snap.val() || '';
+      document.getElementById('status-input').placeholder = status || "What's on your mind?";
+    });
+  } else {
+    document.getElementById('profile-username').textContent = 'Guest';
+    document.getElementById('profile-status').textContent = 'Offline';
+    document.getElementById('profile-pic').src = 'https://via.placeholder.com/120';
+  }
+}
+
+function uploadProfilePic(event) {
+  if (!window.myName) {
+    showNotification('Please login first', 'warning');
+    return;
+  }
+
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const base64 = e.target.result;
+    db.ref("users/" + window.myName + "/pfp").set(base64);
+    document.getElementById('profile-pic').src = base64;
+    showNotification('Profile picture updated!', 'success');
+  };
+  reader.readAsDataURL(file);
+}
+
+function loadProfile() {
+  if (!window.myName) return;
+
+  db.ref("requests/" + window.myName).on("value", (snap) => {
+    const requestsList = document.getElementById('requests-list');
+    requestsList.innerHTML = '';
+
+    if (!snap.exists() || snap.numChildren() === 0) {
+      requestsList.innerHTML = '<p class="empty">No pending requests</p>';
+      return;
+    }
+
+    snap.forEach((req) => {
+      const requester = req.key;
+      const div = document.createElement('div');
+      div.className = 'request-item';
+      div.innerHTML = `
+        <div class="request-user" style="cursor:pointer;" onclick="viewUserProfile('${requester}', 'profile')">
+          <img class="avatar-circle" src="https://via.placeholder.com/34" id="req-pfp-${requester}">
+          <span>${requester}</span>
+        </div>
+        <div class="request-actions">
+          <button class="accept-btn" onclick="event.stopPropagation(); acceptRequest('${requester}')">Accept</button>
+          <button class="decline-btn" onclick="event.stopPropagation(); declineRequest('${requester}')">Decline</button>
+        </div>
+      `;
+      requestsList.appendChild(div);
+
+      db.ref("users/" + requester + "/pfp").once("value", (pSnap) => {
+        const img = document.getElementById(`req-pfp-${requester}`);
+        if (img && pSnap.val()) img.src = pSnap.val();
+      });
+    });
+  });
+}
+
+function acceptRequest(requester) {
+  db.ref("users/" + window.myName + "/friends/" + requester).set(true);
+  db.ref("users/" + requester + "/friends/" + window.myName).set(true);
+  db.ref("requests/" + window.myName + "/" + requester).remove();
+  showNotification(`You are now friends with ${requester}!`, 'success');
+}
+
+function declineRequest(requester) {
+  db.ref("requests/" + window.myName + "/" + requester).remove();
+  showNotification('Request declined', 'success');
+}
 </script>
 </body>
 </html>
