@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="title" content="Snub Browser">
+  <meta name="description" content="Snub Browser - The better way to browse.">
+  <link rel="icon" type="image/x-icon" href="logo.png">
+  <meta property="og:image" content="/logo.png">
+  <title>New Tab - Snub Browser</title>
+  <link rel="icon" href="logo.png">
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="css/main.css">
+
+  <script>
+    (()=>{const t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);
+      else if(matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.setAttribute('data-theme','dark');})();
+  </script>
+</head>
+<body>
+  <div class="app">
+    <div class="bar">
+      <div id="tabs" class="tabs" role="tablist" aria-label="Tabs"><div class="tab active" role="tab" aria-selected="false" draggable="true" data-id="t1"><img class="ico" src="logo.png" alt=""><div class="ttl">New Tab</div><div class="x">✕</div></div></div>
+      <button id="add" class="new" title="New tab">+</button>
+      <button id="fs" class="new" title="Fullscreen">⛶</button>
+    </div>
+    <div id="stage" class="stage"><iframe class="pane active" data-id="t1" allowfullscreen="" allow="camera; microphone" src="tab.html"></iframe></div>
+  </div>
+
+  <script>
+    const tabsEl = document.getElementById('tabs');
+    const stage = document.getElementById('stage');
+    const addBtn = document.getElementById('add');
+    const fsBtn = document.getElementById('fs');
+
+    let list = [];
+    let active = null;
+    let seq = 1;
+    const PERMS = [
+      'allow-downloads',
+      'allow-forms',
+      'allow-orientation-lock',
+      'allow-pointer-lock',
+      'allow-popups',
+      'allow-popups-to-escape-sandbox',
+      'allow-presentation',
+      'allow-same-origin',
+      'allow-scripts',
+      'allow-storage-access-by-user-activation',
+      'allow-top-navigation',
+      'allow-top-navigation-by-user-activation'
+    ].join(' ');
+
+    function getDirectSiteFromHash(){
+      const raw = location.hash.startsWith('#') ? location.hash.slice(1) : location.hash;
+      if(!raw) return '';
+
+      let site = '';
+      if(raw.toLowerCase().startsWith('site=')){
+        site = raw.slice(5);
+      }else{
+        site = new URLSearchParams(raw).get('site') || '';
+      }
+
+      if(!site) return '';
+
+      try{
+        return decodeURIComponent(site);
+      }catch{
+        return site;
+      }
+    }
+
+    function toTabUrl(site){
+      if(!site) return 'tab.html';
+      return `tab.html#site=${encodeURIComponent(site)}`;
+    }
+
+    function ShowOnly(site){
+      document.body.classList.toggle('site-only', Boolean(site));
+      const isSiteOnly = document.body.classList.contains('site-only');
+      list.forEach((tab) => ALLOWWHATSNUBBY(tab.frame, isSiteOnly));
+    }
+
+    function ALLOWWHATSNUBBY(frame, isSiteOnly){
+      if(isSiteOnly){
+        frame.sandbox = PERMS;
+      }else{
+        frame.removeAttribute('sandbox');
+      }
+    }
+
+    function addTab(url='tab.html'){
+      const id = 't'+(seq++);
+      const frame = document.createElement('iframe');
+      frame.className = 'pane';
+      frame.dataset.id = id;
+      frame.allowFullscreen = true;
+      frame.allow = "camera; microphone";
+      ALLOWWHATSNUBBY(frame, document.body.classList.contains('site-only'));
+      frame.src = url;
+
+      frame.addEventListener('load', ()=>{
+        try{
+          const ttl = frame.contentDocument?.title || 'New Tab';
+          setTitle(id, ttl);
+          const u = frame.contentWindow?.location?.href;
+          if(u) setUrl(id, u);
+        }catch{}
+      });
+
+      stage.appendChild(frame);
+      list.push({ id, title:'New Tab', icon:'logo.png', frame, url });
+      draw();
+      setActive(id);
+      return id;
+    }
+
+    function closeTab(id){
+      const i = list.findIndex(t=>t.id===id);
+      if(i<0) return;
+      const was = (active===id);
+      list[i].frame.remove();
+      list.splice(i,1);
+      const next = list[i] || list[i-1];
+      if(was && next) setActive(next.id);
+      else if(!list.length) setActive(addTab());
+      draw();
+    }
+
+    function setActive(id){
+      active = id;
+      list.forEach(t=>{
+        t.frame.classList.toggle('active', t.id===id);
+        const el = tabsEl.querySelector(`.tab[data-id="${t.id}"]`);
+        if(el) el.classList.toggle('active', t.id===id);
+      });
+      const t = list.find(x=>x.id===id);
+      if(t) document.title = `${t.title} - Snub Browser`;
+    }
+
+    function setTitle(id, title){
+      const t = list.find(x=>x.id===id); if(!t) return;
+      t.title = title || 'New Tab';
+      const el = tabsEl.querySelector(`.tab[data-id="${id}"] .ttl`);
+      if(el) el.textContent = t.title;
+      if(active===id) document.title = `${t.title} - Snub Browser`;
+    }
+
+    function setUrl(id, url){
+      const t = list.find(x=>x.id===id); if(!t) return;
+      t.url = url;
+    }
+
+    function draw(){
+      tabsEl.innerHTML = '';
+      list.forEach(t=>{
+        const el = document.createElement('div');
+        el.className = 'tab' + (t.id===active?' active':'');
+        el.setAttribute('role','tab');
+        el.setAttribute('aria-selected', t.id===active?'true':'false');
+        el.draggable = true;
+        el.dataset.id = t.id;
+
+        const ico = document.createElement('img'); ico.className='ico'; ico.src=t.icon; ico.alt='';
+        const ttl = document.createElement('div'); ttl.className='ttl'; ttl.textContent=t.title;
+        const x = document.createElement('div'); x.className='x'; x.innerHTML='&#10005;';
+
+        el.appendChild(ico); el.appendChild(ttl); el.appendChild(x);
+
+        el.addEventListener('click', (e)=>{ if(e.target===x) return; setActive(t.id); });
+        x.addEventListener('click', (e)=>{ e.stopPropagation(); closeTab(t.id); });
+        el.addEventListener('auxclick', (e)=>{ if(e.button===1) closeTab(t.id); });
+
+        el.addEventListener('dragstart', ()=>{ el.classList.add('drag'); el.dataset.drag='1'; });
+        el.addEventListener('dragend',   ()=>{ el.classList.remove('drag'); el.dataset.drag=''; });
+        el.addEventListener('dragover', (ev)=>{
+          ev.preventDefault();
+          const dragging = tabsEl.querySelector('.tab[data-drag="1"]');
+          if(!dragging || dragging===el) return;
+          const r = el.getBoundingClientRect();
+          const before = (ev.clientX - r.left) < r.width/2;
+          tabsEl.insertBefore(dragging, before? el : el.nextSibling);
+        });
+        el.addEventListener('drop', ()=>{
+          const order = [...tabsEl.querySelectorAll('.tab')].map(n=>n.dataset.id);
+          list.sort((a,b)=>order.indexOf(a.id)-order.indexOf(b.id));
+        });
+
+        tabsEl.appendChild(el);
+      });
+    }
+
+    addBtn.addEventListener('click', ()=>addTab());
+
+    document.querySelector('.bar').addEventListener('dblclick', e=>{
+      if(e.target.id==='tabs' || e.target.classList.contains('bar')) addTab();
+    });
+
+    document.querySelector('.bar').addEventListener('auxclick', e=>{
+      if(e.button===1 && (e.target.id==='tabs' || !e.target.closest('.tab'))) addTab();
+    });
+
+    document.addEventListener('keydown', e=>{
+      const mod = e.ctrlKey || e.metaKey;
+      if(mod && e.key.toLowerCase()==='t'){ e.preventDefault(); addTab(); }
+      if(mod && e.key.toLowerCase()==='w'){ e.preventDefault(); closeTab(active); }
+      if(mod && e.key==='Tab'){
+        e.preventDefault();
+        if(!list.length) return;
+        const i = list.findIndex(t=>t.id===active);
+        const nxt = list[(i+1)%list.length];
+        setActive(nxt.id);
+      }
+    });
+
+    fsBtn.addEventListener('click', ()=>{
+      if(!document.fullscreenElement){
+        (document.documentElement.requestFullscreen||document.body.requestFullscreen||function(){}).call(document.documentElement);
+      }else{
+        (document.exitFullscreen||function(){}).call(document);
+      }
+    });
+
+    setInterval(()=>{
+      const t = list.find(x=>x.id===active);
+      if(!t) return;
+      try{
+        const href = t.frame.contentWindow?.location?.href;
+        if(href && href!==t.url) setUrl(t.id, href);
+        const ttl = t.frame.contentDocument?.title;
+        if(ttl && ttl!==t.title) setTitle(t.id, ttl);
+      }catch{}
+    }, 1200);
+
+    window.addEventListener('hashchange', ()=>{
+      const site = getDirectSiteFromHash();
+      ShowOnly(site);
+      if(!site || !active) return;
+      const tab = list.find(t=>t.id===active);
+      if(!tab) return;
+      tab.frame.src = toTabUrl(site);
+      setUrl(tab.id, site);
+    });
+
+    // for load
+    const startupSite = getDirectSiteFromHash();
+    ShowOnly(startupSite);
+    addTab(toTabUrl(startupSite));
+  </script>
+<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c3446d33361c4699ac17d4d7c0ed14ac&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
+
+</body></html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="title" content="Snub Browser">
+  <meta name="description" content="Snub Browser - The better way to browse.">
+  <link rel="icon" type="image/x-icon" href="logo.png">
+  <meta property="og:image" content="/logo.png">
+  <title>New Tab - Snub Browser</title>
+  <link rel="icon" href="logo.png">
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="css/main.css">
+
+  <script>
+    (()=>{const t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);
+      else if(matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.setAttribute('data-theme','dark');})();
+  </script>
+</head>
+<body>
+  <div class="app">
+    <div class="bar">
+      <div id="tabs" class="tabs" role="tablist" aria-label="Tabs"><div class="tab active" role="tab" aria-selected="false" draggable="true" data-id="t1"><img class="ico" src="logo.png" alt=""><div class="ttl">New Tab</div><div class="x">✕</div></div></div>
+      <button id="add" class="new" title="New tab">+</button>
+      <button id="fs" class="new" title="Fullscreen">⛶</button>
+    </div>
+    <div id="stage" class="stage"><iframe class="pane active" data-id="t1" allowfullscreen="" allow="camera; microphone" src="tab.html"></iframe></div>
+  </div>
+
+  <script>
+    const tabsEl = document.getElementById('tabs');
+    const stage = document.getElementById('stage');
+    const addBtn = document.getElementById('add');
+    const fsBtn = document.getElementById('fs');
+
+    let list = [];
+    let active = null;
+    let seq = 1;
+    const PERMS = [
+      'allow-downloads',
+      'allow-forms',
+      'allow-orientation-lock',
+      'allow-pointer-lock',
+      'allow-popups',
+      'allow-popups-to-escape-sandbox',
+      'allow-presentation',
+      'allow-same-origin',
+      'allow-scripts',
+      'allow-storage-access-by-user-activation',
+      'allow-top-navigation',
+      'allow-top-navigation-by-user-activation'
+    ].join(' ');
+
+    function getDirectSiteFromHash(){
+      const raw = location.hash.startsWith('#') ? location.hash.slice(1) : location.hash;
+      if(!raw) return '';
+
+      let site = '';
+      if(raw.toLowerCase().startsWith('site=')){
+        site = raw.slice(5);
+      }else{
+        site = new URLSearchParams(raw).get('site') || '';
+      }
+
+      if(!site) return '';
+
+      try{
+        return decodeURIComponent(site);
+      }catch{
+        return site;
+      }
+    }
+
+    function toTabUrl(site){
+      if(!site) return 'tab.html';
+      return `tab.html#site=${encodeURIComponent(site)}`;
+    }
+
+    function ShowOnly(site){
+      document.body.classList.toggle('site-only', Boolean(site));
+      const isSiteOnly = document.body.classList.contains('site-only');
+      list.forEach((tab) => ALLOWWHATSNUBBY(tab.frame, isSiteOnly));
+    }
+
+    function ALLOWWHATSNUBBY(frame, isSiteOnly){
+      if(isSiteOnly){
+        frame.sandbox = PERMS;
+      }else{
+        frame.removeAttribute('sandbox');
+      }
+    }
+
+    function addTab(url='tab.html'){
+      const id = 't'+(seq++);
+      const frame = document.createElement('iframe');
+      frame.className = 'pane';
+      frame.dataset.id = id;
+      frame.allowFullscreen = true;
+      frame.allow = "camera; microphone";
+      ALLOWWHATSNUBBY(frame, document.body.classList.contains('site-only'));
+      frame.src = url;
+
+      frame.addEventListener('load', ()=>{
+        try{
+          const ttl = frame.contentDocument?.title || 'New Tab';
+          setTitle(id, ttl);
+          const u = frame.contentWindow?.location?.href;
+          if(u) setUrl(id, u);
+        }catch{}
+      });
+
+      stage.appendChild(frame);
+      list.push({ id, title:'New Tab', icon:'logo.png', frame, url });
+      draw();
+      setActive(id);
+      return id;
+    }
+
+    function closeTab(id){
+      const i = list.findIndex(t=>t.id===id);
+      if(i<0) return;
+      const was = (active===id);
+      list[i].frame.remove();
+      list.splice(i,1);
+      const next = list[i] || list[i-1];
+      if(was && next) setActive(next.id);
+      else if(!list.length) setActive(addTab());
+      draw();
+    }
+
+    function setActive(id){
+      active = id;
+      list.forEach(t=>{
+        t.frame.classList.toggle('active', t.id===id);
+        const el = tabsEl.querySelector(`.tab[data-id="${t.id}"]`);
+        if(el) el.classList.toggle('active', t.id===id);
+      });
+      const t = list.find(x=>x.id===id);
+      if(t) document.title = `${t.title} - Snub Browser`;
+    }
+
+    function setTitle(id, title){
+      const t = list.find(x=>x.id===id); if(!t) return;
+      t.title = title || 'New Tab';
+      const el = tabsEl.querySelector(`.tab[data-id="${id}"] .ttl`);
+      if(el) el.textContent = t.title;
+      if(active===id) document.title = `${t.title} - Snub Browser`;
+    }
+
+    function setUrl(id, url){
+      const t = list.find(x=>x.id===id); if(!t) return;
+      t.url = url;
+    }
+
+    function draw(){
+      tabsEl.innerHTML = '';
+      list.forEach(t=>{
+        const el = document.createElement('div');
+        el.className = 'tab' + (t.id===active?' active':'');
+        el.setAttribute('role','tab');
+        el.setAttribute('aria-selected', t.id===active?'true':'false');
+        el.draggable = true;
+        el.dataset.id = t.id;
+
+        const ico = document.createElement('img'); ico.className='ico'; ico.src=t.icon; ico.alt='';
+        const ttl = document.createElement('div'); ttl.className='ttl'; ttl.textContent=t.title;
+        const x = document.createElement('div'); x.className='x'; x.innerHTML='&#10005;';
+
+        el.appendChild(ico); el.appendChild(ttl); el.appendChild(x);
+
+        el.addEventListener('click', (e)=>{ if(e.target===x) return; setActive(t.id); });
+        x.addEventListener('click', (e)=>{ e.stopPropagation(); closeTab(t.id); });
+        el.addEventListener('auxclick', (e)=>{ if(e.button===1) closeTab(t.id); });
+
+        el.addEventListener('dragstart', ()=>{ el.classList.add('drag'); el.dataset.drag='1'; });
+        el.addEventListener('dragend',   ()=>{ el.classList.remove('drag'); el.dataset.drag=''; });
+        el.addEventListener('dragover', (ev)=>{
+          ev.preventDefault();
+          const dragging = tabsEl.querySelector('.tab[data-drag="1"]');
+          if(!dragging || dragging===el) return;
+          const r = el.getBoundingClientRect();
+          const before = (ev.clientX - r.left) < r.width/2;
+          tabsEl.insertBefore(dragging, before? el : el.nextSibling);
+        });
+        el.addEventListener('drop', ()=>{
+          const order = [...tabsEl.querySelectorAll('.tab')].map(n=>n.dataset.id);
+          list.sort((a,b)=>order.indexOf(a.id)-order.indexOf(b.id));
+        });
+
+        tabsEl.appendChild(el);
+      });
+    }
+
+    addBtn.addEventListener('click', ()=>addTab());
+
+    document.querySelector('.bar').addEventListener('dblclick', e=>{
+      if(e.target.id==='tabs' || e.target.classList.contains('bar')) addTab();
+    });
+
+    document.querySelector('.bar').addEventListener('auxclick', e=>{
+      if(e.button===1 && (e.target.id==='tabs' || !e.target.closest('.tab'))) addTab();
+    });
+
+    document.addEventListener('keydown', e=>{
+      const mod = e.ctrlKey || e.metaKey;
+      if(mod && e.key.toLowerCase()==='t'){ e.preventDefault(); addTab(); }
+      if(mod && e.key.toLowerCase()==='w'){ e.preventDefault(); closeTab(active); }
+      if(mod && e.key==='Tab'){
+        e.preventDefault();
+        if(!list.length) return;
+        const i = list.findIndex(t=>t.id===active);
+        const nxt = list[(i+1)%list.length];
+        setActive(nxt.id);
+      }
+    });
+
+    fsBtn.addEventListener('click', ()=>{
+      if(!document.fullscreenElement){
+        (document.documentElement.requestFullscreen||document.body.requestFullscreen||function(){}).call(document.documentElement);
+      }else{
+        (document.exitFullscreen||function(){}).call(document);
+      }
+    });
+
+    setInterval(()=>{
+      const t = list.find(x=>x.id===active);
+      if(!t) return;
+      try{
+        const href = t.frame.contentWindow?.location?.href;
+        if(href && href!==t.url) setUrl(t.id, href);
+        const ttl = t.frame.contentDocument?.title;
+        if(ttl && ttl!==t.title) setTitle(t.id, ttl);
+      }catch{}
+    }, 1200);
+
+    window.addEventListener('hashchange', ()=>{
+      const site = getDirectSiteFromHash();
+      ShowOnly(site);
+      if(!site || !active) return;
+      const tab = list.find(t=>t.id===active);
+      if(!tab) return;
+      tab.frame.src = toTabUrl(site);
+      setUrl(tab.id, site);
+    });
+
+    // for load
+    const startupSite = getDirectSiteFromHash();
+    ShowOnly(startupSite);
+    addTab(toTabUrl(startupSite));
+  </script>
+<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c3446d33361c4699ac17d4d7c0ed14ac&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
+
+</body>
+<html lang="en" data-theme="dark"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="title" content="Snub Browser">
+  <meta name="description" content="Snub Browser - The better way to browse.">
+  <link rel="icon" type="image/x-icon" href="logo.png">
+  <meta property="og:image" content="/logo.png">
+  <title>New Tab - Snub Browser</title>
+  <link rel="icon" href="logo.png">
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="css/main.css">
+
+  <script>
+    (()=>{const t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);
+      else if(matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.setAttribute('data-theme','dark');})();
+  </script>
+</head>
+<body>
+  <div class="app">
+    <div class="bar">
+      <div id="tabs" class="tabs" role="tablist" aria-label="Tabs"><div class="tab active" role="tab" aria-selected="false" draggable="true" data-id="t1"><img class="ico" src="logo.png" alt=""><div class="ttl">New Tab</div><div class="x">✕</div></div></div>
+      <button id="add" class="new" title="New tab">+</button>
+      <button id="fs" class="new" title="Fullscreen">⛶</button>
+    </div>
+    <div id="stage" class="stage"><iframe class="pane active" data-id="t1" allowfullscreen="" allow="camera; microphone" src="tab.html"></iframe></div>
+  </div>
+
+  <script>
+    const tabsEl = document.getElementById('tabs');
+    const stage = document.getElementById('stage');
+    const addBtn = document.getElementById('add');
+    const fsBtn = document.getElementById('fs');
+
+    let list = [];
+    let active = null;
+    let seq = 1;
+    const PERMS = [
+      'allow-downloads',
+      'allow-forms',
+      'allow-orientation-lock',
+      'allow-pointer-lock',
+      'allow-popups',
+      'allow-popups-to-escape-sandbox',
+      'allow-presentation',
+      'allow-same-origin',
+      'allow-scripts',
+      'allow-storage-access-by-user-activation',
+      'allow-top-navigation',
+      'allow-top-navigation-by-user-activation'
+    ].join(' ');
+
+    function getDirectSiteFromHash(){
+      const raw = location.hash.startsWith('#') ? location.hash.slice(1) : location.hash;
+      if(!raw) return '';
+
+      let site = '';
+      if(raw.toLowerCase().startsWith('site=')){
+        site = raw.slice(5);
+      }else{
+        site = new URLSearchParams(raw).get('site') || '';
+      }
+
+      if(!site) return '';
+
+      try{
+        return decodeURIComponent(site);
+      }catch{
+        return site;
+      }
+    }
+
+    function toTabUrl(site){
+      if(!site) return 'tab.html';
+      return `tab.html#site=${encodeURIComponent(site)}`;
+    }
+
+    function ShowOnly(site){
+      document.body.classList.toggle('site-only', Boolean(site));
+      const isSiteOnly = document.body.classList.contains('site-only');
+      list.forEach((tab) => ALLOWWHATSNUBBY(tab.frame, isSiteOnly));
+    }
+
+    function ALLOWWHATSNUBBY(frame, isSiteOnly){
+      if(isSiteOnly){
+        frame.sandbox = PERMS;
+      }else{
+        frame.removeAttribute('sandbox');
+      }
+    }
+
+    function addTab(url='tab.html'){
+      const id = 't'+(seq++);
+      const frame = document.createElement('iframe');
+      frame.className = 'pane';
+      frame.dataset.id = id;
+      frame.allowFullscreen = true;
+      frame.allow = "camera; microphone";
+      ALLOWWHATSNUBBY(frame, document.body.classList.contains('site-only'));
+      frame.src = url;
+
+      frame.addEventListener('load', ()=>{
+        try{
+          const ttl = frame.contentDocument?.title || 'New Tab';
+          setTitle(id, ttl);
+          const u = frame.contentWindow?.location?.href;
+          if(u) setUrl(id, u);
+        }catch{}
+      });
+
+      stage.appendChild(frame);
+      list.push({ id, title:'New Tab', icon:'logo.png', frame, url });
+      draw();
+      setActive(id);
+      return id;
+    }
+
+    function closeTab(id){
+      const i = list.findIndex(t=>t.id===id);
+      if(i<0) return;
+      const was = (active===id);
+      list[i].frame.remove();
+      list.splice(i,1);
+      const next = list[i] || list[i-1];
+      if(was && next) setActive(next.id);
+      else if(!list.length) setActive(addTab());
+      draw();
+    }
+
+    function setActive(id){
+      active = id;
+      list.forEach(t=>{
+        t.frame.classList.toggle('active', t.id===id);
+        const el = tabsEl.querySelector(`.tab[data-id="${t.id}"]`);
+        if(el) el.classList.toggle('active', t.id===id);
+      });
+      const t = list.find(x=>x.id===id);
+      if(t) document.title = `${t.title} - Snub Browser`;
+    }
+
+    function setTitle(id, title){
+      const t = list.find(x=>x.id===id); if(!t) return;
+      t.title = title || 'New Tab';
+      const el = tabsEl.querySelector(`.tab[data-id="${id}"] .ttl`);
+      if(el) el.textContent = t.title;
+      if(active===id) document.title = `${t.title} - Snub Browser`;
+    }
+
+    function setUrl(id, url){
+      const t = list.find(x=>x.id===id); if(!t) return;
+      t.url = url;
+    }
+
+    function draw(){
+      tabsEl.innerHTML = '';
+      list.forEach(t=>{
+        const el = document.createElement('div');
+        el.className = 'tab' + (t.id===active?' active':'');
+        el.setAttribute('role','tab');
+        el.setAttribute('aria-selected', t.id===active?'true':'false');
+        el.draggable = true;
+        el.dataset.id = t.id;
+
+        const ico = document.createElement('img'); ico.className='ico'; ico.src=t.icon; ico.alt='';
+        const ttl = document.createElement('div'); ttl.className='ttl'; ttl.textContent=t.title;
+        const x = document.createElement('div'); x.className='x'; x.innerHTML='&#10005;';
+
+        el.appendChild(ico); el.appendChild(ttl); el.appendChild(x);
+
+        el.addEventListener('click', (e)=>{ if(e.target===x) return; setActive(t.id); });
+        x.addEventListener('click', (e)=>{ e.stopPropagation(); closeTab(t.id); });
+        el.addEventListener('auxclick', (e)=>{ if(e.button===1) closeTab(t.id); });
+
+        el.addEventListener('dragstart', ()=>{ el.classList.add('drag'); el.dataset.drag='1'; });
+        el.addEventListener('dragend',   ()=>{ el.classList.remove('drag'); el.dataset.drag=''; });
+        el.addEventListener('dragover', (ev)=>{
+          ev.preventDefault();
+          const dragging = tabsEl.querySelector('.tab[data-drag="1"]');
+          if(!dragging || dragging===el) return;
+          const r = el.getBoundingClientRect();
+          const before = (ev.clientX - r.left) < r.width/2;
+          tabsEl.insertBefore(dragging, before? el : el.nextSibling);
+        });
+        el.addEventListener('drop', ()=>{
+          const order = [...tabsEl.querySelectorAll('.tab')].map(n=>n.dataset.id);
+          list.sort((a,b)=>order.indexOf(a.id)-order.indexOf(b.id));
+        });
+
+        tabsEl.appendChild(el);
+      });
+    }
+
+    addBtn.addEventListener('click', ()=>addTab());
+
+    document.querySelector('.bar').addEventListener('dblclick', e=>{
+      if(e.target.id==='tabs' || e.target.classList.contains('bar')) addTab();
+    });
+
+    document.querySelector('.bar').addEventListener('auxclick', e=>{
+      if(e.button===1 && (e.target.id==='tabs' || !e.target.closest('.tab'))) addTab();
+    });
+
+    document.addEventListener('keydown', e=>{
+      const mod = e.ctrlKey || e.metaKey;
+      if(mod && e.key.toLowerCase()==='t'){ e.preventDefault(); addTab(); }
+      if(mod && e.key.toLowerCase()==='w'){ e.preventDefault(); closeTab(active); }
+      if(mod && e.key==='Tab'){
+        e.preventDefault();
+        if(!list.length) return;
+        const i = list.findIndex(t=>t.id===active);
+        const nxt = list[(i+1)%list.length];
+        setActive(nxt.id);
+      }
+    });
+
+    fsBtn.addEventListener('click', ()=>{
+      if(!document.fullscreenElement){
+        (document.documentElement.requestFullscreen||document.body.requestFullscreen||function(){}).call(document.documentElement);
+      }else{
+        (document.exitFullscreen||function(){}).call(document);
+      }
+    });
+
+    setInterval(()=>{
+      const t = list.find(x=>x.id===active);
+      if(!t) return;
+      try{
+        const href = t.frame.contentWindow?.location?.href;
+        if(href && href!==t.url) setUrl(t.id, href);
+        const ttl = t.frame.contentDocument?.title;
+        if(ttl && ttl!==t.title) setTitle(t.id, ttl);
+      }catch{}
+    }, 1200);
+
+    window.addEventListener('hashchange', ()=>{
+      const site = getDirectSiteFromHash();
+      ShowOnly(site);
+      if(!site || !active) return;
+      const tab = list.find(t=>t.id===active);
+      if(!tab) return;
+      tab.frame.src = toTabUrl(site);
+      setUrl(tab.id, site);
+    });
+
+    // for load
+    const startupSite = getDirectSiteFromHash();
+    ShowOnly(startupSite);
+    addTab(toTabUrl(startupSite));
+  </script>
+<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;c3446d33361c4699ac17d4d7c0ed14ac&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
+
+</body></html>
