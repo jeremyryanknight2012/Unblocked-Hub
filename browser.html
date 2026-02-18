@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nova Browser</title>
+  <meta name="color-scheme" content="light dark">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #1e1e2e;
+      --bar: #181825;
+      --tab: #313244;
+      --tab-active: #45475a;
+      --tab-hover: #585b70;
+      --text: #cdd6f4;
+      --muted: #a6adc8;
+      --accent: #89b4fa;
+      --border: #45475a;
+      --red: #f38ba8;
+    }
+    [data-theme="light"] {
+      --bg: #eff1f5;
+      --bar: #dce0e8;
+      --tab: #ccd0da;
+      --tab-active: #bcc0cc;
+      --tab-hover: #acb0be;
+      --text: #4c4f69;
+      --muted: #6c6f85;
+      --accent: #1e66f5;
+      --border: #acb0be;
+      --red: #d20f39;
+    }
+
+    html, body { height: 100%; overflow: hidden; }
+    body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); }
+    .app { display: flex; flex-direction: column; height: 100vh; }
+
+    /* Tab bar */
+    .bar {
+      display: flex; align-items: center;
+      background: var(--bar);
+      border-bottom: 1px solid var(--border);
+      height: 40px; padding: 0 6px; gap: 4px;
+      flex-shrink: 0; user-select: none;
+    }
+    .tabs {
+      display: flex; align-items: center;
+      flex: 1; overflow-x: auto; overflow-y: hidden;
+      gap: 3px; scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab {
+      display: flex; align-items: center; gap: 6px;
+      padding: 0 8px 0 10px; height: 30px;
+      min-width: 90px; max-width: 200px;
+      border-radius: 7px; background: var(--tab);
+      color: var(--muted); cursor: pointer; flex-shrink: 0;
+      transition: background .15s, color .15s;
+      border: 1px solid transparent; font-size: 12px;
+    }
+    .tab:hover { background: var(--tab-hover); color: var(--text); }
+    .tab.active { background: var(--tab-active); color: var(--text); border-color: var(--border); }
+    .tab.dragging { opacity: .4; }
+    .tab .ico { width: 14px; height: 14px; flex-shrink: 0; object-fit: contain; border-radius: 2px; }
+    .tab .ttl { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tab .x {
+      width: 16px; height: 16px; display: flex;
+      align-items: center; justify-content: center;
+      border-radius: 4px; font-size: 11px; flex-shrink: 0;
+      color: var(--muted); transition: background .1s, color .1s;
+    }
+    .tab .x:hover { background: var(--red); color: #fff; }
+    .btn {
+      background: none; border: none; color: var(--muted); cursor: pointer;
+      width: 28px; height: 28px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0; transition: background .15s, color .15s;
+    }
+    .btn:hover { background: var(--tab-hover); color: var(--text); }
+
+    /* Nav bar */
+    .navbar {
+      display: flex; align-items: center;
+      background: var(--bar); border-bottom: 1px solid var(--border);
+      height: 38px; padding: 0 8px; gap: 6px; flex-shrink: 0;
+    }
+    .nav-btn {
+      background: none; border: none; color: var(--muted); cursor: pointer;
+      width: 26px; height: 26px; border-radius: 5px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0; transition: background .15s, color .15s;
+    }
+    .nav-btn:hover:not(:disabled) { background: var(--tab-hover); color: var(--text); }
+    .nav-btn:disabled { opacity: .3; cursor: default; }
+    #urlbar {
+      flex: 1; background: var(--bg);
+      border: 1px solid var(--border); border-radius: 7px;
+      color: var(--text); font-size: 13px; padding: 4px 10px; outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    #urlbar:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+    }
+
+    /* Stage */
+    .stage { flex: 1; position: relative; overflow: hidden; }
+    .pane {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      border: none; display: none; background: #fff;
+    }
+    .pane.active { display: block; }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="bar">
+    <div id="tabs" class="tabs" role="tablist"></div>
+    <button class="btn" id="addBtn" title="New tab (Ctrl+T)">+</button>
+    <button class="btn" id="themeBtn" title="Toggle theme">◐</button>
+    <button class="btn" id="fsBtn" title="Fullscreen">⛶</button>
+  </div>
+  <div class="navbar">
+    <button class="nav-btn" id="backBtn" title="Back" disabled>&#8592;</button>
+    <button class="nav-btn" id="fwdBtn" title="Forward" disabled>&#8594;</button>
+    <button class="nav-btn" id="reloadBtn" title="Reload">&#8635;</button>
+    <input id="urlbar" type="text" placeholder="Search or enter address…" spellcheck="false" autocomplete="off">
+    <button class="nav-btn" id="goBtn" title="Go">&#10140;</button>
+  </div>
+  <div id="stage" class="stage"></div>
+</div>
+
+<script>
+// ── Theme ─────────────────────────────────────────────────────────────────────
+(()=>{
+  const saved = localStorage.getItem('nova-theme');
+  const pref  = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', saved || pref);
+})();
+document.getElementById('themeBtn').addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('nova-theme', next);
+});
+
+// ── New-tab srcdoc (no external file needed) ──────────────────────────────────
+function newTabSrcdoc() {
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="color-scheme" content="light dark"><title>New Tab</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#1e1e2e;--sf:#313244;--tx:#cdd6f4;--mu:#a6adc8;--ac:#89b4fa;--bd:#45475a;--in:#181825}
+@media(prefers-color-scheme:light){:root{--bg:#eff1f5;--sf:#dce0e8;--tx:#4c4f69;--mu:#6c6f85;--ac:#1e66f5;--bd:#acb0be;--in:#ccd0da}}
+html,body{height:100%}
+body{background:var(--bg);color:var(--tx);font-family:system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px}
+h1{font-size:26px;font-weight:700}
+.bar{display:flex;align-items:center;width:min(540px,90vw);background:var(--in);border:1px solid var(--bd);border-radius:12px;padding:0 14px;gap:10px}
+.bar:focus-within{border-color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 20%,transparent)}
+.bar svg{color:var(--mu);flex-shrink:0}
+.bar input{flex:1;background:none;border:none;outline:none;font-size:15px;color:var(--tx);padding:13px 0}
+.bar input::placeholder{color:var(--mu)}
+.links{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;max-width:540px}
+.lk{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:var(--mu);font-size:12px;transition:color .15s;cursor:pointer}
+.lk:hover{color:var(--tx)}
+.lk .ic{width:48px;height:48px;border-radius:12px;background:var(--sf);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:22px;transition:background .15s}
+.lk:hover .ic{background:var(--bd)}
+.clock{font-size:13px;color:var(--mu);letter-spacing:.05em}
+</style></head><body>
+<h1>🌐 Nova Browser</h1>
+<form class="bar" id="f">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input id="q" placeholder="Search Google or enter address…" autofocus autocomplete="off" spellcheck="false">
+</form>
+<div class="links">
+<div class="lk" data-url="https://google.com"><div class="ic">🔍</div>Google</div>
+<div class="lk" data-url="https://youtube.com"><div class="ic">▶️</div>YouTube</div>
+<div class="lk" data-url="https://github.com"><div class="ic">🐙</div>GitHub</div>
+<div class="lk" data-url="https://reddit.com"><div class="ic">👾</div>Reddit</div>
+<div class="lk" data-url="https://wikipedia.org"><div class="ic">📖</div>Wikipedia</div>
+<div class="lk" data-url="https://claude.ai"><div class="ic">✨</div>Claude</div>
+</div>
+<div class="clock" id="cl"></div>
+<script>
+function tick(){var n=new Date();document.getElementById('cl').textContent=n.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+' · '+n.toLocaleDateString([],{weekday:'long',month:'long',day:'numeric'});}
+tick();setInterval(tick,1000);
+function nav(url){window.parent.postMessage({type:'nova-nav',url:url},'*');}
+document.getElementById('f').addEventListener('submit',function(e){
+  e.preventDefault();var v=document.getElementById('q').value.trim();if(!v)return;
+  var url;if(/^https?:\/\//.test(v))url=v;else if(/^[\w-]+(\.[\w-]+)+(\/.*)?$/.test(v))url='https://'+v;else url='https://www.google.com/search?q='+encodeURIComponent(v);
+  nav(url);
+});
+document.querySelectorAll('.lk').forEach(function(el){el.addEventListener('click',function(){nav(el.dataset.url);});});
+<\/script></body></html>`;
+}
+
+// ── State ─────────────────────────────────────────────────────────────────────
+const tabsEl    = document.getElementById('tabs');
+const stage     = document.getElementById('stage');
+const urlbar    = document.getElementById('urlbar');
+const backBtn   = document.getElementById('backBtn');
+const fwdBtn    = document.getElementById('fwdBtn');
+const reloadBtn = document.getElementById('reloadBtn');
+const goBtn     = document.getElementById('goBtn');
+
+let list   = [];
+let active = null;
+let seq    = 1;
+
+// Messages from new-tab page
+window.addEventListener('message', e => {
+  if (e.data?.type === 'nova-nav') navigate(e.data.url);
+});
+
+// ── URL helpers ───────────────────────────────────────────────────────────────
+function parseUrl(raw) {
+  raw = (raw || '').trim();
+  if (!raw) return null;
+  if (/^https?:\/\//i.test(raw)) return raw;
+  if (/^[\w-]+(\.[\w-]+)+(\/.*)?$/.test(raw)) return 'https://' + raw;
+  return 'https://www.google.com/search?q=' + encodeURIComponent(raw);
+}
+
+function navigate(url) {
+  const t = list.find(x => x.id === active);
+  if (!t || !url) return;
+  t.frame.src = url;
+  t.url = url;
+  urlbar.value = url;
+}
+
+// ── Nav bar controls ──────────────────────────────────────────────────────────
+function handleGo() { const u = parseUrl(urlbar.value); if (u) navigate(u); }
+urlbar.addEventListener('keydown', e => { if (e.key === 'Enter') handleGo(); });
+goBtn.addEventListener('click', handleGo);
+urlbar.addEventListener('focus', () => urlbar.select());
+
+backBtn.addEventListener('click', () => {
+  try { list.find(x=>x.id===active)?.frame.contentWindow.history.back(); } catch {}
+});
+fwdBtn.addEventListener('click', () => {
+  try { list.find(x=>x.id===active)?.frame.contentWindow.history.forward(); } catch {}
+});
+reloadBtn.addEventListener('click', () => {
+  const t = list.find(x=>x.id===active); if (!t) return;
+  try { t.frame.contentWindow.location.reload(); } catch { t.frame.src = t.frame.src; }
+});
+
+// ── Tab management ────────────────────────────────────────────────────────────
+function addTab(url) {
+  const id    = 't' + (seq++);
+  const frame = document.createElement('iframe');
+  frame.className      = 'pane';
+  frame.dataset.id     = id;
+  frame.allowFullscreen = true;
+  frame.allow          = 'camera; microphone';
+  frame.sandbox = [
+    'allow-downloads','allow-forms','allow-modals','allow-orientation-lock',
+    'allow-pointer-lock','allow-popups','allow-popups-to-escape-sandbox',
+    'allow-presentation','allow-same-origin','allow-scripts',
+    'allow-storage-access-by-user-activation','allow-top-navigation-by-user-activation'
+  ].join(' ');
+
+  if (url) { frame.src = url; }
+  else     { frame.srcdoc = newTabSrcdoc(); }
+
+  frame.addEventListener('load', () => {
+    try {
+      const ttl  = frame.contentDocument?.title;
+      const href = frame.contentWindow?.location?.href;
+      if (ttl) setTitle(id, ttl);
+      if (href && href !== 'about:blank' && href !== 'about:srcdoc') setUrl(id, href);
+    } catch {}
+  });
+
+  stage.appendChild(frame);
+  list.push({ id, title: 'New Tab', icon: '', frame, url: url || '' });
+  render();
+  setActive(id);
+  return id;
+}
+
+function closeTab(id) {
+  const i = list.findIndex(t => t.id === id);
+  if (i < 0) return;
+  const wasActive = active === id;
+  list[i].frame.remove();
+  list.splice(i, 1);
+  if (wasActive) {
+    const next = list[i] || list[i - 1];
+    if (next) setActive(next.id);
+    else addTab();
+  }
+  render();
+}
+
+function setActive(id) {
+  active = id;
+  list.forEach(t => {
+    t.frame.classList.toggle('active', t.id === id);
+    const el = tabsEl.querySelector(`.tab[data-id="${t.id}"]`);
+    if (el) el.classList.toggle('active', t.id === id);
+  });
+  const t = list.find(x => x.id === id);
+  if (!t) return;
+  document.title = `${t.title} - Nova Browser`;
+  urlbar.value   = t.url || '';
+}
+
+function setTitle(id, title) {
+  const t = list.find(x => x.id === id); if (!t) return;
+  t.title = title || 'New Tab';
+  const el = tabsEl.querySelector(`.tab[data-id="${id}"] .ttl`);
+  if (el) el.textContent = t.title;
+  if (active === id) document.title = `${t.title} - Nova Browser`;
+}
+
+function setUrl(id, url) {
+  const t = list.find(x => x.id === id); if (!t) return;
+  t.url = url;
+  if (active === id) urlbar.value = url;
+}
+
+function setIcon(id, src) {
+  const t = list.find(x => x.id === id); if (!t) return;
+  t.icon = src;
+  const el = tabsEl.querySelector(`.tab[data-id="${id}"] .ico`);
+  if (el) { el.src = src; el.style.display = ''; }
+}
+
+// ── Render tabs ───────────────────────────────────────────────────────────────
+function render() {
+  tabsEl.innerHTML = '';
+  list.forEach(t => {
+    const el = document.createElement('div');
+    el.className = 'tab' + (t.id === active ? ' active' : '');
+    el.setAttribute('role', 'tab');
+    el.dataset.id = t.id;
+    el.draggable  = true;
+    el.title      = t.title;
+
+    const ico = document.createElement('img');
+    ico.className = 'ico'; ico.alt = '';
+    if (t.icon) { ico.src = t.icon; }
+    else if (t.url) { ico.src = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(t.url)}&sz=32`; }
+    else { ico.style.display = 'none'; }
+    ico.onerror = () => { ico.style.display = 'none'; };
+
+    const ttl = document.createElement('div');
+    ttl.className = 'ttl'; ttl.textContent = t.title;
+
+    const x = document.createElement('div');
+    x.className = 'x'; x.innerHTML = '&#10005;'; x.title = 'Close tab';
+
+    el.append(ico, ttl, x);
+
+    el.addEventListener('click',    e => { if (e.target !== x) setActive(t.id); });
+    x.addEventListener('click',     e => { e.stopPropagation(); closeTab(t.id); });
+    el.addEventListener('auxclick', e => { if (e.button === 1) { e.preventDefault(); closeTab(t.id); } });
+
+    el.addEventListener('dragstart', () => el.classList.add('dragging'));
+    el.addEventListener('dragend',   () => el.classList.remove('dragging'));
+    el.addEventListener('dragover',  ev => {
+      ev.preventDefault();
+      const drag = tabsEl.querySelector('.tab.dragging');
+      if (!drag || drag === el) return;
+      const { left, width } = el.getBoundingClientRect();
+      tabsEl.insertBefore(drag, (ev.clientX - left) < width / 2 ? el : el.nextSibling);
+    });
+    el.addEventListener('drop', () => {
+      const order = [...tabsEl.querySelectorAll('.tab')].map(n => n.dataset.id);
+      list.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+    });
+
+    tabsEl.appendChild(el);
+  });
+}
+
+// ── Sync title/url from active iframe ─────────────────────────────────────────
+setInterval(() => {
+  const t = list.find(x => x.id === active); if (!t) return;
+  try {
+    const href = t.frame.contentWindow?.location?.href;
+    if (href && href !== 'about:srcdoc' && href !== 'about:blank' && href !== t.url) setUrl(t.id, href);
+    const ttl = t.frame.contentDocument?.title;
+    if (ttl && ttl !== t.title) setTitle(t.id, ttl);
+    const link = t.frame.contentDocument?.querySelector('link[rel~="icon"]');
+    if (link?.href && link.href !== t.icon) setIcon(t.id, link.href);
+  } catch {}
+}, 1000);
+
+// ── Keyboard shortcuts ────────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  const mod = e.ctrlKey || e.metaKey;
+  if (mod && e.key === 't') { e.preventDefault(); addTab(); }
+  if (mod && e.key === 'w') { e.preventDefault(); closeTab(active); }
+  if (mod && e.key === 'l') { e.preventDefault(); urlbar.focus(); }
+  if (mod && e.key === 'r') { e.preventDefault(); reloadBtn.click(); }
+  if (mod && e.key === 'Tab') {
+    e.preventDefault();
+    if (!list.length) return;
+    const i = list.findIndex(t => t.id === active);
+    setActive(list[(i + 1) % list.length].id);
+  }
+});
+
+// ── Buttons ───────────────────────────────────────────────────────────────────
+document.getElementById('addBtn').addEventListener('click', () => addTab());
+document.querySelector('.bar').addEventListener('dblclick', e => {
+  if (!e.target.closest('.tab') && !e.target.closest('.btn')) addTab();
+});
+document.getElementById('fsBtn').addEventListener('click', () => {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+  else document.exitFullscreen?.();
+});
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+addTab();
+</script>
+</body>
+</html>
