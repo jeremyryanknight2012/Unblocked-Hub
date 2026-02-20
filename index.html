@@ -765,7 +765,7 @@
       <div id="home" class="page-section active">
         <div class="card">
           <h1>Welcome to Nova</h1>
-          <p>Huge New Update just dropped — there's now Unblocked Google, a Shop, Achievements, Chat, Profile, Settings, and multiple new games</p>
+          <p></p>
           <div class="row">
             <div class="row-title"><span>🕐 Recently Played</span></div>
             <p class="empty" id="recentlyPlayedEmpty">No recent activity</p>
@@ -1098,7 +1098,7 @@
               </div>
               <div class="chat-input-bar">
                 <div class="chat-input-inner">
-                  <button class="input-action-btn" title="Emoji">😊</button>
+                  <button class="input-action-btn" title="Emoji"></button>
                   <textarea id="chat-input" class="nova-chat-input" placeholder="Send a message..." rows="1" onkeydown="handleChatKey(event)" oninput="autoResizeInput(this)"></textarea>
                   <button class="send-btn" onclick="sendMsg()" title="Send">➤</button>
                 </div>
@@ -1854,7 +1854,7 @@ window.addEventListener('load', () => {
   const hash = window.location.hash.substring(1);
   if (hash && document.getElementById(hash)) showPage(hash);
   else showPage('home');
-  const storedUsername = localStorage.getItem("nexus_user");
+  const storedUsername = localStorage.getItem("nova_user");
   if (storedUsername) {
     db.ref("users/" + storedUsername).once("value", (snap) => {
       if (snap.exists()) {
