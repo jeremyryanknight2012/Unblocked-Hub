@@ -28,7 +28,6 @@
       overflow: hidden;
     }
 
-    /* ── BACKGROUND ── */
     .bg-container {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       overflow: hidden; z-index: 0; pointer-events: none;
@@ -95,7 +94,6 @@
       100% { transform: translateY(-100vh) translateX(var(--drift, 0px)); opacity: 0; }
     }
 
-    /* ── HEADER ── */
     header {
       position: relative; z-index: 10;
       display: flex; align-items: center; padding: 0 24px;
@@ -125,7 +123,6 @@
       50% { opacity: 0.3; }
     }
 
-    /* ── PAGE ── */
     .page {
       position: relative; z-index: 1;
       height: calc(100vh - 52px);
@@ -133,7 +130,6 @@
       align-items: center; justify-content: center;
     }
 
-    /* Button */
     .launch-btn {
       position: relative;
       display: inline-flex; align-items: center; gap: 12px;
@@ -197,7 +193,7 @@
 <script>
 'use strict';
 
-// ── PARTICLES ──
+// PARTICLES
 (function createParticles() {
   const container = document.getElementById('particles'),
         frag = document.createDocumentFragment();
@@ -215,10 +211,15 @@
   container.appendChild(frag);
 })();
 
-// ── OPEN NOVA ──
+// OPEN NOVA
 function openNova() {
   var win = window.open('about:blank', '_blank');
-  if (!win) { alert('Pop-up blocked — please allow pop-ups and try again.'); return; }
+  if (!win) { 
+    alert('Pop-up blocked — please allow pop ups and come back'); 
+    return; 
+  }
+
+  win.location.href = "https://jeremyryanknight2012.github.io/Unblocked-Hub/nova.html";
 }
 </script>
 </body>
