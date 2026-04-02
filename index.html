@@ -4,403 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nova</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #0a0e1a;
-      --bg-gradient: linear-gradient(135deg, #0a0e1a 0%, #1a1f3a 100%);
-      --panel: #131729;
-      --panel2: #0f1424;
-      --text: #f0f4ff;
-      --muted: #8b9dc3;
-      --border: rgba(139, 157, 195, 0.15);
-      --hover: rgba(91, 141, 239, 0.1);
-      --active: rgba(91, 141, 239, 0.2);
-      --accent: #5b8def;
-      --accent-glow: rgba(91, 141, 239, 0.4);
-      --online: #00ff88;
-      --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
-
-    body {
-      font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      overflow: hidden;
-      position: relative;
-    }
-
-    /* ── BACKGROUND ── */
-    .bg-container {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      overflow: hidden; z-index: 0; pointer-events: none;
-    }
-    .gradient-wave {
-      position: absolute; width: 100%; height: 100%;
-      background:
-        radial-gradient(circle at 20% 50%, rgba(91, 141, 239, 0.12) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(0, 255, 136, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 40% 20%, rgba(147, 51, 234, 0.08) 0%, transparent 50%);
-    }
-    .orb {
-      position: absolute; border-radius: 50%; filter: blur(60px);
-      opacity: 0.18; pointer-events: none; animation: floatOrb 30s ease-in-out infinite;
-    }
-    .orb-1 {
-      width: 350px; height: 350px;
-      background: radial-gradient(circle, rgba(91, 141, 239, 0.5), transparent 70%);
-      top: 5%; left: 5%; animation-duration: 35s;
-    }
-    .orb-2 {
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(0, 255, 136, 0.4), transparent 70%);
-      bottom: 5%; right: 5%; animation-duration: 40s; animation-delay: -15s;
-    }
-    @keyframes floatOrb {
-      0%, 100% { transform: translate(0, 0); }
-      50% { transform: translate(80px, -80px); }
-    }
-    .grid-overlay {
-      position: absolute; width: 100%; height: 100%;
-      background-image:
-        linear-gradient(rgba(91, 141, 239, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(91, 141, 239, 0.04) 1px, transparent 1px);
-      background-size: 80px 80px; opacity: 0.4;
-    }
-    .scanline {
-      position: absolute; width: 100%; height: 2px;
-      background: linear-gradient(90deg, transparent 0%, rgba(91, 141, 239, 0.3) 50%, transparent 100%);
-      animation: scanlineMove 8s linear infinite;
-    }
-    @keyframes scanlineMove { 0% { top: -2px; } 100% { top: 100%; } }
-    .energy-ring {
-      position: absolute; top: 50%; left: 50%;
-      border: 1px solid rgba(91, 141, 239, 0.15);
-      border-radius: 50%;
-      animation: energyExpand 10s ease-out infinite;
-    }
-    .energy-ring:nth-child(2) { animation-delay: 5s; }
-    @keyframes energyExpand {
-      0%   { width: 80px;  height: 80px;  opacity: 0.6; transform: translate(-50%, -50%); }
-      100% { width: 900px; height: 900px; opacity: 0;   transform: translate(-50%, -50%); }
-    }
-    .particles { position: absolute; width: 100%; height: 100%; }
-    .particle {
-      position: absolute; width: 2px; height: 2px;
-      background: rgba(91, 141, 239, 0.5); border-radius: 50%;
-      animation: particleFloat linear infinite;
-    }
-    @keyframes particleFloat {
-      0%   { transform: translateY(100vh); opacity: 0; }
-      10%  { opacity: 0.8; }
-      90%  { opacity: 0.8; }
-      100% { transform: translateY(-100vh) translateX(var(--drift, 0px)); opacity: 0; }
-    }
-
-    /* ── HEADER ── */
-    header {
-      position: relative; z-index: 10;
-      display: flex; align-items: center; padding: 0 20px;
-      height: 56px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(19, 23, 41, 0.95);
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-    }
-    .brand {
-      font-weight: 800; font-size: 22px; letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #5b8def 0%, #00ff88 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .header-info { margin-left: auto; display: flex; align-items: center; gap: 12px; }
-    .info-item {
-      display: flex; flex-direction: column; align-items: flex-start;
-      padding: 4px 10px;
-      background: rgba(91, 141, 239, 0.08);
-      border: 1px solid var(--border); border-radius: 8px; min-width: 90px;
-    }
-    .info-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 1px; }
-    .info-value { font-size: 13px; font-weight: 700; color: var(--text); }
-    #current-time { font-family: 'Courier New', monospace; letter-spacing: 0.05em; }
-
-    /* ── MAIN CONTENT ── */
-    .page {
-      position: relative; z-index: 1;
-      height: calc(100vh - 56px);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 32px;
-    }
-
-    /* ── CARD ── */
-    .card {
-      background: rgba(19, 23, 41, 0.85);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 52px 64px;
-      box-shadow: var(--card-shadow), 0 0 80px rgba(91, 141, 239, 0.08);
-      text-align: center;
-      max-width: 480px;
-      width: 90%;
-      display: flex; flex-direction: column; align-items: center; gap: 20px;
-      animation: cardIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-    }
-    @keyframes cardIn {
-      from { opacity: 0; transform: translateY(30px) scale(0.97); }
-      to   { opacity: 1; transform: translateY(0)    scale(1); }
-    }
-
-    .card-icon {
-      width: 72px; height: 72px;
-      background: linear-gradient(135deg, rgba(91,141,239,0.2) 0%, rgba(0,255,136,0.1) 100%);
-      border: 1px solid rgba(91,141,239,0.3);
-      border-radius: 20px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 36px;
-      box-shadow: 0 4px 24px rgba(91,141,239,0.2);
-    }
-
-    .card h1 {
-      font-size: 32px; font-weight: 800; letter-spacing: -1px;
-      background: linear-gradient(135deg, #f0f4ff 0%, #5b8def 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      line-height: 1.1;
-    }
-    .card p {
-      color: var(--muted); font-size: 14px; line-height: 1.6; font-weight: 500;
-    }
-
-    /* ── NOVA BUTTON ── */
-    .nova-btn {
-      position: relative;
-      display: inline-flex; align-items: center; justify-content: center;
-      gap: 10px;
-      padding: 16px 48px;
-      font-family: 'Inter', sans-serif;
-      font-size: 16px; font-weight: 800; letter-spacing: 0.5px;
-      color: #fff;
-      background: linear-gradient(135deg, #3a6fd8 0%, #5b8def 60%, #4ade80 100%);
-      border: none; border-radius: 14px;
-      cursor: pointer;
-      box-shadow: 0 4px 24px rgba(91,141,239,0.45), 0 0 0 0 rgba(91,141,239,0.4);
-      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
-      overflow: hidden;
-      outline: none;
-      width: 100%;
-    }
-    .nova-btn::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
-      border-radius: inherit;
-      pointer-events: none;
-    }
-    .nova-btn::after {
-      content: '';
-      position: absolute; top: -50%; left: -60%;
-      width: 50%; height: 200%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transform: skewX(-20deg);
-      animation: shimmer 3s ease-in-out infinite;
-    }
-    @keyframes shimmer {
-      0%   { left: -60%; }
-      100% { left: 130%; }
-    }
-    .nova-btn:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 8px 40px rgba(91,141,239,0.6), 0 0 0 4px rgba(91,141,239,0.15);
-      filter: brightness(1.08);
-    }
-    .nova-btn:active {
-      transform: translateY(0) scale(0.98);
-      box-shadow: 0 2px 12px rgba(91,141,239,0.35);
-    }
-    .nova-btn-icon {
-      font-size: 18px; line-height: 1;
-      animation: pulse 2s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50%       { transform: scale(1.15); }
-    }
-
-    /* ── STATUS BADGE ── */
-    .status-badge {
-      display: flex; align-items: center; gap: 7px;
-      padding: 6px 14px;
-      background: rgba(0, 255, 136, 0.07);
-      border: 1px solid rgba(0, 255, 136, 0.2);
-      border-radius: 20px;
-      font-size: 12px; font-weight: 700; color: var(--online);
-    }
-    .status-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--online);
-      box-shadow: 0 0 6px var(--online);
-      animation: blink 1.8s ease-in-out infinite;
-    }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.4; }
-    }
-
-    /* ── FOOTER HINT ── */
-    .hint {
-      font-size: 11px; color: rgba(139,157,195,0.5);
-      font-weight: 500; letter-spacing: 0.05em;
-    }
-
-    /* ── NOTIFICATION ── */
-    .notification {
-      position: fixed; bottom: 20px; right: 20px;
-      background: rgba(19, 23, 41, 0.98);
-      border: 2px solid var(--accent);
-      border-radius: 14px; padding: 12px 20px;
-      display: flex; align-items: center; gap: 10px;
-      box-shadow: 0 6px 24px rgba(91, 141, 239, 0.25);
-      transform: translateX(150%);
-      transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      z-index: 10000; max-width: 320px;
-    }
-    .notification.show { transform: translateX(0); }
-    .notification-text { font-weight: 700; font-size: 13px; }
-
-    @media (max-width: 480px) {
-      .card { padding: 36px 28px; }
-      .header-info { display: none; }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- BACKGROUND -->
-  <div class="bg-container">
-    <div class="gradient-wave"></div>
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="grid-overlay"></div>
-    <div class="scanline"></div>
-    <div class="energy-ring"></div>
-    <div class="energy-ring"></div>
-    <div class="particles" id="particles"></div>
-  </div>
-
-  <!-- HEADER -->
-  <header>
-    <div class="brand">Nova</div>
-    <div class="header-info">
-      <div class="info-item">
-        <span class="info-label">Time</span>
-        <span class="info-value" id="current-time">00:00:00</span>
-      </div>
-      <div class="info-item">
-        <span class="info-label">Status</span>
-        <span class="info-value" style="color: var(--online);">Online</span>
-      </div>
-    </div>
-  </header>
-
-  <!-- MAIN -->
-  <div class="page">
-    <div class="card">
-      <div class="card-icon">🚀</div>
-
-      <h1>Welcome to Nova</h1>
-
-      <p>Your all-in-one unblocked hub. Click below to launch the full Nova experience in a clean, unrestricted window.</p>
-
-      <div class="status-badge">
-        <div class="status-dot"></div>
-        All systems operational
-      </div>
-
-      <button class="nova-btn" onclick="openNova()">
-        <span class="nova-btn-icon">✦</span>
-        Launch NOVA
-        <span class="nova-btn-icon">✦</span>
-      </button>
-
-      <p class="hint">Opens in a new clean window · Nothing is tracked</p>
-    </div>
-  </div>
-
-  <!-- NOTIFICATION -->
-  <div class="notification" id="notification">
-    <span>🚀</span>
-    <span class="notification-text" id="notif-text">Launching Nova...</span>
-  </div>
-
-<script>
-'use strict';
-
-// ── CLOCK ──
-let _lastSec = -1;
-function clockTick() {
-  const now = new Date(), sec = now.getSeconds();
-  if (sec !== _lastSec) {
-    _lastSec = sec;
-    let h = now.getHours();
-    const m = String(now.getMinutes()).padStart(2,'0'),
-          s = String(sec).padStart(2,'0'),
-          ampm = h >= 12 ? 'PM' : 'AM';
-    h = h % 12 || 12;
-    document.getElementById('current-time').textContent =
-      `${String(h).padStart(2,'0')}:${m}:${s} ${ampm}`;
-  }
-  requestAnimationFrame(clockTick);
-}
-requestAnimationFrame(clockTick);
-
-// ── PARTICLES ──
-(function createParticles() {
-  const container = document.getElementById('particles'),
-        frag = document.createDocumentFragment();
-  for (let i = 0; i < 12; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    p.style.left = (Math.random() * 100) + '%';
-    p.style.setProperty('--drift', ((Math.random() - 0.5) * 150) + 'px');
-    p.style.animationDuration = (20 + Math.random() * 20) + 's';
-    p.style.animationDelay = (Math.random() * 15) + 's';
-    p.style.background = ['rgba(91,141,239,0.5)', 'rgba(0,255,136,0.4)', 'rgba(147,51,234,0.4)'][i % 3];
-    frag.appendChild(p);
-  }
-  container.appendChild(frag);
-})();
-
-// ── NOTIFICATION ──
-let _notifT = null;
-function showNotif(text) {
-  const el = document.getElementById('notification'),
-        tx = document.getElementById('notif-text');
-  tx.textContent = text;
-  el.classList.add('show');
-  if (_notifT) clearTimeout(_notifT);
-  _notifT = setTimeout(() => el.classList.remove('show'), 3000);
-}
-
-// ── OPEN NOVA ──
-function openNova() {
-  showNotif('🚀 Launching Nova...');
-  var win = window.open('about:blank', '_blank');
-  if (!win) { showNotif('⚠️ Pop-up blocked! Please allow pop-ups.'); return; }
-
-  // The full Nova site HTML to inject
-  var novaHTML = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nova</title>
   
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"><\/script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"><\/script>
-  <script defer src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"><\/script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -496,6 +103,7 @@ function openNova() {
     .particle { position: absolute; width: 2px; height: 2px; background: rgba(91, 141, 239, 0.5); border-radius: 50%; animation: particleFloat linear infinite; }
     @keyframes particleFloat { 0% { transform: translateY(100vh); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { transform: translateY(-100vh) translateX(var(--drift, 0px)); opacity: 0; } }
 
+    /* ============================================================ LAYOUT ============================================================ */
     .app { display: grid; grid-template-rows: 56px 1fr; grid-template-columns: 260px 1fr; height: 100vh; position: relative; z-index: 1; }
 
     body.grid-mode .scroller { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; overflow-y: auto; overflow-x: hidden; }
@@ -606,6 +214,7 @@ function openNova() {
     .notification-icon { font-size: 20px; }
     .notification-text { font-weight: 700; font-size: 13px; color: var(--text); }
 
+    /* BADGE SYSTEM */
     .badge-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; margin-top: 14px; }
     .badge { background: rgba(19, 23, 41, 0.8); border: 1px solid var(--border); border-radius: 12px; padding: 14px; text-align: center; transition: border-color 0.2s ease; cursor: pointer; position: relative; }
     .badge.unlocked { border-color: var(--coin-gold); }
@@ -663,13 +272,60 @@ function openNova() {
     .google-sites-button { font-family: 'Inter', Arial, sans-serif; font-size: 14px; font-weight: 700; padding: 12px 28px; border-radius: 10px; border: 1px solid var(--accent); cursor: pointer; color: var(--text); background: rgba(91, 141, 239, 0.15); transition: background 0.2s ease; }
     .google-sites-button:hover { background: rgba(91, 141, 239, 0.3); }
 
-    .profile-banner { width: 100%; height: 160px; border-radius: 14px 14px 0 0; position: relative; overflow: hidden; margin-bottom: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #2d3244 0%, #3d4460 100%); border: 1px solid var(--border); border-bottom: none; }
-    .profile-banner-text { font-size: 52px; font-weight: 900; letter-spacing: 8px; color: rgba(255,255,255,0.18); text-transform: uppercase; user-select: none; pointer-events: none; font-family: 'Inter', sans-serif; }
-    .profile-banner img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
-    .profile-banner-nova-overlay { position: absolute; bottom: 12px; right: 18px; font-size: 22px; font-weight: 900; letter-spacing: 4px; color: rgba(255,255,255,0.5); text-transform: uppercase; pointer-events: none; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
-    .profile-card-merged { background: rgba(19, 23, 41, 0.8); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 20px; box-shadow: var(--card-shadow); }
+    /* ============================================================ PROFILE BANNER ============================================================ */
+    .profile-banner {
+      width: 100%;
+      height: 160px;
+      border-radius: 14px 14px 0 0;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #2d3244 0%, #3d4460 100%);
+      border: 1px solid var(--border);
+      border-bottom: none;
+    }
+    .profile-banner-text {
+      font-size: 52px;
+      font-weight: 900;
+      letter-spacing: 8px;
+      color: rgba(255,255,255,0.18);
+      text-transform: uppercase;
+      user-select: none;
+      pointer-events: none;
+      font-family: 'Inter', sans-serif;
+    }
+    .profile-banner img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .profile-banner-nova-overlay {
+      position: absolute;
+      bottom: 12px;
+      right: 18px;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      pointer-events: none;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+    .profile-card-merged {
+      background: rgba(19, 23, 41, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: var(--card-shadow);
+    }
     body.light-mode .profile-card-merged { background: rgba(255, 255, 255, 0.95); }
     .profile-card-body { padding: 24px; }
+
     .profile-container { max-width: 680px; margin: 0 auto; }
     .profile-header { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; }
     .profile-pic-wrapper { position: relative; margin-top: -50px; z-index: 2; }
@@ -699,14 +355,55 @@ function openNova() {
     #image-popup-overlay.show { display: flex; }
     #image-popup-img { max-width: 90vw; max-height: 90vh; border-radius: 14px; box-shadow: 0 14px 56px rgba(0,0,0,0.8); }
 
-    .banner-shop-item { width: 280px; background: rgba(19, 23, 41, 0.8); border: 1px solid var(--border); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; flex: 0 0 auto; transition: border-color 0.2s ease; }
+    /* ============================================================ BANNER SHOP ITEM ============================================================ */
+    .banner-shop-item {
+      width: 280px;
+      background: rgba(19, 23, 41, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 0 0 auto;
+      transition: border-color 0.2s ease;
+    }
     body.light-mode .banner-shop-item { background: rgba(255,255,255,0.95); }
     .banner-shop-item:hover { border-color: var(--accent); }
-    .banner-preview { width: 100%; height: 80px; border-radius: 10px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-    .banner-preview-text { font-size: 22px; font-weight: 900; letter-spacing: 5px; color: rgba(255,255,255,0.35); text-transform: uppercase; pointer-events: none; user-select: none; }
+    .banner-preview {
+      width: 100%;
+      height: 80px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .banner-preview-text {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 5px;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+      pointer-events: none;
+      user-select: none;
+    }
     .banner-preview img { position: absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; }
-    .banner-preview .nova-tag { position: absolute; bottom: 6px; right: 10px; font-size: 11px; font-weight: 900; letter-spacing: 2px; color: rgba(255,255,255,0.5); text-shadow: 0 1px 4px rgba(0,0,0,0.6); pointer-events: none; }
+    .banner-preview .nova-tag {
+      position: absolute;
+      bottom: 6px;
+      right: 10px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.5);
+      text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+      pointer-events: none;
+    }
 
+    /* ============================================================ ADMIN PANEL ============================================================ */
     .admin-section { max-width: 900px; }
     .admin-section h1 { background: linear-gradient(135deg, #ff4444 0%, #ff8800 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; margin-top: 20px; }
@@ -726,6 +423,7 @@ function openNova() {
     .admin-row { display: flex; gap: 7px; align-items: center; flex-wrap: wrap; }
     .admin-badge { display: inline-block; padding: 3px 9px; border-radius: 18px; font-size: 11px; font-weight: 800; background: rgba(255,68,68,0.2); border: 1px solid rgba(255,68,68,0.4); color: var(--alert); letter-spacing: 0.05em; margin-bottom: 10px; }
 
+    /* ============================================================ CHAT UI ============================================================ */
     #chat.page-section { padding: 0; overflow: hidden; }
     .nova-chat-wrap { display: grid; grid-template-columns: 64px 220px 1fr 240px; height: 100%; overflow: hidden; background: rgba(8, 11, 24, 0.9); }
     .chat-icon-rail { display: flex; flex-direction: column; align-items: center; padding: 14px 0; gap: 6px; border-right: 1px solid var(--border); background: rgba(5, 7, 18, 0.95); }
@@ -835,433 +533,1557 @@ function openNova() {
     .stat-label { font-size: 11px; color: var(--muted); font-weight: 600; }
     .stat-value { font-size: 13px; font-weight: 800; color: var(--accent); }
 
-    .user-profile-banner { width: 100%; height: 120px; border-radius: 14px 14px 0 0; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #2d3244 0%, #3d4460 100%); }
+    /* User profile page banner */
+    .user-profile-banner {
+      width: 100%;
+      height: 120px;
+      border-radius: 14px 14px 0 0;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #2d3244 0%, #3d4460 100%);
+    }
     .user-profile-banner img { position: absolute; top:0;left:0;width:100%;height:100%;object-fit:cover; }
     .user-profile-banner .banner-nova-label { position: absolute; bottom:8px;right:14px; font-size:16px;font-weight:900;letter-spacing:3px;color:rgba(255,255,255,0.4);text-shadow:0 1px 4px rgba(0,0,0,0.5); pointer-events:none; }
 
     @media (max-width: 1100px) { .nova-chat-wrap { grid-template-columns: 64px 200px 1fr; } .chat-right-panel { display: none; } }
     @media (max-width: 768px) { .app { grid-template-columns: 1fr; } aside { display: none; } .header-info { display: none; } .nova-chat-wrap { grid-template-columns: 1fr; } .chat-icon-rail, .chat-sidebar-panel { display: none; } .admin-grid { grid-template-columns: 1fr; } }
-  <\/style>
-<\/head>
+  </style>
+</head>
 
 <body>
   <div class="bg-container">
-    <div class="custom-bg" id="customBg"><\/div>
-    <div class="gradient-wave"><\/div>
-    <div class="orb orb-1"><\/div>
-    <div class="orb orb-2"><\/div>
-    <div class="grid-overlay"><\/div>
-    <div class="scanline"><\/div>
-    <div class="energy-ring"><\/div>
-    <div class="energy-ring"><\/div>
-    <div class="particles" id="particles"><\/div>
-  <\/div>
+    <div class="custom-bg" id="customBg"></div>
+    <div class="gradient-wave"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="grid-overlay"></div>
+    <div class="scanline"></div>
+    <div class="energy-ring"></div>
+    <div class="energy-ring"></div>
+    <div class="particles" id="particles"></div>
+  </div>
 
   <div id="image-popup-overlay">
-    <img id="image-popup-img" src="" alt="Popup" \/>
-  <\/div>
+    <img id="image-popup-img" src="" alt="Popup" />
+  </div>
 
   <div class="app">
     <header>
-      <div class="brand">Nova<\/div>
+      <div class="brand">Nova</div>
       <div class="header-info">
-        <div class="info-item"><span class="info-label">Device<\/span><span class="info-value" id="device-type">PC<\/span><\/div>
-        <div class="info-item"><span class="info-label">Time<\/span><span class="info-value" id="current-time">00:00:00<\/span><\/div>
-        <div class="info-item"><span class="info-label">Memory<\/span><span class="info-value" id="memory-usage">-- MB<\/span><\/div>
-      <\/div>
+        <div class="info-item"><span class="info-label">Device</span><span class="info-value" id="device-type">PC</span></div>
+        <div class="info-item"><span class="info-label">Time</span><span class="info-value" id="current-time">00:00:00</span></div>
+        <div class="info-item"><span class="info-label">Memory</span><span class="info-value" id="memory-usage">-- MB</span></div>
+      </div>
       <div class="coin-display" onclick="showPage('achievements')" title="View Achievements & Rewards">
-        <div class="coin-icon">🪙<\/div>
-        <span id="coin-count">0<\/span>
-      <\/div>
-    <\/header>
+        <div class="coin-icon">🪙</div>
+        <span id="coin-count">0</span>
+      </div>
+    </header>
 
     <aside>
-      <div class="nav-title">Pages<\/div>
+      <div class="nav-title">Pages</div>
       <nav class="nav" id="nav">
-        <a data-page="home"><span class="dot"><\/span><span>Home<\/span><\/a>
-        <a data-page="unblocked-google"><span class="dot"><\/span><span>Unblocked Google<\/span><\/a>
-        <a data-page="games"><span class="dot"><\/span><span>Games<\/span><\/a>
-        <a data-page="shop"><span class="dot"><\/span><span>Shop<\/span><\/a>
-        <a data-page="achievements"><span class="dot"><\/span><span>Achievements<\/span><\/a>
-        <a data-page="requests"><span class="dot"><\/span><span>Requests<\/span><\/a>
-        <a data-page="water"><span class="dot"><\/span><span>Water<\/span><\/a>
-        <a data-page="movies"><span class="dot"><\/span><span>Movies<\/span><\/a>
-        <a data-page="tvshows"><span class="dot"><\/span><span>TV Shows<\/span><\/a>
-        <a data-page="chat"><span class="dot"><\/span><span>Chat<\/span><\/a>
-        <a data-page="profile"><span class="dot"><\/span><span>Profile<\/span><\/a>
-        <a data-page="settings"><span class="dot"><\/span><span>Settings<\/span><\/a>
-        <a data-page="admin" id="admin-nav-link" class="admin-nav-item" style="display:none;"><span class="dot"><\/span><span>🛡️ Admin Panel<\/span><\/a>
-      <\/nav>
-    <\/aside>
+        <a data-page="home"><span class="dot"></span><span>Home</span></a>
+        <a data-page="unblocked-google"><span class="dot"></span><span>Unblocked Google</span></a>
+        <a data-page="games"><span class="dot"></span><span>Games</span></a>
+        <a data-page="shop"><span class="dot"></span><span>Shop</span></a>
+        <a data-page="achievements"><span class="dot"></span><span>Achievements</span></a>
+        <a data-page="requests"><span class="dot"></span><span>Requests</span></a>
+        <a data-page="water"><span class="dot"></span><span>Water</span></a>
+        <a data-page="movies"><span class="dot"></span><span>Movies</span></a>
+        <a data-page="tvshows"><span class="dot"></span><span>TV Shows</span></a>
+        <a data-page="chat"><span class="dot"></span><span>Chat</span></a>
+        <a data-page="profile"><span class="dot"></span><span>Profile</span></a>
+        <a data-page="settings"><span class="dot"></span><span>Settings</span></a>
+        <a data-page="admin" id="admin-nav-link" class="admin-nav-item" style="display:none;"><span class="dot"></span><span>🛡️ Admin Panel</span></a>
+      </nav>
+    </aside>
 
     <main>
+      <!-- HOME PAGE -->
       <div id="home" class="page-section active">
         <div class="card">
-          <h1>Welcome to Nova<\/h1>
-          <p><\/p>
+          <h1>Welcome to Nova</h1>
+          <p></p>
           <div class="row">
-            <div class="row-title"><span>🕐 Recently Played<\/span><\/div>
-            <p class="empty" id="recentlyPlayedEmpty">No recent activity<\/p>
-            <div class="scroller" id="recentlyPlayedScroller"><\/div>
-          <\/div>
+            <div class="row-title"><span>🕐 Recently Played</span></div>
+            <p class="empty" id="recentlyPlayedEmpty">No recent activity</p>
+            <div class="scroller" id="recentlyPlayedScroller"></div>
+          </div>
           <div class="row" style="margin-top: 28px;">
-            <div class="row-title"><span>⭐ Your Favorites<\/span><\/div>
-            <p class="empty" id="favoritesEmpty">No favorites yet. Click the star on any game or movie!<\/p>
-            <div class="scroller" id="favoritesScroller"><\/div>
-          <\/div>
-        <\/div>
-      <\/div>
+            <div class="row-title"><span>⭐ Your Favorites</span></div>
+            <p class="empty" id="favoritesEmpty">No favorites yet. Click the star on any game or movie!</p>
+            <div class="scroller" id="favoritesScroller"></div>
+          </div>
+        </div>
+      </div>
 
+      <!-- ACHIEVEMENTS PAGE -->
       <div id="achievements" class="page-section">
         <div class="card">
-          <h1>🏆 Achievements & Rewards<\/h1>
-          <p>Track your progress and claim daily rewards. Click any badge to see details — some secret badges require a code!<\/p>
+          <h1>🏆 Achievements & Rewards</h1>
+          <p>Track your progress and claim daily rewards. Click any badge to see details — some secret badges require a code!</p>
           <div style="margin-top: 20px; padding: 20px; background: rgba(255, 215, 0, 0.1); border: 2px solid rgba(255, 215, 0, 0.3); border-radius: 14px;">
-            <h2 style="margin: 0 0 10px 0; color: var(--coin-gold);">💰 Daily Rewards<\/h2>
-            <p style="margin: 0 0 14px 0;">Claim your reward every 12 hours!<\/p>
+            <h2 style="margin: 0 0 10px 0; color: var(--coin-gold);">💰 Daily Rewards</h2>
+            <p style="margin: 0 0 14px 0;">Claim your reward every 12 hours!</p>
             <div style="display: flex; align-items: center; gap: 14px;">
-              <button class="btn" id="claimRewardBtn" onclick="claimDailyReward()">Claim 5 Coins<\/button>
-              <span id="rewardTimer" style="color: var(--muted); font-weight: 700;"><\/span>
-            <\/div>
-          <\/div>
+              <button class="btn" id="claimRewardBtn" onclick="claimDailyReward()">Claim 5 Coins</button>
+              <span id="rewardTimer" style="color: var(--muted); font-weight: 700;"></span>
+            </div>
+          </div>
           <div style="margin-top: 28px;">
-            <h2>🎖️ Your Badges <span style="font-size:13px;color:var(--muted);font-weight:500;" id="badge-progress-text"><\/span><\/h2>
-            <p style="font-size:12px;color:var(--muted);margin-bottom:0;">🟢 Auto = earned automatically &nbsp;|&nbsp; 🔑 Code = enter a secret code to unlock<\/p>
-            <div class="badge-container" id="badgeContainer"><\/div>
-          <\/div>
-        <\/div>
-      <\/div>
+            <h2>🎖️ Your Badges <span style="font-size:13px;color:var(--muted);font-weight:500;" id="badge-progress-text"></span></h2>
+            <p style="font-size:12px;color:var(--muted);margin-bottom:0;">🟢 Auto = earned automatically &nbsp;|&nbsp; 🔑 Code = enter a secret code to unlock</p>
+            <div class="badge-container" id="badgeContainer"></div>
+          </div>
+        </div>
+      </div>
 
+      <!-- SETTINGS PAGE -->
       <div id="settings" class="page-section">
         <div class="card settings-container">
-          <h1>Settings<\/h1>
-          <p>Customize your Nova experience<\/p>
+          <h1>Settings</h1>
+          <p>Customize your Nova experience</p>
           <div class="settings-group">
-            <h2>🎨 Appearance<\/h2>
-            <div class="setting-item"><div class="setting-info"><div class="setting-title">Dark Mode \/ Light Mode<\/div><div class="setting-desc">Toggle between dark and light themes<\/div><\/div><div class="toggle-switch" id="theme-toggle" onclick="toggleTheme()"><\/div><\/div>
-            <div class="setting-item"><div class="setting-info"><div class="setting-title">Custom Background<\/div><div class="setting-desc">Upload your own background image<\/div><\/div><div class="file-input-wrapper"><input type="file" id="bg-upload" accept="image\/*" onchange="uploadBackground(event)"><label for="bg-upload" class="file-input-label">Choose File<\/label><\/div><\/div>
-            <div class="setting-item"><div class="setting-info"><div class="setting-title">Reset Background<\/div><div class="setting-desc">Remove custom background and restore default<\/div><\/div><button class="btn" onclick="resetBackground()">Reset<\/button><\/div>
-          <\/div>
+            <h2>🎨 Appearance</h2>
+            <div class="setting-item"><div class="setting-info"><div class="setting-title">Dark Mode / Light Mode</div><div class="setting-desc">Toggle between dark and light themes</div></div><div class="toggle-switch" id="theme-toggle" onclick="toggleTheme()"></div></div>
+            <div class="setting-item"><div class="setting-info"><div class="setting-title">Custom Background</div><div class="setting-desc">Upload your own background image</div></div><div class="file-input-wrapper"><input type="file" id="bg-upload" accept="image/*" onchange="uploadBackground(event)"><label for="bg-upload" class="file-input-label">Choose File</label></div></div>
+            <div class="setting-item"><div class="setting-info"><div class="setting-title">Reset Background</div><div class="setting-desc">Remove custom background and restore default</div></div><button class="btn" onclick="resetBackground()">Reset</button></div>
+          </div>
           <div class="settings-group">
-            <h2>⚡ Performance<\/h2>
-            <div class="setting-item"><div class="setting-info"><div class="setting-title">Performance Mode<\/div><div class="setting-desc">Disable animations for better performance<\/div><\/div><div class="toggle-switch" id="performance-toggle" onclick="togglePerformance()"><\/div><\/div>
-          <\/div>
+            <h2>⚡ Performance</h2>
+            <div class="setting-item"><div class="setting-info"><div class="setting-title">Performance Mode</div><div class="setting-desc">Disable animations for better performance</div></div><div class="toggle-switch" id="performance-toggle" onclick="togglePerformance()"></div></div>
+          </div>
           <div class="settings-group">
-            <h2>🎮 Display<\/h2>
-            <div class="setting-item"><div class="setting-info"><div class="setting-title">Scroll or Grid Mode<\/div><div class="setting-desc">Display games in scrollable row or grid layout<\/div><\/div><div class="toggle-switch" id="grid-toggle" onclick="toggleGridMode()"><\/div><\/div>
-          <\/div>
+            <h2>🎮 Display</h2>
+            <div class="setting-item"><div class="setting-info"><div class="setting-title">Scroll or Grid Mode</div><div class="setting-desc">Display games in scrollable row or grid layout</div></div><div class="toggle-switch" id="grid-toggle" onclick="toggleGridMode()"></div></div>
+          </div>
           <div class="settings-group">
-            <h2>🔔 Notifications<\/h2>
-            <div class="setting-item"><div class="setting-info"><div class="setting-title">Enable Notifications<\/div><div class="setting-desc">Receive notifications for rewards and achievements<\/div><\/div><div class="toggle-switch active" id="notifications-toggle" onclick="toggleNotifications()"><\/div><\/div>
-            <div class="setting-item"><div class="setting-info"><div class="setting-title">Notification Frequency<\/div><div class="setting-desc">How often you receive notifications<\/div><\/div><select id="notification-frequency" onchange="updateNotificationFrequency()"><option value="all">All Notifications<\/option><option value="important">Important Only<\/option><option value="minimal">Minimal<\/option><option value="none">None<\/option><\/select><\/div>
-          <\/div>
+            <h2>🔔 Notifications</h2>
+            <div class="setting-item"><div class="setting-info"><div class="setting-title">Enable Notifications</div><div class="setting-desc">Receive notifications for rewards and achievements</div></div><div class="toggle-switch active" id="notifications-toggle" onclick="toggleNotifications()"></div></div>
+            <div class="setting-item"><div class="setting-info"><div class="setting-title">Notification Frequency</div><div class="setting-desc">How often you receive notifications</div></div><select id="notification-frequency" onchange="updateNotificationFrequency()"><option value="all">All Notifications</option><option value="important">Important Only</option><option value="minimal">Minimal</option><option value="none">None</option></select></div>
+          </div>
           <div class="settings-group">
-            <h2>⌨️ Keyboard Shortcuts<\/h2>
-            <div class="setting-item"><div class="setting-info"><div class="setting-title">Enable Keyboard Shortcuts<\/div><div class="setting-desc">Use keyboard shortcuts to navigate<\/div><\/div><div class="toggle-switch active" id="shortcuts-toggle" onclick="toggleShortcuts()"><\/div><\/div>
+            <h2>⌨️ Keyboard Shortcuts</h2>
+            <div class="setting-item"><div class="setting-info"><div class="setting-title">Enable Keyboard Shortcuts</div><div class="setting-desc">Use keyboard shortcuts to navigate</div></div><div class="toggle-switch active" id="shortcuts-toggle" onclick="toggleShortcuts()"></div></div>
             <div style="margin-top: 14px;">
-              <div class="shortcut-item"><span class="shortcut-action">Home Page<\/span><div class="shortcut-keys"><span class="shortcut-key">Alt<\/span><span>+<\/span><span class="shortcut-key">H<\/span><\/div><\/div>
-              <div class="shortcut-item"><span class="shortcut-action">Games<\/span><div class="shortcut-keys"><span class="shortcut-key">Alt<\/span><span>+<\/span><span class="shortcut-key">G<\/span><\/div><\/div>
-              <div class="shortcut-item"><span class="shortcut-action">Settings<\/span><div class="shortcut-keys"><span class="shortcut-key">Alt<\/span><span>+<\/span><span class="shortcut-key">S<\/span><\/div><\/div>
-              <div class="shortcut-item"><span class="shortcut-action">Search<\/span><div class="shortcut-keys"><span class="shortcut-key">Ctrl<\/span><span>+<\/span><span class="shortcut-key">K<\/span><\/div><\/div>
-              <div class="shortcut-item"><span class="shortcut-action">Profile<\/span><div class="shortcut-keys"><span class="shortcut-key">Alt<\/span><span>+<\/span><span class="shortcut-key">P<\/span><\/div><\/div>
-            <\/div>
-          <\/div>
+              <div class="shortcut-item"><span class="shortcut-action">Home Page</span><div class="shortcut-keys"><span class="shortcut-key">Alt</span><span>+</span><span class="shortcut-key">H</span></div></div>
+              <div class="shortcut-item"><span class="shortcut-action">Games</span><div class="shortcut-keys"><span class="shortcut-key">Alt</span><span>+</span><span class="shortcut-key">G</span></div></div>
+              <div class="shortcut-item"><span class="shortcut-action">Settings</span><div class="shortcut-keys"><span class="shortcut-key">Alt</span><span>+</span><span class="shortcut-key">S</span></div></div>
+              <div class="shortcut-item"><span class="shortcut-action">Search</span><div class="shortcut-keys"><span class="shortcut-key">Ctrl</span><span>+</span><span class="shortcut-key">K</span></div></div>
+              <div class="shortcut-item"><span class="shortcut-action">Profile</span><div class="shortcut-keys"><span class="shortcut-key">Alt</span><span>+</span><span class="shortcut-key">P</span></div></div>
+            </div>
+          </div>
           <div class="settings-group">
-            <h2>🔒 Browser<\/h2>
-            <div class="setting-item"><div class="setting-info"><div class="setting-title">Prevent Ctrl+W<\/div><div class="setting-desc">Block accidental tab closing with Ctrl+W<\/div><\/div><div class="toggle-switch" id="ctrlw-toggle" onclick="toggleCtrlW()"><\/div><\/div>
-          <\/div>
+            <h2>🔒 Browser</h2>
+            <div class="setting-item"><div class="setting-info"><div class="setting-title">Prevent Ctrl+W</div><div class="setting-desc">Block accidental tab closing with Ctrl+W</div></div><div class="toggle-switch" id="ctrlw-toggle" onclick="toggleCtrlW()"></div></div>
+          </div>
           <div class="settings-group">
-            <h2>💾 Data<\/h2>
-            <div class="setting-item"><div class="setting-info"><div class="setting-title">Export Settings<\/div><div class="setting-desc">Save your settings to a file<\/div><\/div><button class="btn" onclick="exportSettings()">Export<\/button><\/div>
-            <div class="setting-item"><div class="setting-info"><div class="setting-title">Import Settings<\/div><div class="setting-desc">Load settings from a file<\/div><\/div><div class="file-input-wrapper"><input type="file" id="settings-import" accept=".json" onchange="importSettings(event)"><label for="settings-import" class="file-input-label">Import<\/label><\/div><\/div>
-            <div class="setting-item"><div class="setting-info"><div class="setting-title">Reset All Settings<\/div><div class="setting-desc">Clear all settings and return to defaults<\/div><\/div><button class="btn" style="background: rgba(255, 68, 68, 0.2); border-color: var(--alert);" onclick="resetAllSettings()">Reset All<\/button><\/div>
-          <\/div>
-        <\/div>
-      <\/div>
+            <h2>💾 Data</h2>
+            <div class="setting-item"><div class="setting-info"><div class="setting-title">Export Settings</div><div class="setting-desc">Save your settings to a file</div></div><button class="btn" onclick="exportSettings()">Export</button></div>
+            <div class="setting-item"><div class="setting-info"><div class="setting-title">Import Settings</div><div class="setting-desc">Load settings from a file</div></div><div class="file-input-wrapper"><input type="file" id="settings-import" accept=".json" onchange="importSettings(event)"><label for="settings-import" class="file-input-label">Import</label></div></div>
+            <div class="setting-item"><div class="setting-info"><div class="setting-title">Reset All Settings</div><div class="setting-desc">Clear all settings and return to defaults</div></div><button class="btn" style="background: rgba(255, 68, 68, 0.2); border-color: var(--alert);" onclick="resetAllSettings()">Reset All</button></div>
+          </div>
+        </div>
+      </div>
 
+      <!-- UNBLOCKED GOOGLE PAGE -->
       <div id="unblocked-google" class="page-section">
-        <div class="card"><h1>Unblocked Google<\/h1><p>This doesn't show up on your search history and everything is completely unblocked<\/p><br><button class="google-sites-button" onclick="openUnblockedGoogle()">Open Unblocked Google<\/button><\/div>
-      <\/div>
+        <div class="card"><h1>Unblocked Google</h1><p>This doesn't show up on your search history and everything is completely unblocked</p><br><button class="google-sites-button" onclick="openUnblockedGoogle()">Open Unblocked Google</button></div>
+      </div>
 
+      <!-- GAMES PAGE -->
       <div id="games" class="page-section">
         <div class="card">
-          <h1>Games<\/h1>
+          <h1>Games</h1>
           <div class="search-wrap">
-            <input id="games-search" class="search-input" type="text" placeholder="Search games..." autocomplete="off" \/>
-            <button id="games-clear" class="clear-btn" type="button">Clear<\/button>
-          <\/div>
+            <input id="games-search" class="search-input" type="text" placeholder="Search games..." autocomplete="off" />
+            <button id="games-clear" class="clear-btn" type="button">Clear</button>
+          </div>
           <div class="category-filter">
-            <button class="category-btn active" onclick="filterGamesByCategory('all', this)">All<\/button>
-            <button class="category-btn" onclick="filterGamesByCategory('action', this)">Action<\/button>
-            <button class="category-btn" onclick="filterGamesByCategory('horror', this)">Horror<\/button>
-            <button class="category-btn" onclick="filterGamesByCategory('sports', this)">Sports<\/button>
-            <button class="category-btn" onclick="filterGamesByCategory('puzzle', this)">Puzzle<\/button>
-            <button class="category-btn" onclick="filterGamesByCategory('adventure', this)">Adventure<\/button>
-          <\/div>
-          <div class="row"><div class="row-title"><span>Top Games<\/span><\/div><div class="scroller" id="topGamesScroller"><\/div><\/div>
-          <div class="row" style="margin-top:18px;"><div class="row-title"><span>Games<\/span><\/div><p class="empty" id="gamesEmpty" style="display:none;">No games match your search.<\/p><div class="scroller" id="allGamesScroller"><\/div><\/div>
-        <\/div>
-      <\/div>
+            <button class="category-btn active" onclick="filterGamesByCategory('all', this)">All</button>
+            <button class="category-btn" onclick="filterGamesByCategory('action', this)">Action</button>
+            <button class="category-btn" onclick="filterGamesByCategory('horror', this)">Horror</button>
+            <button class="category-btn" onclick="filterGamesByCategory('sports', this)">Sports</button>
+            <button class="category-btn" onclick="filterGamesByCategory('puzzle', this)">Puzzle</button>
+            <button class="category-btn" onclick="filterGamesByCategory('adventure', this)">Adventure</button>
+          </div>
+          <div class="row"><div class="row-title"><span>Top Games</span></div><div class="scroller" id="topGamesScroller"></div></div>
+          <div class="row" style="margin-top:18px;"><div class="row-title"><span>Games</span></div><p class="empty" id="gamesEmpty" style="display:none;">No games match your search.</p><div class="scroller" id="allGamesScroller"></div></div>
+        </div>
+      </div>
 
+      <!-- SHOP PAGE -->
       <div id="shop" class="page-section">
         <div class="card">
-          <h1>Nova Coin Shop<\/h1>
-          <p>Purchase offline game downloads and profile banners with your Nova Coins. Make sure to login so your coins save!<\/p>
+          <h1>Nova Coin Shop</h1>
+          <p>Purchase offline game downloads and profile banners with your Nova Coins. Make sure to login so your coins save!</p>
           <div class="row">
-            <div class="row-title"><span>🎨 Profile Banners<\/span><\/div>
-            <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Equip a banner on your profile page. Banners always display "Nova" text.<\/p>
-            <div class="scroller" id="bannerShopScroller"><\/div>
-          <\/div>
+            <div class="row-title"><span>🎨 Profile Banners</span></div>
+            <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Equip a banner on your profile page. Banners always display "Nova" text.</p>
+            <div class="scroller" id="bannerShopScroller"></div>
+          </div>
           <div class="row" style="margin-top:28px;">
-            <div class="row-title"><span>🎮 Available Downloads<\/span><\/div>
-            <div class="scroller" id="shopScroller"><\/div>
-          <\/div>
+            <div class="row-title"><span>🎮 Available Downloads</span></div>
+            <div class="scroller" id="shopScroller"></div>
+          </div>
           <div class="row" style="margin-top:28px;">
-            <div class="row-title"><span>Your Purchases<\/span><\/div>
-            <div id="purchasedItems"><p class="empty">You haven't purchased anything yet...<\/p><\/div>
-          <\/div>
-        <\/div>
-      <\/div>
+            <div class="row-title"><span>Your Purchases</span></div>
+            <div id="purchasedItems"><p class="empty">You haven't purchased anything yet...</p></div>
+          </div>
+        </div>
+      </div>
 
+      <!-- REQUESTS PAGE -->
       <div id="requests" class="page-section">
         <div class="card">
-          <h1>Requests<\/h1><p>Submit a request or report a bug<\/p>
+          <h1>Requests</h1><p>Submit a request or report a bug</p>
           <form id="requestForm">
-            <label><strong>Request Type<\/strong><\/label><br>
-            <select name="request_type" required><option value="">Select an option<\/option><option>Game Request<\/option><option>Movie Request<\/option><option>TV Show Request<\/option><option>Anime Request<\/option><option>Feature Suggestion<\/option><option>Report a Bug<\/option><option>Other<\/option><\/select>
-            <label><strong>Details<\/strong><\/label><br>
-            <textarea name="details" required rows="5" placeholder="Describe your request..."><\/textarea>
-            <label><strong>Name (optional)<\/strong><\/label><br>
+            <label><strong>Request Type</strong></label><br>
+            <select name="request_type" required><option value="">Select an option</option><option>Game Request</option><option>Movie Request</option><option>TV Show Request</option><option>Anime Request</option><option>Feature Suggestion</option><option>Report a Bug</option><option>Other</option></select>
+            <label><strong>Details</strong></label><br>
+            <textarea name="details" required rows="5" placeholder="Describe your request..."></textarea>
+            <label><strong>Name (optional)</strong></label><br>
             <input type="text" name="name" placeholder="Your name">
-            <button class="btn" type="submit">Submit Request<\/button>
-            <p id="status"><\/p>
-          <\/form>
-        <\/div>
-      <\/div>
+            <button class="btn" type="submit">Submit Request</button>
+            <p id="status"></p>
+          </form>
+        </div>
+      </div>
 
+      <!-- WATER PAGE -->
       <div id="water" class="page-section">
-        <div class="card"><h1>Water<\/h1><p>Password is funni<\/p><br><button class="google-sites-button" onclick="openWaterGame()">Click this<\/button><\/div>
-      <\/div>
+        <div class="card"><h1>Water</h1><p>Password is funni</p><br><button class="google-sites-button" onclick="openWaterGame()">Click this</button></div>
+      </div>
 
+      <!-- MOVIES PAGE -->
       <div id="movies" class="page-section">
         <div class="card">
-          <h1>Movies<\/h1>
-          <div class="search-wrap"><input id="movies-search" class="search-input" placeholder="Search movies..." \/><button id="movies-clear" class="clear-btn">Clear<\/button><\/div>
-          <div class="row"><div class="row-title">Top Movies<\/div><div class="scroller" id="topMoviesScroller"><\/div><\/div>
-          <div class="row"><div class="row-title">All Movies<\/div><p class="empty" id="moviesEmpty" style="display:none;">No movies match your search.<\/p><div class="scroller" id="allMoviesScroller"><\/div><\/div>
-        <\/div>
-      <\/div>
+          <h1>Movies</h1>
+          <div class="search-wrap"><input id="movies-search" class="search-input" placeholder="Search movies..." /><button id="movies-clear" class="clear-btn">Clear</button></div>
+          <div class="row"><div class="row-title">Top Movies</div><div class="scroller" id="topMoviesScroller"></div></div>
+          <div class="row"><div class="row-title">All Movies</div><p class="empty" id="moviesEmpty" style="display:none;">No movies match your search.</p><div class="scroller" id="allMoviesScroller"></div></div>
+        </div>
+      </div>
 
+      <!-- TV SHOWS PAGE -->
       <div id="tvshows" class="page-section">
         <div class="card">
-          <h1>TV Shows<\/h1>
-          <div class="search-wrap"><input id="tvshows-search" class="search-input" placeholder="Search TV shows..." \/><button id="tvshows-clear" class="clear-btn">Clear<\/button><\/div>
-          <div class="row"><div class="row-title">All TV Shows<\/div><div class="scroller" id="allTVShowsScroller"><\/div><\/div>
-        <\/div>
-      <\/div>
+          <h1>TV Shows</h1>
+          <div class="search-wrap"><input id="tvshows-search" class="search-input" placeholder="Search TV shows..." /><button id="tvshows-clear" class="clear-btn">Clear</button></div>
+          <div class="row"><div class="row-title">All TV Shows</div><div class="scroller" id="allTVShowsScroller"></div></div>
+        </div>
+      </div>
 
+      <!-- CHAT PAGE -->
       <div id="chat" class="page-section" style="padding:0;">
         <div class="nova-chat-wrap">
           <div class="chat-icon-rail">
-            <div class="rail-icon active" id="rail-all" onclick="switchRailTab('all')" title="All">💬<span class="rail-tooltip">All Chats<\/span><\/div>
-            <div class="rail-icon" id="rail-friends" onclick="switchRailTab('friends')" title="Friends">👥<span class="rail-tooltip">Friends<\/span><\/div>
-            <div class="rail-icon" id="rail-groups" onclick="switchRailTab('groups')" title="Groups">🌐<span class="rail-tooltip">Groups<\/span><\/div>
-            <div class="rail-divider"><\/div>
-            <div class="rail-icon" id="rail-public" onclick="openChat('Live Chatroom', null, 'global')" title="Public">#<span class="rail-tooltip">Public Channel<\/span><\/div>
-            <div class="rail-spacer"><\/div>
-            <div class="rail-icon" onclick="showPage('profile')" title="Profile">👤<span class="rail-tooltip">Profile<\/span><\/div>
-          <\/div>
+            <div class="rail-icon active" id="rail-all" onclick="switchRailTab('all')" title="All">💬<span class="rail-tooltip">All Chats</span></div>
+            <div class="rail-icon" id="rail-friends" onclick="switchRailTab('friends')" title="Friends">👥<span class="rail-tooltip">Friends</span></div>
+            <div class="rail-icon" id="rail-groups" onclick="switchRailTab('groups')" title="Groups">🌐<span class="rail-tooltip">Groups</span></div>
+            <div class="rail-divider"></div>
+            <div class="rail-icon" id="rail-public" onclick="openChat('Live Chatroom', null, 'global')" title="Public">#<span class="rail-tooltip">Public Channel</span></div>
+            <div class="rail-spacer"></div>
+            <div class="rail-icon" onclick="showPage('profile')" title="Profile">👤<span class="rail-tooltip">Profile</span></div>
+          </div>
           <div class="chat-sidebar-panel">
             <div class="sidebar-header">
-              <div class="sidebar-header-title">Nova Chat<\/div>
-              <div class="chat-search-box"><span>🔍<\/span><input type="text" id="friend-search" placeholder="Search people..." onkeyup="filterFriends()" \/><\/div>
-            <\/div>
-            <div class="sidebar-section-label"><span>Channels<\/span><\/div>
+              <div class="sidebar-header-title">Nova Chat</div>
+              <div class="chat-search-box"><span>🔍</span><input type="text" id="friend-search" placeholder="Search people..." onkeyup="filterFriends()" /></div>
+            </div>
+            <div class="sidebar-section-label"><span>Channels</span></div>
             <div id="chatroom-list">
               <div class="chat-entry" id="global-entry" onclick="openChat('Live Chatroom', document.getElementById('global-entry'), 'global')">
-                <div class="chat-entry-avatar" style="font-size:15px;">#<\/div>
-                <div class="chat-entry-info"><div class="chat-entry-name">Public Channel<\/div><div class="chat-entry-preview">Global chat for everyone<\/div><\/div>
-              <\/div>
-            <\/div>
-            <div class="sidebar-section-label" id="groups-label" style="display:none;"><span>Groups<\/span><\/div>
-            <div id="group-list"><\/div>
-            <div class="sidebar-section-label"><span>Friends<\/span><button onclick="addFriend()" title="Add Friend">+<\/button><\/div>
-            <div class="sidebar-list" id="friend-list"><\/div>
-            <div class="add-friend-btn" onclick="addFriend()"><span>+<\/span> Add Friend<\/div>
-          <\/div>
+                <div class="chat-entry-avatar" style="font-size:15px;">#</div>
+                <div class="chat-entry-info"><div class="chat-entry-name">Public Channel</div><div class="chat-entry-preview">Global chat for everyone</div></div>
+              </div>
+            </div>
+            <div class="sidebar-section-label" id="groups-label" style="display:none;"><span>Groups</span></div>
+            <div id="group-list"></div>
+            <div class="sidebar-section-label"><span>Friends</span><button onclick="addFriend()" title="Add Friend">+</button></div>
+            <div class="sidebar-list" id="friend-list"></div>
+            <div class="add-friend-btn" onclick="addFriend()"><span>+</span> Add Friend</div>
+          </div>
           <div class="chat-main-area" id="chat-pane">
-            <div class="chat-empty-state" id="chat-empty-state"><div class="chat-empty-icon">💬<\/div><div class="chat-empty-title">No Conversation Selected<\/div><div class="chat-empty-desc">Pick a friend or channel from the left to start chatting<\/div><\/div>
+            <div class="chat-empty-state" id="chat-empty-state"><div class="chat-empty-icon">💬</div><div class="chat-empty-title">No Conversation Selected</div><div class="chat-empty-desc">Pick a friend or channel from the left to start chatting</div></div>
             <div id="chat-active-view" style="display:none; flex-direction:column; height:100%;">
               <div class="chat-topbar">
-                <div class="chat-topbar-avatar" id="topbar-avatar" onclick="viewProfileFromChat()">?<\/div>
-                <div class="chat-topbar-info"><div class="chat-topbar-name" id="active-chat-user" onclick="viewProfileFromChat()">—<\/div><div class="chat-topbar-status" id="topbar-status"><span class="status-dot"><\/span> Online<\/div><\/div>
+                <div class="chat-topbar-avatar" id="topbar-avatar" onclick="viewProfileFromChat()">?</div>
+                <div class="chat-topbar-info"><div class="chat-topbar-name" id="active-chat-user" onclick="viewProfileFromChat()">—</div><div class="chat-topbar-status" id="topbar-status"><span class="status-dot"></span> Online</div></div>
                 <div class="topbar-actions">
-                  <button class="topbar-btn" id="make-group-btn" onclick="createGroup()" style="display:none;" title="Create Group">➕<span class="rail-tooltip">Create Group<\/span><\/button>
-                  <button class="topbar-btn" id="manage-group-btn" onclick="alert('Group management coming soon!')" style="display:none;" title="Manage Group">⚙️<span class="rail-tooltip">Manage Group<\/span><\/button>
-                  <button class="topbar-btn" onclick="changeChatBG()" title="Change BG">🖼️<span class="rail-tooltip">Change Background<\/span><\/button>
-                <\/div>
-              <\/div>
-              <div id="chat-msgs" class="chat-messages"><\/div>
-              <div class="typing-indicator" id="typing-indicator"><div class="typing-dots"><span><\/span><span><\/span><span><\/span><\/div><span id="typing-text">Someone is typing...<\/span><\/div>
+                  <button class="topbar-btn" id="make-group-btn" onclick="createGroup()" style="display:none;" title="Create Group">➕<span class="rail-tooltip">Create Group</span></button>
+                  <button class="topbar-btn" id="manage-group-btn" onclick="alert('Group management coming soon!')" style="display:none;" title="Manage Group">⚙️<span class="rail-tooltip">Manage Group</span></button>
+                  <button class="topbar-btn" onclick="changeChatBG()" title="Change BG">🖼️<span class="rail-tooltip">Change Background</span></button>
+                </div>
+              </div>
+              <div id="chat-msgs" class="chat-messages"></div>
+              <div class="typing-indicator" id="typing-indicator"><div class="typing-dots"><span></span><span></span><span></span></div><span id="typing-text">Someone is typing...</span></div>
               <div class="chat-input-bar">
                 <div class="chat-input-inner">
-                  <button class="input-action-btn" title="Emoji"><\/button>
-                  <textarea id="chat-input" class="nova-chat-input" placeholder="Send a message..." rows="1" onkeydown="handleChatKey(event)" oninput="autoResizeInput(this)"><\/textarea>
-                  <button class="send-btn" onclick="sendMsg()" title="Send">➤<\/button>
-                <\/div>
-              <\/div>
-            <\/div>
-          <\/div>
-          <div class="chat-right-panel"><div class="right-panel-header">📊 Info<\/div><div class="right-panel-body" id="right-panel-body"><div style="color:var(--muted);font-size:13px;text-align:center;margin-top:20px;">Select a chat to see info<\/div><\/div><\/div>
-        <\/div>
-      <\/div>
+                  <button class="input-action-btn" title="Emoji"></button>
+                  <textarea id="chat-input" class="nova-chat-input" placeholder="Send a message..." rows="1" onkeydown="handleChatKey(event)" oninput="autoResizeInput(this)"></textarea>
+                  <button class="send-btn" onclick="sendMsg()" title="Send">➤</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="chat-right-panel"><div class="right-panel-header">📊 Info</div><div class="right-panel-body" id="right-panel-body"><div style="color:var(--muted);font-size:13px;text-align:center;margin-top:20px;">Select a chat to see info</div></div></div>
+        </div>
+      </div>
 
+      <!-- PROFILE PAGE -->
       <div id="profile" class="page-section">
         <div class="profile-container">
+          <!-- Banner + Profile merged card -->
           <div class="profile-card-merged">
+            <!-- BANNER -->
             <div class="profile-banner" id="profile-banner">
-              <span class="profile-banner-text">NOVA<\/span>
-              <span class="profile-banner-nova-overlay">NOVA<\/span>
-            <\/div>
+              <span class="profile-banner-text">NOVA</span>
+              <span class="profile-banner-nova-overlay">NOVA</span>
+            </div>
             <div class="profile-card-body">
               <div style="display:flex; align-items:flex-start; gap:20px; flex-wrap:wrap;">
                 <div class="profile-pic-wrapper">
                   <img id="profile-pic" class="profile-pic" src="https://via.placeholder.com/120" alt="Profile Picture">
-                  <button class="change-pic-btn" onclick="document.getElementById('pfp-upload').click()">📷<\/button>
-                  <input type="file" id="pfp-upload" accept="image\/*" style="display:none;" onchange="uploadProfilePic(event)">
-                <\/div>
+                  <button class="change-pic-btn" onclick="document.getElementById('pfp-upload').click()">📷</button>
+                  <input type="file" id="pfp-upload" accept="image/*" style="display:none;" onchange="uploadProfilePic(event)">
+                </div>
                 <div class="profile-info" style="padding-top:10px;">
-                  <h2 id="profile-username">Guest<\/h2>
-                  <p class="status" id="profile-status">Offline<\/p>
+                  <h2 id="profile-username">Guest</h2>
+                  <p class="status" id="profile-status">Offline</p>
                   <div class="status-update" style="margin-top: 10px;">
                     <input type="text" id="status-input" class="status-input" placeholder="What's on your mind?" maxlength="100">
-                    <button class="btn" onclick="updateStatus()" style="padding: 7px 14px;">Update<\/button>
-                  <\/div>
-                <\/div>
-              <\/div>
-            <\/div>
-          <\/div>
+                    <button class="btn" onclick="updateStatus()" style="padding: 7px 14px;">Update</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="card" style="margin-bottom:18px;">
-            <h3 style="margin-top:0;">Login \/ Register<\/h3>
+            <h3 style="margin-top:0;">Login / Register</h3>
             <input type="text" id="login-username" placeholder="Enter username" style="margin-bottom:8px;">
             <input type="password" id="login-password" placeholder="Enter password" style="margin-bottom:8px;">
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
-              <button class="btn" onclick="loginUser()">Login<\/button>
-              <button class="btn" onclick="registerUser()">Register<\/button>
-              <button class="btn" onclick="logoutUser()">Logout<\/button>
-            <\/div>
-            <div id="auth-status-msg" class="auth-status-msg"><\/div>
-          <\/div>
-          <div class="requests-section">
-            <h3>Friend Requests<\/h3>
-            <div id="requests-list"><p class="empty">No pending requests<\/p><\/div>
-          <\/div>
-        <\/div>
-      <\/div>
+              <button class="btn" onclick="loginUser()">Login</button>
+              <button class="btn" onclick="registerUser()">Register</button>
+              <button class="btn" onclick="logoutUser()">Logout</button>
+            </div>
+            <div id="auth-status-msg" class="auth-status-msg"></div>
+          </div>
 
+          <div class="requests-section">
+            <h3>Friend Requests</h3>
+            <div id="requests-list"><p class="empty">No pending requests</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- USER PROFILE VIEW PAGE -->
       <div id="user-profile" class="page-section">
         <div class="card profile-container" style="padding:0;overflow:hidden;">
           <div class="user-profile-banner" id="user-profile-banner">
-            <span style="font-size:32px;font-weight:900;letter-spacing:6px;color:rgba(255,255,255,0.2);user-select:none;">NOVA<\/span>
-            <span class="banner-nova-label">NOVA<\/span>
-          <\/div>
+            <span style="font-size:32px;font-weight:900;letter-spacing:6px;color:rgba(255,255,255,0.2);user-select:none;">NOVA</span>
+            <span class="banner-nova-label">NOVA</span>
+          </div>
           <div style="padding:24px;">
-            <button class="btn" onclick="goBackFromUserProfile()" style="margin-bottom: 18px;">← Back<\/button>
+            <button class="btn" onclick="goBackFromUserProfile()" style="margin-bottom: 18px;">← Back</button>
             <div class="profile-header">
               <div class="profile-pic-wrapper" style="margin-top:-50px;">
                 <img id="user-profile-pic" class="profile-pic" src="https://via.placeholder.com/120" alt="Profile Picture">
-              <\/div>
+              </div>
               <div class="profile-info">
-                <h2 id="user-profile-username">Loading...<\/h2>
-                <p class="status" id="user-profile-status">Offline<\/p>
-                <p class="status" id="user-profile-custom-status" style="margin-top: 6px; font-style: italic;"><\/p>
-              <\/div>
-            <\/div>
+                <h2 id="user-profile-username">Loading...</h2>
+                <p class="status" id="user-profile-status">Offline</p>
+                <p class="status" id="user-profile-custom-status" style="margin-top: 6px; font-style: italic;"></p>
+              </div>
+            </div>
             <div class="card" style="margin-top:18px;">
-              <h3 style="margin-top:0;">Actions<\/h3>
+              <h3 style="margin-top:0;">Actions</h3>
               <div style="display:flex;gap:8px;flex-wrap:wrap;" id="user-profile-actions">
-                <button class="btn" onclick="sendFriendRequestToUser()">Add Friend<\/button>
-                <button class="btn" onclick="messageUser()">Send Message<\/button>
-              <\/div>
-            <\/div>
-          <\/div>
-        <\/div>
-      <\/div>
+                <button class="btn" onclick="sendFriendRequestToUser()">Add Friend</button>
+                <button class="btn" onclick="messageUser()">Send Message</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <!-- ADMIN PANEL PAGE -->
       <div id="admin" class="page-section">
         <div class="card admin-section">
-          <h1>🛡️ Admin Panel<\/h1>
-          <div class="admin-badge">OWNER ONLY<\/div>
-          <p style="color:var(--muted);">Full control panel. Be careful — all actions are permanent.<\/p>
+          <h1>🛡️ Admin Panel</h1>
+          <div class="admin-badge">OWNER ONLY</div>
+          <p style="color:var(--muted);">Full control panel. Be careful — all actions are permanent.</p>
           <div class="admin-grid">
-            <div class="admin-card"><h2>🔨 Ban User<\/h2><input type="text" id="ban-username-input" class="admin-input" placeholder="Username to ban" onkeydown="if(event.key==='Enter') banUser()" \/><button class="admin-btn" onclick="banUser()">Ban User<\/button><div id="ban-feedback" class="admin-feedback"><\/div><\/div>
-            <div class="admin-card"><h2>📢 Global Message<\/h2><input type="text" id="global-message-input" class="admin-input" placeholder="Message to send to everyone" onkeydown="if(event.key==='Enter') sendGlobalMessage()" \/><button class="admin-btn blue" onclick="sendGlobalMessage()">Send Global Message<\/button><div id="global-msg-feedback" class="admin-feedback"><\/div><\/div>
-            <div class="admin-card"><h2>🪙 Give Credits<\/h2><input type="text" id="credit-username-input" class="admin-input" placeholder="Username to credit" onkeydown="if(event.key==='Enter') giveCredits()" \/><input type="number" id="credit-amount-input" class="admin-input" placeholder="Amount of coins" min="1" \/><button class="admin-btn green" onclick="giveCredits()">Give Credits<\/button><div id="credit-feedback" class="admin-feedback"><\/div><\/div>
-            <div class="admin-card"><h2>🎨 Limited Skins<\/h2><input type="text" id="limited-name-input" class="admin-input" placeholder="Background name" \/><input type="file" id="limited-image-input" accept="image\/*" style="display:none;" onchange="handleLimitedImage(this)" \/><button class="admin-btn blue" onclick="document.getElementById('limited-image-input').click()" style="margin-bottom:7px;">Choose Image<\/button><div id="limited-image-preview" style="max-width:140px;max-height:75px;margin-bottom:7px;border-radius:7px;overflow:hidden;display:none;"><img id="limited-preview-img" style="width:100%;height:auto;display:block;" \/><\/div><div class="admin-row" style="margin-bottom:7px;"><input type="number" id="limited-duration-input" class="admin-input" placeholder="Duration" min="1" style="margin-bottom:0;max-width:90px;" \/><select id="limited-duration-unit" class="admin-input" style="margin-bottom:0;max-width:100px;"><option value="minutes">minutes<\/option><option value="hours">hours<\/option><\/select><\/div><input type="number" id="limited-price-input" class="admin-input" placeholder="Price (NC)" min="0" value="0" \/><button class="admin-btn green" onclick="submitLimitedSkin()">Add to Shop<\/button><div id="limited-feedback" class="admin-feedback"><\/div><\/div>
-          <\/div>
-        <\/div>
-      <\/div>
-    <\/main>
-  <\/div>
+            <div class="admin-card"><h2>🔨 Ban User</h2><input type="text" id="ban-username-input" class="admin-input" placeholder="Username to ban" onkeydown="if(event.key==='Enter') banUser()" /><button class="admin-btn" onclick="banUser()">Ban User</button><div id="ban-feedback" class="admin-feedback"></div></div>
+            <div class="admin-card"><h2>📢 Global Message</h2><input type="text" id="global-message-input" class="admin-input" placeholder="Message to send to everyone" onkeydown="if(event.key==='Enter') sendGlobalMessage()" /><button class="admin-btn blue" onclick="sendGlobalMessage()">Send Global Message</button><div id="global-msg-feedback" class="admin-feedback"></div></div>
+            <div class="admin-card"><h2>🪙 Give Credits</h2><input type="text" id="credit-username-input" class="admin-input" placeholder="Username to credit" onkeydown="if(event.key==='Enter') giveCredits()" /><input type="number" id="credit-amount-input" class="admin-input" placeholder="Amount of coins" min="1" /><button class="admin-btn green" onclick="giveCredits()">Give Credits</button><div id="credit-feedback" class="admin-feedback"></div></div>
+            <div class="admin-card"><h2>🎰 Set Slot Luck</h2><input type="text" id="luck-username-input" class="admin-input" placeholder="Username to modify" onkeydown="if(event.key==='Enter') setUserLuck()" /><input type="number" id="luck-value-input" class="admin-input" placeholder="Luck multiplier (default: 1.0)" min="0.1" max="10" step="0.1" value="1" /><div style="font-size:11px;color:var(--muted);margin-bottom:9px;">1.0 = normal · 2.0 = 2x luck · 0.5 = half luck</div><button class="admin-btn" onclick="setUserLuck()">Set Luck</button><div id="luck-feedback" class="admin-feedback"></div></div>
+            <div class="admin-card"><h2>🏷️ Manage User Tags</h2><input type="text" id="tag-username-input" class="admin-input" placeholder="Username" onkeydown="if(event.key==='Enter') setUserTag()" /><input type="text" id="tag-name-input" class="admin-input" placeholder="Tag name (e.g. OWNER)" /><div class="admin-row" style="margin-bottom:9px;"><label style="font-size:12px;color:var(--muted);margin-bottom:0;">Tag color:</label><input type="color" id="tag-color-input" value="#ff0000" style="width:56px;height:34px;padding:4px;border-radius:7px;border:1px solid var(--border);background:rgba(91,141,239,0.05);cursor:pointer;" /></div><div class="admin-row"><button class="admin-btn" onclick="setUserTag()">Set Tag</button><button class="admin-btn" style="border-color:rgba(255,68,68,0.5);background:rgba(255,68,68,0.1);" onclick="removeUserTag()">Remove Tag</button></div><div id="tag-feedback" class="admin-feedback"></div></div>
+            <div class="admin-card"><h2>🖼️ Image Popup</h2><input type="text" id="popup-target-input" class="admin-input" placeholder="Username or 'everyone'" onkeydown="if(event.key==='Enter') triggerImagePopup()" /><input type="number" id="popup-duration-input" class="admin-input" placeholder="Duration (seconds)" min="1" value="5" /><input type="text" id="popup-url-input" class="admin-input" placeholder="Image URL" onkeydown="if(event.key==='Enter') triggerImagePopup()" /><button class="admin-btn blue" onclick="triggerImagePopup()">Show Image</button><div id="popup-feedback" class="admin-feedback"></div></div>
+            <div class="admin-card"><h2>🎨 Limited Skins</h2><input type="text" id="limited-name-input" class="admin-input" placeholder="Background name" /><input type="file" id="limited-image-input" accept="image/*" style="display:none;" onchange="handleLimitedImage(this)" /><button class="admin-btn blue" onclick="document.getElementById('limited-image-input').click()" style="margin-bottom:7px;">Choose Image</button><div id="limited-image-preview" style="max-width:140px;max-height:75px;margin-bottom:7px;border-radius:7px;overflow:hidden;display:none;"><img id="limited-preview-img" style="width:100%;height:auto;display:block;" /></div><div class="admin-row" style="margin-bottom:7px;"><input type="number" id="limited-duration-input" class="admin-input" placeholder="Duration" min="1" style="margin-bottom:0;max-width:90px;" /><select id="limited-duration-unit" class="admin-input" style="margin-bottom:0;max-width:100px;"><option value="minutes">minutes</option><option value="hours">hours</option></select></div><input type="number" id="limited-price-input" class="admin-input" placeholder="Price (NC)" min="0" value="0" /><button class="admin-btn green" onclick="submitLimitedSkin()">Add to Shop</button><div id="limited-feedback" class="admin-feedback"></div></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 
+  <!-- PLAYER OVERLAY -->
   <div class="player" id="player">
-    <div class="player-topbar"><div id="playerName">Content<\/div><button id="closeBtn" class="player-exit">Exit<\/button><\/div>
-    <iframe id="playerFrame" class="player-frame"><\/iframe>
-  <\/div>
+    <div class="player-topbar"><div id="playerName">Content</div><button id="closeBtn" class="player-exit">Exit</button></div>
+    <iframe id="playerFrame" class="player-frame"></iframe>
+  </div>
 
-  <div class="notification" id="notification"><div class="notification-icon">📢<\/div><div class="notification-text" id="notificationText">Notification<\/div><\/div>
+  <!-- NOTIFICATION -->
+  <div class="notification" id="notification"><div class="notification-icon">📢</div><div class="notification-text" id="notificationText">Notification</div></div>
 
-  <div class="modal" id="rewardModal"><div class="modal-content"><div class="reward-icon">🎉<\/div><div class="reward-title">Daily Reward Claimed!<\/div><div class="reward-text">You received <strong>5 Nova Coins<\/strong><\/div><button class="btn" onclick="closeRewardModal()">Awesome!<\/button><\/div><\/div>
+  <!-- DAILY REWARD MODAL -->
+  <div class="modal" id="rewardModal"><div class="modal-content"><div class="reward-icon">🎉</div><div class="reward-title">Daily Reward Claimed!</div><div class="reward-text">You received <strong>5 Nova Coins</strong></div><button class="btn" onclick="closeRewardModal()">Awesome!</button></div></div>
 
+  <!-- CUSTOM TEXT BANNER MODAL -->
   <div class="modal" id="customTextModal">
     <div class="modal-content" style="max-width:440px;">
-      <div style="font-size:36px;margin-bottom:12px;">✏️<\/div>
-      <div class="reward-title" style="font-size:22px;">Custom Text Banner<\/div>
-      <p style="color:var(--muted);margin-bottom:16px;">Enter your custom banner text (max 20 chars). "NOVA" will appear as a subtle overlay.<\/p>
+      <div style="font-size:36px;margin-bottom:12px;">✏️</div>
+      <div class="reward-title" style="font-size:22px;">Custom Text Banner</div>
+      <p style="color:var(--muted);margin-bottom:16px;">Enter your custom banner text (max 20 chars). "NOVA" will appear as a subtle overlay.</p>
       <input type="text" id="custom-banner-text-input" placeholder="Your text here..." maxlength="20" style="margin-bottom:14px;text-transform:uppercase;">
       <div id="custom-text-banner-preview" style="width:100%;height:70px;border-radius:10px;background:linear-gradient(135deg,#2d3244,#3d4460);display:flex;align-items:center;justify-content:center;margin-bottom:16px;position:relative;overflow:hidden;border:1px solid var(--border);">
-        <span id="ctbp-text" style="font-size:20px;font-weight:900;letter-spacing:4px;color:rgba(255,255,255,0.7);text-transform:uppercase;"><\/span>
-        <span style="position:absolute;bottom:6px;right:10px;font-size:10px;font-weight:900;letter-spacing:2px;color:rgba(255,255,255,0.35);">NOVA<\/span>
-      <\/div>
+        <span id="ctbp-text" style="font-size:20px;font-weight:900;letter-spacing:4px;color:rgba(255,255,255,0.7);text-transform:uppercase;"></span>
+        <span style="position:absolute;bottom:6px;right:10px;font-size:10px;font-weight:900;letter-spacing:2px;color:rgba(255,255,255,0.35);">NOVA</span>
+      </div>
       <div style="display:flex;gap:10px;justify-content:center;">
-        <button class="btn" onclick="confirmCustomTextBanner()">Confirm Purchase<\/button>
-        <button class="btn" style="background:rgba(255,68,68,0.15);border-color:var(--alert);" onclick="document.getElementById('customTextModal').classList.remove('show')">Cancel<\/button>
-      <\/div>
-    <\/div>
-  <\/div>
+        <button class="btn" onclick="confirmCustomTextBanner()">Confirm Purchase</button>
+        <button class="btn" style="background:rgba(255,68,68,0.15);border-color:var(--alert);" onclick="document.getElementById('customTextModal').classList.remove('show')">Cancel</button>
+      </div>
+    </div>
+  </div>
 
+  <!-- CUSTOM IMAGE BANNER MODAL -->
   <div class="modal" id="customImageModal">
     <div class="modal-content" style="max-width:480px;">
-      <div style="font-size:36px;margin-bottom:12px;">🖼️<\/div>
-      <div class="reward-title" style="font-size:22px;">Custom Image Banner<\/div>
-      <p style="color:var(--muted);margin-bottom:16px;">Upload an image for your banner. "NOVA" will appear as a subtle overlay on the banner.<\/p>
+      <div style="font-size:36px;margin-bottom:12px;">🖼️</div>
+      <div class="reward-title" style="font-size:22px;">Custom Image Banner</div>
+      <p style="color:var(--muted);margin-bottom:16px;">Upload an image for your banner. "NOVA" will appear as a subtle overlay on the banner.</p>
       <div class="file-input-wrapper" style="display:block;margin-bottom:14px;">
-        <input type="file" id="custom-banner-img-input" accept="image\/*" onchange="previewCustomBannerImage(event)">
-        <label for="custom-banner-img-input" class="file-input-label" style="display:block;text-align:center;">📁 Choose Image<\/label>
-      <\/div>
+        <input type="file" id="custom-banner-img-input" accept="image/*" onchange="previewCustomBannerImage(event)">
+        <label for="custom-banner-img-input" class="file-input-label" style="display:block;text-align:center;">📁 Choose Image</label>
+      </div>
       <div id="custom-img-banner-preview" style="width:100%;height:80px;border-radius:10px;background:linear-gradient(135deg,#2d3244,#3d4460);display:flex;align-items:center;justify-content:center;margin-bottom:16px;position:relative;overflow:hidden;border:1px solid var(--border);">
         <img id="cibp-img" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:none;">
-        <span id="cibp-placeholder" style="font-size:12px;color:var(--muted);font-weight:600;">Image preview will appear here<\/span>
-        <span style="position:absolute;bottom:6px;right:10px;font-size:10px;font-weight:900;letter-spacing:2px;color:rgba(255,255,255,0.45);text-shadow:0 1px 4px rgba(0,0,0,0.6);">NOVA<\/span>
-      <\/div>
+        <span id="cibp-placeholder" style="font-size:12px;color:var(--muted);font-weight:600;">Image preview will appear here</span>
+        <span style="position:absolute;bottom:6px;right:10px;font-size:10px;font-weight:900;letter-spacing:2px;color:rgba(255,255,255,0.45);text-shadow:0 1px 4px rgba(0,0,0,0.6);">NOVA</span>
+      </div>
       <div style="display:flex;gap:10px;justify-content:center;">
-        <button class="btn" id="confirm-custom-img-btn" onclick="confirmCustomImageBanner()" disabled>Confirm Purchase<\/button>
-        <button class="btn" style="background:rgba(255,68,68,0.15);border-color:var(--alert);" onclick="document.getElementById('customImageModal').classList.remove('show')">Cancel<\/button>
-      <\/div>
-    <\/div>
-  <\/div>
+        <button class="btn" id="confirm-custom-img-btn" onclick="confirmCustomImageBanner()" disabled>Confirm Purchase</button>
+        <button class="btn" style="background:rgba(255,68,68,0.15);border-color:var(--alert);" onclick="document.getElementById('customImageModal').classList.remove('show')">Cancel</button>
+      </div>
+    </div>
+  </div>
 
 <script>
 'use strict';
-${document.querySelector('script').textContent.replace(/<\/script>/g, '<\\/script>')}
-<\/script>
-<\/body>
-<\/html>`;
 
-  win.document.open();
-  win.document.write(novaHTML);
-  win.document.close();
+window.addEventListener('load', () => {
+  if (window.emailjs) emailjs.init("WVn4FyckWoY68y1Kp");
+});
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB-IbnRdC9RwT4eZPtpgH9F1fj5OKeRw9U",
+  authDomain: "unblocked-hub-chat.firebaseapp.com",
+  databaseURL: "https://unblocked-hub-chat-default-rtdb.firebaseio.com",
+  projectId: "unblocked-hub-chat",
+  storageBucket: "unblocked-hub-chat.firebasestorage.app",
+  messagingSenderId: "192995986961",
+  appId: "1:192995986961:web:6ee8f3ce513ac3b744ebb0"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+const ADMIN_USERNAME = 'Jeremy';
+
+window.myName = null;
+let activeChat = null, chatType = "none", myFriends = [];
+let viewedUserName = null;
+let previousPage = null;
+let currentRailTab = 'all';
+let limitedImageBase64 = null;
+let pendingCustomImageBase64 = null;
+
+// ============================================
+// BANNER SYSTEM
+// ============================================
+const BANNER_COLORS = [
+  { id: 'banner-red',    name: 'Red Banner',    price: 5,   bg: 'linear-gradient(135deg, #8b0000 0%, #cc2222 100%)',   textColor: 'rgba(255,255,255,0.25)' },
+  { id: 'banner-orange', name: 'Orange Banner', price: 5,   bg: 'linear-gradient(135deg, #7a3500 0%, #d45500 100%)',   textColor: 'rgba(255,255,255,0.25)' },
+  { id: 'banner-yellow', name: 'Yellow Banner', price: 5,   bg: 'linear-gradient(135deg, #7a6200 0%, #c8a000 100%)',   textColor: 'rgba(255,255,255,0.25)' },
+  { id: 'banner-green',  name: 'Green Banner',  price: 5,   bg: 'linear-gradient(135deg, #003d1a 0%, #0a6e30 100%)',   textColor: 'rgba(255,255,255,0.25)' },
+  { id: 'banner-blue',   name: 'Blue Banner',   price: 5,   bg: 'linear-gradient(135deg, #001a5c 0%, #1a3fa8 100%)',   textColor: 'rgba(255,255,255,0.25)' },
+  { id: 'banner-purple', name: 'Purple Banner', price: 5,   bg: 'linear-gradient(135deg, #2d0057 0%, #6a1caa 100%)',   textColor: 'rgba(255,255,255,0.25)' },
+];
+
+let ownedBanners = [];
+let activeBanner = null; // { type: 'color'|'custom-img'|'custom-text', id, data }
+
+function loadBannerData() {
+  if (!window.myName) return;
+  db.ref("users/" + window.myName + "/ownedBanners").once("value", s => {
+    ownedBanners = s.val() || [];
+    renderBannerShop();
+  });
+  db.ref("users/" + window.myName + "/activeBanner").once("value", s => {
+    activeBanner = s.val() || null;
+    applyBannerToProfile(activeBanner, 'profile-banner');
+  });
 }
+
+function saveBannerData() {
+  if (!window.myName) return;
+  db.ref("users/" + window.myName + "/ownedBanners").set(ownedBanners);
+  db.ref("users/" + window.myName + "/activeBanner").set(activeBanner);
+}
+
+function applyBannerToProfile(banner, elementId) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  // Reset
+  el.style.background = '';
+  el.innerHTML = '';
+
+  if (!banner) {
+    // Default gray banner
+    el.style.background = 'linear-gradient(135deg, #2d3244 0%, #3d4460 100%)';
+    el.innerHTML = '<span class="profile-banner-text">NOVA</span><span class="profile-banner-nova-overlay">NOVA</span>';
+    return;
+  }
+
+  if (banner.type === 'color') {
+    const cfg = BANNER_COLORS.find(b => b.id === banner.id);
+    if (cfg) {
+      el.style.background = cfg.bg;
+      el.innerHTML = `<span class="profile-banner-text" style="color:${cfg.textColor}">NOVA</span><span class="profile-banner-nova-overlay">NOVA</span>`;
+    }
+  } else if (banner.type === 'custom-img') {
+    el.style.background = '#1a1f3a';
+    el.innerHTML = `<img src="${banner.data}" alt="Banner" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;"><span class="profile-banner-nova-overlay">NOVA</span>`;
+  } else if (banner.type === 'custom-text') {
+    el.style.background = 'linear-gradient(135deg, #1a1f3a 0%, #2d3460 100%)';
+    el.innerHTML = `<span class="profile-banner-text" style="font-size:36px;letter-spacing:6px;color:rgba(255,255,255,0.55);">${escapeHtml(banner.data)}</span><span class="profile-banner-nova-overlay">NOVA</span>`;
+  }
+}
+
+function equipBanner(bannerId, type, data) {
+  activeBanner = { type, id: bannerId, data: data || null };
+  saveBannerData();
+  applyBannerToProfile(activeBanner, 'profile-banner');
+  renderBannerShop();
+  showNotification('Banner equipped!', 'success');
+}
+
+function equipDefaultBanner() {
+  activeBanner = null;
+  saveBannerData();
+  applyBannerToProfile(null, 'profile-banner');
+  renderBannerShop();
+  showNotification('Default banner equipped!', 'success');
+}
+
+function renderBannerShop() {
+  const scroller = document.getElementById('bannerShopScroller');
+  if (!scroller) return;
+  scroller.innerHTML = '';
+  const frag = document.createDocumentFragment();
+
+  // Default gray banner (always free/equippable)
+  const defDiv = document.createElement('div');
+  defDiv.className = 'banner-shop-item';
+  const isDefaultActive = !activeBanner;
+  defDiv.innerHTML = `
+    <div class="banner-preview" style="background:linear-gradient(135deg,#2d3244,#3d4460);">
+      <span class="banner-preview-text" style="color:rgba(255,255,255,0.2);">NOVA</span>
+      <span class="nova-tag">NOVA</span>
+    </div>
+    <strong>Default Banner</strong>
+    <div style="font-size:12px;color:var(--muted);">Classic gray Nova banner</div>
+    <button class="${isDefaultActive ? 'btn' : 'buy-btn'}" onclick="equipDefaultBanner()" style="${isDefaultActive ? 'background:rgba(0,255,136,0.2);border-color:var(--success);' : ''}">${isDefaultActive ? '✓ Equipped' : 'Equip'}</button>
+  `;
+  frag.appendChild(defDiv);
+
+  // Color banners
+  BANNER_COLORS.forEach(banner => {
+    const owned = ownedBanners.includes(banner.id);
+    const isEquipped = activeBanner && activeBanner.type === 'color' && activeBanner.id === banner.id;
+    const canAfford = novaCoins >= banner.price;
+    const div = document.createElement('div');
+    div.className = 'banner-shop-item';
+    div.innerHTML = `
+      <div class="banner-preview" style="background:${banner.bg};">
+        <span class="banner-preview-text" style="color:${banner.textColor};">NOVA</span>
+        <span class="nova-tag">NOVA</span>
+      </div>
+      <strong>${banner.name}</strong>
+      <div class="price"><div class="coin-icon" style="width:16px;height:16px;font-size:10px;">🪙</div><span>${banner.price}</span></div>
+      ${owned
+        ? `<button class="${isEquipped ? 'btn' : 'buy-btn'}" onclick="equipBanner('${banner.id}','color',null)" style="${isEquipped ? 'background:rgba(0,255,136,0.2);border-color:var(--success);' : ''}">${isEquipped ? '✓ Equipped' : 'Equip'}</button>`
+        : `<button class="buy-btn" onclick="purchaseBanner('${banner.id}')" ${canAfford ? '' : 'disabled'}>${canAfford ? 'Buy ' + banner.price + ' 🪙' : 'Not Enough Coins'}</button>`
+      }
+    `;
+    frag.appendChild(div);
+  });
+
+  // Custom Image Banner (100 coins)
+  const hasCustomImg = ownedBanners.includes('banner-custom-img');
+  const isCustomImgEquipped = activeBanner && activeBanner.type === 'custom-img';
+  const canAffordImg = novaCoins >= 100;
+  const imgDiv = document.createElement('div');
+  imgDiv.className = 'banner-shop-item';
+  imgDiv.innerHTML = `
+    <div class="banner-preview" style="background:linear-gradient(135deg,#1a1030,#3a1060);">
+      <span class="banner-preview-text" style="color:rgba(200,150,255,0.4);">IMG</span>
+      <span class="nova-tag">NOVA</span>
+    </div>
+    <strong>Custom Image Banner</strong>
+    <div style="font-size:11px;color:var(--muted);line-height:1.4;">Upload any image as your banner. "NOVA" overlay included.</div>
+    <div class="price"><div class="coin-icon" style="width:16px;height:16px;font-size:10px;">🪙</div><span>100</span></div>
+    ${hasCustomImg
+      ? `<button class="${isCustomImgEquipped ? 'btn' : 'buy-btn'}" onclick="${isCustomImgEquipped ? 'document.getElementById(\'customImageModal\').classList.add(\'show\')' : 'openCustomImageEquip()'}" style="${isCustomImgEquipped ? 'background:rgba(0,255,136,0.2);border-color:var(--success);' : ''}">📁 ${isCustomImgEquipped ? 'Change Image' : 'Upload Image'}</button>`
+      : `<button class="buy-btn" onclick="openCustomImageModal()" ${canAffordImg ? '' : 'disabled'}>${canAffordImg ? 'Buy 100 🪙' : 'Not Enough Coins'}</button>`
+    }
+  `;
+  frag.appendChild(imgDiv);
+
+  // Custom Text Banner (100 coins)
+  const hasCustomText = ownedBanners.includes('banner-custom-text');
+  const isCustomTextEquipped = activeBanner && activeBanner.type === 'custom-text';
+  const canAffordText = novaCoins >= 100;
+  const txtDiv = document.createElement('div');
+  txtDiv.className = 'banner-shop-item';
+  txtDiv.innerHTML = `
+    <div class="banner-preview" style="background:linear-gradient(135deg,#0a1a30,#1a3060);">
+      <span class="banner-preview-text" style="color:rgba(150,200,255,0.4);">ABC</span>
+      <span class="nova-tag">NOVA</span>
+    </div>
+    <strong>Custom Text Banner</strong>
+    <div style="font-size:11px;color:var(--muted);line-height:1.4;">Show any text on your banner. "NOVA" overlay included.</div>
+    <div class="price"><div class="coin-icon" style="width:16px;height:16px;font-size:10px;">🪙</div><span>100</span></div>
+    ${hasCustomText
+      ? `<button class="${isCustomTextEquipped ? 'btn' : 'buy-btn'}" onclick="openCustomTextEquip()" style="${isCustomTextEquipped ? 'background:rgba(0,255,136,0.2);border-color:var(--success);' : ''}">✏️ ${isCustomTextEquipped ? 'Change Text' : 'Set Text'}</button>`
+      : `<button class="buy-btn" onclick="openCustomTextModal()" ${canAffordText ? '' : 'disabled'}>${canAffordText ? 'Buy 100 🪙' : 'Not Enough Coins'}</button>`
+    }
+  `;
+  frag.appendChild(txtDiv);
+
+  scroller.appendChild(frag);
+}
+
+function purchaseBanner(bannerId) {
+  if (!window.myName) { showNotification('Login to purchase banners!', 'warning'); return; }
+  const banner = BANNER_COLORS.find(b => b.id === bannerId);
+  if (!banner || novaCoins < banner.price) { showNotification('Not enough Nova Coins!', 'warning'); return; }
+  novaCoins -= banner.price;
+  ownedBanners.push(bannerId);
+  saveBannerData();
+  saveCoinData();
+  updateCoinDisplay();
+  equipBanner(bannerId, 'color', null);
+  showNotification(`${banner.name} purchased & equipped!`, 'success');
+  unlockBadge('big-spender');
+}
+
+// Custom Image Banner
+function openCustomImageModal() {
+  if (!window.myName) { showNotification('Login first!', 'warning'); return; }
+  if (novaCoins < 100) { showNotification('Not enough coins! Need 100 🪙', 'warning'); return; }
+  document.getElementById('cibp-img').style.display = 'none';
+  document.getElementById('cibp-placeholder').style.display = 'block';
+  document.getElementById('confirm-custom-img-btn').disabled = true;
+  pendingCustomImageBase64 = null;
+  document.getElementById('customImageModal').classList.add('show');
+}
+function openCustomImageEquip() {
+  document.getElementById('cibp-img').style.display = 'none';
+  document.getElementById('cibp-placeholder').style.display = 'block';
+  document.getElementById('confirm-custom-img-btn').disabled = true;
+  pendingCustomImageBase64 = null;
+  // Mark as already owned so no charge
+  window._bannerEquipOnly = true;
+  document.getElementById('customImageModal').classList.add('show');
+}
+function previewCustomBannerImage(event) {
+  const file = event.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    pendingCustomImageBase64 = e.target.result;
+    const img = document.getElementById('cibp-img');
+    img.src = e.target.result; img.style.display = 'block';
+    document.getElementById('cibp-placeholder').style.display = 'none';
+    document.getElementById('confirm-custom-img-btn').disabled = false;
+  };
+  reader.readAsDataURL(file);
+}
+function confirmCustomImageBanner() {
+  if (!pendingCustomImageBase64) return;
+  const equipOnly = window._bannerEquipOnly;
+  window._bannerEquipOnly = false;
+  if (!equipOnly) {
+    novaCoins -= 100;
+    if (!ownedBanners.includes('banner-custom-img')) ownedBanners.push('banner-custom-img');
+    saveCoinData(); updateCoinDisplay();
+    unlockBadge('big-spender');
+  }
+  equipBanner('banner-custom-img', 'custom-img', pendingCustomImageBase64);
+  document.getElementById('customImageModal').classList.remove('show');
+  pendingCustomImageBase64 = null;
+}
+
+// Custom Text Banner
+function openCustomTextModal() {
+  if (!window.myName) { showNotification('Login first!', 'warning'); return; }
+  if (novaCoins < 100) { showNotification('Not enough coins! Need 100 🪙', 'warning'); return; }
+  document.getElementById('custom-banner-text-input').value = '';
+  document.getElementById('ctbp-text').textContent = '';
+  window._textBannerEquipOnly = false;
+  document.getElementById('customTextModal').classList.add('show');
+}
+function openCustomTextEquip() {
+  document.getElementById('custom-banner-text-input').value = activeBanner && activeBanner.type === 'custom-text' ? activeBanner.data : '';
+  document.getElementById('ctbp-text').textContent = activeBanner && activeBanner.type === 'custom-text' ? activeBanner.data : '';
+  window._textBannerEquipOnly = true;
+  document.getElementById('customTextModal').classList.add('show');
+}
+document.addEventListener('input', e => {
+  if (e.target.id === 'custom-banner-text-input') {
+    document.getElementById('ctbp-text').textContent = e.target.value.toUpperCase();
+  }
+});
+function confirmCustomTextBanner() {
+  const text = document.getElementById('custom-banner-text-input').value.trim().toUpperCase();
+  if (!text) { showNotification('Please enter some text!', 'warning'); return; }
+  const equipOnly = window._textBannerEquipOnly;
+  window._textBannerEquipOnly = false;
+  if (!equipOnly) {
+    novaCoins -= 100;
+    if (!ownedBanners.includes('banner-custom-text')) ownedBanners.push('banner-custom-text');
+    saveCoinData(); updateCoinDisplay();
+    unlockBadge('big-spender');
+  }
+  equipBanner('banner-custom-text', 'custom-text', text);
+  document.getElementById('customTextModal').classList.remove('show');
+}
+
+// ============================================
+// ADMIN CHECK
+// ============================================
+function checkAdminAccess() {
+  const link = document.getElementById('admin-nav-link');
+  if (window.myName === ADMIN_USERNAME) { link.style.display = 'flex'; }
+  else { link.style.display = 'none'; if (document.getElementById('admin').classList.contains('active')) showPage('home'); }
+}
+
+// ============================================
+// SETTINGS SYSTEM
+// ============================================
+const SETTINGS_KEY = 'nova_settings';
+let preventCtrlW = false, keyboardShortcutsEnabled = true, notificationsEnabled = true, notificationFrequency = 'all';
+
+function loadSettings() {
+  const saved = localStorage.getItem(SETTINGS_KEY); if (!saved) return;
+  try {
+    const s = JSON.parse(saved);
+    if (s.lightMode) { document.body.classList.add('light-mode'); document.getElementById('theme-toggle').classList.add('active'); }
+    if (s.performanceMode) { document.body.classList.add('performance-mode'); document.getElementById('performance-toggle').classList.add('active'); }
+    if (s.gridMode) { document.body.classList.add('grid-mode'); document.getElementById('grid-toggle').classList.add('active'); }
+    if (s.preventCtrlW) { preventCtrlW = true; document.getElementById('ctrlw-toggle').classList.add('active'); }
+    if (s.keyboardShortcuts !== undefined) { keyboardShortcutsEnabled = s.keyboardShortcuts; if (!keyboardShortcutsEnabled) document.getElementById('shortcuts-toggle').classList.remove('active'); }
+    if (s.notifications !== undefined) { notificationsEnabled = s.notifications; if (!notificationsEnabled) document.getElementById('notifications-toggle').classList.remove('active'); }
+    if (s.notificationFrequency) { notificationFrequency = s.notificationFrequency; document.getElementById('notification-frequency').value = notificationFrequency; }
+    if (s.customBackground) { const b = document.getElementById('customBg'); b.style.backgroundImage = `url(${s.customBackground})`; b.classList.add('active'); }
+  } catch(e) { console.error('Settings load failed', e); }
+}
+
+function saveSettings() {
+  const bgImg = document.getElementById('customBg').style.backgroundImage;
+  const bgVal = bgImg ? bgImg.slice(5, -2) : '';
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify({ lightMode: document.body.classList.contains('light-mode'), performanceMode: document.body.classList.contains('performance-mode'), gridMode: document.body.classList.contains('grid-mode'), preventCtrlW, keyboardShortcuts: keyboardShortcutsEnabled, notifications: notificationsEnabled, notificationFrequency, customBackground: bgVal }));
+}
+
+function toggleTheme() { document.body.classList.toggle('light-mode'); document.getElementById('theme-toggle').classList.toggle('active'); saveSettings(); unlockBadge('theme-switcher'); }
+function togglePerformance() { document.body.classList.toggle('performance-mode'); document.getElementById('performance-toggle').classList.toggle('active'); saveSettings(); }
+function toggleGridMode() { document.body.classList.toggle('grid-mode'); document.getElementById('grid-toggle').classList.toggle('active'); saveSettings(); }
+function toggleCtrlW() { preventCtrlW = !preventCtrlW; document.getElementById('ctrlw-toggle').classList.toggle('active'); saveSettings(); }
+function toggleShortcuts() { keyboardShortcutsEnabled = !keyboardShortcutsEnabled; document.getElementById('shortcuts-toggle').classList.toggle('active'); saveSettings(); showNotification(keyboardShortcutsEnabled ? 'Keyboard shortcuts enabled' : 'Keyboard shortcuts disabled', keyboardShortcutsEnabled ? 'success' : 'warning'); }
+function toggleNotifications() { notificationsEnabled = !notificationsEnabled; document.getElementById('notifications-toggle').classList.toggle('active'); saveSettings(); }
+function updateNotificationFrequency() { notificationFrequency = document.getElementById('notification-frequency').value; saveSettings(); showNotification('Notification frequency updated', 'success'); }
+function uploadBackground(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = e => { const b = document.getElementById('customBg'); b.style.backgroundImage = `url(${e.target.result})`; b.classList.add('active'); saveSettings(); showNotification('Custom background applied!', 'success'); }; reader.readAsDataURL(file); }
+function resetBackground() { const b = document.getElementById('customBg'); b.style.backgroundImage = ''; b.classList.remove('active'); saveSettings(); showNotification('Background reset!', 'success'); }
+function exportSettings() { const s = localStorage.getItem(SETTINGS_KEY); if (!s) { showNotification('No settings to export!', 'warning'); return; } const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([s], {type:'application/json'})); a.download = 'nova-settings.json'; a.click(); showNotification('Settings exported!', 'success'); }
+function importSettings(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = e => { try { JSON.parse(e.target.result); localStorage.setItem(SETTINGS_KEY, e.target.result); showNotification('Settings imported! Refreshing...', 'success'); setTimeout(() => location.reload(), 1500); } catch { showNotification('Invalid settings file!', 'error'); } }; reader.readAsText(file); }
+function resetAllSettings() { if (confirm('Reset all settings? This cannot be undone.')) { localStorage.removeItem(SETTINGS_KEY); showNotification('Settings reset! Refreshing...', 'success'); setTimeout(() => location.reload(), 1500); } }
+
+// ============================================
+// KEYBOARD SHORTCUTS
+// ============================================
+document.addEventListener('keydown', e => {
+  if (preventCtrlW && e.ctrlKey && e.key === 'w') { e.preventDefault(); showNotification('Tab closing disabled!', 'warning'); return; }
+  if (!keyboardShortcutsEnabled) return;
+  if (e.ctrlKey && e.key === 'k') { e.preventDefault(); const si = document.querySelector('.page-section.active .search-input'); if (si) si.focus(); return; }
+  if (e.altKey) { const map = { h: 'home', g: 'games', s: 'settings', p: 'profile' }; const page = map[e.key.toLowerCase()]; if (page) { e.preventDefault(); showPage(page); } }
+});
+
+// ============================================
+// NOTIFICATION
+// ============================================
+let _notifTimeout = null;
+function showNotification(text, type = 'success') {
+  if (!notificationsEnabled) return;
+  if (notificationFrequency === 'none') return;
+  if (notificationFrequency === 'important' && type !== 'error' && type !== 'warning') return;
+  if (notificationFrequency === 'minimal' && type === 'success') return;
+  const el = document.getElementById('notification'), textEl = document.getElementById('notificationText');
+  el.className = 'notification ' + type; textEl.textContent = text; el.classList.add('show');
+  if (_notifTimeout) clearTimeout(_notifTimeout);
+  _notifTimeout = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ============================================
+// DEVICE & SYSTEM INFO
+// ============================================
+function detectDevice() {
+  const ua = navigator.userAgent; let device = 'PC';
+  if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) device = 'Tablet';
+  else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) device = 'Phone';
+  document.getElementById('device-type').textContent = device;
+}
+let _lastClockSec = -1;
+function clockTick() {
+  const now = new Date(), sec = now.getSeconds();
+  if (sec !== _lastClockSec) {
+    _lastClockSec = sec; let h = now.getHours(); const m = String(now.getMinutes()).padStart(2,'0'), s = String(sec).padStart(2,'0'), ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12; document.getElementById('current-time').textContent = `${String(h).padStart(2,'0')}:${m}:${s} ${ampm}`;
+  }
+  requestAnimationFrame(clockTick);
+}
+requestAnimationFrame(clockTick);
+function updateMemoryUsage() { if (performance.memory) document.getElementById('memory-usage').textContent = `${(performance.memory.usedJSHeapSize / 1048576).toFixed(1)} MB`; else document.getElementById('memory-usage').textContent = 'N/A'; }
+detectDevice(); updateMemoryUsage(); setInterval(updateMemoryUsage, 5000);
+
+// ============================================
+// PARTICLES
+// ============================================
+function createParticles() {
+  const container = document.getElementById('particles'), frag = document.createDocumentFragment();
+  for (let i = 0; i < 12; i++) {
+    const p = document.createElement('div'); p.className = 'particle';
+    p.style.left = (Math.random() * 100) + '%';
+    p.style.setProperty('--drift', ((Math.random() - 0.5) * 150) + 'px');
+    p.style.animationDuration = (20 + Math.random() * 20) + 's';
+    p.style.animationDelay = (Math.random() * 15) + 's';
+    p.style.background = ['rgba(91,141,239,0.5)', 'rgba(0,255,136,0.4)', 'rgba(147,51,234,0.4)'][i % 3];
+    frag.appendChild(p);
+  }
+  container.appendChild(frag);
+}
+createParticles();
+
+// ============================================
+// FAVORITES & RECENTLY PLAYED
+// ============================================
+let favorites = [], recentlyPlayed = [];
+function loadUserData() {
+  try { favorites = JSON.parse(localStorage.getItem('nova_favorites') || '[]'); } catch { favorites = []; }
+  try { recentlyPlayed = JSON.parse(localStorage.getItem('nova_recently_played') || '[]'); } catch { recentlyPlayed = []; }
+  renderFavorites(); renderRecentlyPlayed();
+}
+const saveFavorites = () => localStorage.setItem('nova_favorites', JSON.stringify(favorites));
+const saveRecentlyPlayed = () => localStorage.setItem('nova_recently_played', JSON.stringify(recentlyPlayed));
+function toggleFavorite(id, name, url, thumb, type) {
+  const idx = favorites.findIndex(f => f.id === id);
+  if (idx > -1) { favorites.splice(idx, 1); showNotification(`Removed ${name} from favorites`, 'warning'); }
+  else { favorites.push({ id, name, url, thumb, type }); showNotification(`Added ${name} to favorites!`, 'success'); unlockBadge('first-favorite'); if (favorites.length >= 5) unlockBadge('favorite-five'); if (favorites.length >= 10) unlockBadge('collector'); }
+  saveFavorites(); renderFavorites();
+  const btn = document.querySelector(`[data-fav-id="${id}"]`); if (btn) { btn.textContent = idx > -1 ? '☆' : '⭐'; btn.classList.toggle('active', idx === -1); }
+}
+function addToRecentlyPlayed(id, name, url, thumb, type) {
+  recentlyPlayed = recentlyPlayed.filter(r => r.id !== id); recentlyPlayed.unshift({ id, name, url, thumb, type, playedAt: Date.now() });
+  if (recentlyPlayed.length > 10) recentlyPlayed.length = 10; saveRecentlyPlayed(); renderRecentlyPlayed();
+  unlockBadge('first-game'); if (recentlyPlayed.length >= 5) unlockBadge('game-enthusiast'); if (recentlyPlayed.length >= 10) unlockBadge('gamer');
+}
+function buildItemCard(item, typeClass) {
+  const isFav = favorites.some(f => f.id === item.id); const d = document.createElement('div'); d.className = typeClass;
+  d.innerHTML = `<button class="favorite-btn${isFav?' active':''}" data-fav-id="${item.id}" onclick="event.stopPropagation();toggleFavorite('${item.id}','${item.name}','${item.url}','${item.thumb}','${typeClass}')">${isFav?'⭐':'☆'}</button><img class="thumb" src="${item.thumb}" alt="${item.name}" loading="lazy"><strong>${item.name}</strong><button class="${typeClass}-btn" data-url="${item.url}" data-title="${item.name}" data-id="${item.id}" data-thumb="${item.thumb}">${typeClass==='game'?'Launch':'Watch'}</button>`;
+  return d;
+}
+function renderFavorites() {
+  const scroller = document.getElementById('favoritesScroller'), empty = document.getElementById('favoritesEmpty');
+  if (!favorites.length) { empty.style.display='block'; scroller.innerHTML=''; return; } empty.style.display='none';
+  const frag = document.createDocumentFragment(); favorites.forEach(item => frag.appendChild(buildItemCard(item, item.type))); scroller.innerHTML=''; scroller.appendChild(frag);
+}
+function renderRecentlyPlayed() {
+  const scroller = document.getElementById('recentlyPlayedScroller'), empty = document.getElementById('recentlyPlayedEmpty');
+  if (!recentlyPlayed.length) { empty.style.display='block'; scroller.innerHTML=''; return; } empty.style.display='none';
+  const frag = document.createDocumentFragment(); recentlyPlayed.forEach(item => frag.appendChild(buildItemCard(item, item.type))); scroller.innerHTML=''; scroller.appendChild(frag);
+}
+
+// ============================================
+// DAILY REWARDS
+// ============================================
+let _rewardTimerInterval = null;
+function checkDailyReward() {
+  const last = localStorage.getItem('last_reward_claim'), ready = !last || (Date.now() - parseInt(last)) >= 43200000;
+  document.getElementById('claimRewardBtn').disabled = !ready; document.getElementById('rewardTimer').textContent = ready ? 'Available now!' : '';
+  if (!ready) startRewardTimer();
+}
+function startRewardTimer() {
+  if (_rewardTimerInterval) clearInterval(_rewardTimerInterval);
+  _rewardTimerInterval = setInterval(() => {
+    const last = localStorage.getItem('last_reward_claim'), remaining = parseInt(last) + 43200000 - Date.now();
+    if (remaining <= 0) { clearInterval(_rewardTimerInterval); checkDailyReward(); return; }
+    const h = Math.floor(remaining / 3600000), m = Math.floor((remaining % 3600000) / 60000), s = Math.floor((remaining % 60000) / 1000);
+    document.getElementById('rewardTimer').textContent = `Next: ${h}h ${m}m ${s}s`;
+  }, 1000);
+}
+function claimDailyReward() {
+  novaCoins += 5; saveCoinData(); updateCoinDisplay(); localStorage.setItem('last_reward_claim', Date.now().toString());
+  document.getElementById('rewardModal').classList.add('show'); document.getElementById('claimRewardBtn').disabled = true;
+  showNotification('+5 Nova Coins earned!', 'success'); unlockBadge('daily-login'); startRewardTimer();
+}
+function closeRewardModal() { document.getElementById('rewardModal').classList.remove('show'); }
+
+// ============================================
+// ACHIEVEMENTS / BADGES
+// ============================================
+const BADGES = {
+  'welcome':         { name:'Welcome',           icon:'👋', desc:'Create your account',                type:'auto' },
+  'first-game':      { name:'First Steps',        icon:'🎮', desc:'Play your first game',               type:'auto' },
+  'first-favorite':  { name:'Favorite Found',     icon:'⭐', desc:'Add your first favorite',            type:'auto' },
+  'daily-login':     { name:'Daily Visitor',      icon:'📅', desc:'Claim a daily reward',               type:'auto' },
+  'first-setting':   { name:'Customizer',         icon:'🎨', desc:'Open the settings page',            type:'auto' },
+  'explorer':        { name:'Explorer',            icon:'🧭', desc:'Visit 5 different pages',           type:'auto' },
+  'first-friend':    { name:'Friend Maker',       icon:'👋', desc:'Accept your first friend',          type:'auto' },
+  'first-message':   { name:'Conversationalist',  icon:'💬', desc:'Send your first chat message',      type:'auto' },
+  'searcher':        { name:'Searcher',            icon:'🔍', desc:'Use search in the app',             type:'auto' },
+  'profile-editor':  { name:'Profile Editor',     icon:'✏️', desc:'Update your profile picture',       type:'auto' },
+  'theme-switcher':  { name:'Theme Switcher',     icon:'🌓', desc:'Toggle between light/dark mode',    type:'auto' },
+  'movie-starter':   { name:'Movie Starter',      icon:'🎬', desc:'Watch your first movie',            type:'auto' },
+  'window-shopper':  { name:'Window Shopper',     icon:'🛍️', desc:'Visit the shop',                    type:'auto' },
+  'favorite-five':   { name:'Favorite Five',      icon:'🌟', desc:'Add 5 items to favorites',          type:'auto' },
+  'collector':       { name:'Collector',           icon:'📚', desc:'Add 10 items to favorites',         type:'auto' },
+  'coin-collector':  { name:'Coin Collector',     icon:'🪙', desc:'Earn 50 Nova Coins',                type:'auto' },
+  'big-spender':     { name:'Big Spender',        icon:'💰', desc:'Make your first purchase',          type:'auto' },
+  'social-butterfly':{ name:'Social Butterfly',   icon:'👥', desc:'Add 5 friends',                     type:'auto' },
+  'game-enthusiast': { name:'Game Enthusiast',    icon:'🕹️', desc:'Play 5 different games',            type:'auto' },
+  'gamer':           { name:'Hardcore Gamer',     icon:'👾', desc:'Play 10 different games',           type:'auto' },
+  'status-setter':   { name:'Status Setter',      icon:'💭', desc:'Set a custom status message',      type:'auto' },
+  'chat-active':     { name:'Chat Active',        icon:'📨', desc:'Send 10 chat messages',             type:'auto' },
+  'night-owl':       { name:'Night Owl',          icon:'🦉', desc:'Use Nova after midnight',           type:'auto' },
+  'early-bird':      { name:'Early Bird',         icon:'🌅', desc:'Use Nova before 7AM',               type:'auto' },
+  'speed-runner':    { name:'Speed Runner',       icon:'⚡', desc:'Launch a game within 10s of opening', type:'auto' },
+  'secret-agent':    { name:'Secret Agent',       icon:'🕵️', desc:'You know the secrets...', type:'code', code:'agent007' },
+  'dev-mode':        { name:'Dev Mode',           icon:'💻', desc:'Developer access granted', type:'code', code:'novadev' },
+  'golden-key':      { name:'Golden Key',         icon:'🗝️', desc:'Unlock the golden vault',  type:'code', code:'goldkey' },
+  'shadow-master':   { name:'Shadow Master',      icon:'🌑', desc:'Master of the shadows',     type:'code', code:'shadow99' },
+  'nova-founder':    { name:'Nova Founder',       icon:'🚀', desc:'An OG Nova user',           type:'code', code:'novaogl' },
+};
+
+let unlockedBadges = [], pagesVisited = new Set(), chatMessageCount = 0, speedRunnerChecked = false;
+const BADGES_KEY = 'nova_badges_v2', _appOpenTime = Date.now();
+
+function loadBadges() {
+  try { unlockedBadges = JSON.parse(localStorage.getItem(BADGES_KEY) || '[]'); } catch { unlockedBadges = []; }
+  chatMessageCount = parseInt(localStorage.getItem('nova_chat_count') || '0');
+  renderBadges();
+}
+function saveBadges() { localStorage.setItem(BADGES_KEY, JSON.stringify(unlockedBadges)); }
+function unlockBadge(id) {
+  if (unlockedBadges.includes(id) || !BADGES[id]) return;
+  unlockedBadges.push(id); saveBadges(); showNotification(`🏆 Badge: ${BADGES[id].name}!`, 'success'); renderBadges();
+}
+function tryCodeBadge(badgeId, inputEl, btnEl) {
+  const badge = BADGES[badgeId]; if (!badge || badge.type !== 'code') return;
+  if (inputEl.value.trim().toLowerCase() === badge.code) { unlockBadge(badgeId); inputEl.style.borderColor = 'var(--success)'; btnEl.textContent = '✓'; btnEl.disabled = true; setTimeout(() => inputEl.parentElement.classList.remove('show'), 1200); }
+  else { inputEl.style.borderColor = 'var(--alert)'; inputEl.value = ''; setTimeout(() => { inputEl.style.borderColor = ''; }, 1200); }
+}
+function renderBadges() {
+  const container = document.getElementById('badgeContainer'); container.innerHTML = '';
+  const earned = unlockedBadges.filter(id => BADGES[id]).length;
+  const prog = document.getElementById('badge-progress-text'); if (prog) prog.textContent = `(${earned} / ${Object.keys(BADGES).length})`;
+  const frag = document.createDocumentFragment();
+  Object.keys(BADGES).forEach(id => {
+    const badge = BADGES[id], unlocked = unlockedBadges.includes(id), isCode = badge.type === 'code';
+    const div = document.createElement('div');
+    div.className = `badge ${unlocked ? 'unlocked' : 'locked'}${isCode && !unlocked ? ' code-required' : ''}`;
+    const tagLabel = unlocked ? 'earned' : (isCode ? 'code' : 'auto'), tagText = unlocked ? '✓ Earned' : (isCode ? '🔑 Code' : '🟢 Auto');
+    div.innerHTML = `<div class="badge-icon">${badge.icon}</div><div class="badge-name">${badge.name}</div><div class="badge-desc">${badge.desc}</div><span class="badge-tag ${tagLabel}">${tagText}</span>${isCode && !unlocked ? `<div class="badge-code-area" id="code-area-${id}"><input class="badge-code-input" id="code-in-${id}" type="text" placeholder="Enter code..."/><button class="badge-code-submit" id="code-btn-${id}">Submit</button></div>` : ''}`;
+    if (isCode && !unlocked) { div.addEventListener('click', e => { if (e.target.classList.contains('badge-code-input') || e.target.classList.contains('badge-code-submit')) return; const area = document.getElementById(`code-area-${id}`); area.classList.toggle('show'); if (area.classList.contains('show')) document.getElementById(`code-in-${id}`).focus(); }); }
+    frag.appendChild(div);
+  });
+  container.appendChild(frag);
+  Object.keys(BADGES).forEach(id => {
+    const badge = BADGES[id]; if (badge.type !== 'code' || unlockedBadges.includes(id)) return;
+    const inp = document.getElementById(`code-in-${id}`), btn = document.getElementById(`code-btn-${id}`);
+    if (inp && btn) { btn.addEventListener('click', () => tryCodeBadge(id, inp, btn)); inp.addEventListener('keydown', e => { if (e.key === 'Enter') tryCodeBadge(id, inp, btn); }); }
+  });
+}
+function checkTimeBadges() { const h = new Date().getHours(); if (h < 4) unlockBadge('night-owl'); else if (h < 7) unlockBadge('early-bird'); }
+checkTimeBadges();
+function checkSpeedRunner() { if (!speedRunnerChecked) { speedRunnerChecked = true; if (Date.now() - _appOpenTime < 10000) unlockBadge('speed-runner'); } }
+
+// ============================================
+// STATUS
+// ============================================
+function updateStatus() {
+  if (!window.myName) { showNotification('Please login first', 'warning'); return; }
+  const v = document.getElementById('status-input').value.trim(); if (!v) return;
+  db.ref("users/" + window.myName + "/customStatus").set(v);
+  document.getElementById('status-input').value = ''; showNotification('Status updated!', 'success'); unlockBadge('status-setter');
+}
+
+// ============================================
+// NOVA COIN SYSTEM
+// ============================================
+let novaCoins = 0, purchasedGames = [], coinInterval = null;
+function updateCoinDisplay() { document.getElementById('coin-count').textContent = novaCoins; if (novaCoins >= 50) unlockBadge('coin-collector'); }
+function earnCoin() { if (!window.myName) return; novaCoins++; saveCoinData(); updateCoinDisplay(); showNotification('+1 Coin!', 'success'); }
+function saveCoinData() { if (!window.myName) return; db.ref("users/" + window.myName + "/coins").set(novaCoins); db.ref("users/" + window.myName + "/purchasedGames").set(purchasedGames); }
+function loadCoinData() {
+  if (!window.myName) { novaCoins = 0; purchasedGames = []; updateCoinDisplay(); return; }
+  db.ref("users/" + window.myName + "/coins").once("value", s => { novaCoins = s.val() || 0; updateCoinDisplay(); });
+  db.ref("users/" + window.myName + "/purchasedGames").once("value", s => { purchasedGames = s.val() || []; if (document.getElementById('shop').classList.contains('active')) renderShop(); });
+}
+function startCoinEarning() { if (coinInterval) clearInterval(coinInterval); coinInterval = setInterval(earnCoin, 300000); }
+function stopCoinEarning() { if (coinInterval) { clearInterval(coinInterval); coinInterval = null; } }
+updateCoinDisplay();
+
+// ============================================
+// SHOP
+// ============================================
+const SHOP_ITEMS = [
+  { id:"minecraft-download",  name:"Minecraft",       price:10, thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/minecraft.png",    downloadFile:"minecraft.html" },
+  { id:"mario64-download",    name:"Super Mario 64",  price:10, thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/supermario64.png",  downloadFile:"mario64.html" },
+  { id:"balatro-download",    name:"Balatro",         price:10, thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/balatro.png",       downloadFile:"balatro.html" },
+  { id:"tattletail-download", name:"Tattletail",      price:5,  thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/tattletail.png",    downloadFile:"tattletail.html" }
+];
+
+function renderShop() {
+  const scroller = document.getElementById('shopScroller'); scroller.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  SHOP_ITEMS.forEach(item => {
+    const bought = purchasedGames.includes(item.id), canAfford = novaCoins >= item.price;
+    const div = document.createElement('div'); div.className = 'shop-item';
+    div.innerHTML = `<img class="thumb" src="${item.thumb}" alt="${item.name}" loading="lazy"><strong>${item.name}</strong><div class="price"><div class="coin-icon">🪙</div><span>${item.price}</span></div>${bought?'<button class="btn" style="background:rgba(0,255,136,0.2);border-color:var(--success);">Purchased ✓</button>':`<button class="buy-btn" onclick="purchaseItem('${item.id}')" ${!canAfford?'disabled':''}>${canAfford?'Buy Now':'Not Enough Coins'}</button>`}`;
+    frag.appendChild(div);
+  });
+  scroller.appendChild(frag);
+  renderBannerShop();
+  renderPurchasedItems();
+}
+
+function purchaseItem(itemId) {
+  if (!window.myName) { showNotification('Login to make purchases!', 'warning'); return; }
+  const item = SHOP_ITEMS.find(i => i.id === itemId); if (!item) return;
+  if (novaCoins >= item.price) {
+    novaCoins -= item.price; purchasedGames.push(itemId); saveCoinData(); updateCoinDisplay(); renderShop();
+    unlockBadge('big-spender'); showNotification(`${item.name} purchased!`, 'success');
+    fetch(item.downloadFile).then(r => r.blob()).then(blob => { const url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = item.downloadFile; document.body.appendChild(a); a.click(); URL.revokeObjectURL(url); document.body.removeChild(a); }).catch(() => showNotification('Download failed.', 'error'));
+  } else { showNotification('Not enough Nova Coins!', 'warning'); }
+}
+
+function renderPurchasedItems() {
+  const container = document.getElementById('purchasedItems');
+  if (!purchasedGames.length) { container.innerHTML = '<p class="empty">No purchases yet.</p>'; return; }
+  container.innerHTML = '';
+  purchasedGames.forEach(gameId => {
+    const item = SHOP_ITEMS.find(i => i.id === gameId); if (!item) return;
+    const div = document.createElement('div');
+    div.style.cssText = 'display:flex;align-items:center;gap:14px;padding:14px;background:rgba(19,23,41,0.8);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;';
+    div.innerHTML = `<img src="${item.thumb}" loading="lazy" style="width:56px;height:56px;border-radius:7px;object-fit:contain;background:rgba(0,0,0,0.3);"><div style="flex:1;"><strong style="display:block;margin-bottom:3px;">${item.name}</strong><span style="color:var(--muted);font-size:12px;">Purchased</span></div><button class="btn" onclick="redownloadGame('${item.downloadFile}')" style="white-space:nowrap;">Download Again</button>`;
+    container.appendChild(div);
+  });
+}
+
+function redownloadGame(filename) { fetch(filename).then(r => r.blob()).then(blob => { const url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); URL.revokeObjectURL(url); document.body.removeChild(a); }).catch(() => showNotification('Download failed!', 'error')); }
+
+// ============================================
+// NAVIGATION
+// ============================================
+function showPage(pageId) {
+  if (pageId === 'admin' && window.myName !== ADMIN_USERNAME) { showNotification('Access denied.', 'error'); return; }
+  document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById(pageId); if (target) target.classList.add('active');
+  document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+  const navLink = document.querySelector(`.nav a[data-page="${pageId}"]`); if (navLink) navLink.classList.add('active');
+  pagesVisited.add(pageId); if (pagesVisited.size >= 5) unlockBadge('explorer');
+  if (pageId === 'settings') unlockBadge('first-setting');
+  if (pageId === 'shop') { unlockBadge('window-shopper'); renderShop(); }
+  if (pageId === 'achievements') checkDailyReward();
+  if (pageId === 'chat' && window.myName) setupChat();
+  if (pageId === 'profile') loadProfile();
+}
+
+window.addEventListener('load', () => {
+  loadSettings(); loadUserData(); loadBadges();
+  document.querySelectorAll('.nav a').forEach(link => { link.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); const p = link.dataset.page; if (p) showPage(p); }); });
+  const hash = window.location.hash.substring(1);
+  if (hash && document.getElementById(hash)) showPage(hash); else showPage('home');
+  const stored = localStorage.getItem("nova_user") || localStorage.getItem("nexus_user");
+  if (stored) {
+    db.ref("users/" + stored).once("value", snap => {
+      if (snap.exists()) { window.myName = stored; updateProfileDisplay(); loadCoinData(); loadBannerData(); startCoinEarning(); checkAdminAccess(); listenForImagePopups(); }
+    });
+  }
+  checkDailyReward();
+  // Render default banner on profile for guests
+  applyBannerToProfile(null, 'profile-banner');
+});
+
+// ============================================
+// GAMES DATA
+// ============================================
+const TOP_GAMES = [
+  { id:"roblox",    name:"Roblox",      url:"https://jeremyryanknight2012.github.io/My-Website/games/roblox.html",    thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/roblox.png",    category:"adventure" },
+  { id:"1v1lol",   name:"1v1.LOL",     url:"https://jeremyryanknight2012.github.io/My-Website/games/1v1lol.html",   thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/1v1lol.png",   category:"action" },
+  { id:"retrobowl", name:"Retro Bowl",  url:"https://jeremyryanknight2012.github.io/My-Website/games/retrobowl.html",thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/retrobowl.png",category:"sports" },
+  { id:"ultrakill", name:"Ultrakill",   url:"https://jeremyryanknight2012.github.io/My-Website/games/ultrakill.html",thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/ultrakill.png",category:"action" }
+];
+
+const ALL_GAMES = [
+  { id:"2playerbattle", name:"2 Player Battle", url:"https://turbowarp.org/292728003/embed", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/2playerbattle.png", category:"action" },
+  { id:"3dtuning", name:"3D Tuning", url:"https://www.3dtuning.com/en-US/", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/3dtuning.png", category:"puzzle" },
+  { id:"10minutestilldawn", name:"10 Minutes Till Dawn", url:"https://jeremyryanknight2012.github.io/My-Website/games/10minutestilldawn.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/10minutestilldawn.png", category:"action" },
+  { id:"amongus", name:"Among Us", url:"https://jeremyryanknight2012.github.io/My-Website/games/amongus.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/amongus.png", category:"puzzle" },
+  { id:"armedforces", name:"Armed Forces", url:"https://jeremyryanknight2012.github.io/My-Website/games/armedforces.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/armedforces.png", category:"action" },
+  { id:"badparenting", name:"Bad Parenting", url:"https://jeremyryanknight2012.github.io/My-Website/games/badparenting.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/badparenting.png", category:"horror" },
+  { id:"balatro", name:"Balatro", url:"https://jeremyryanknight2012.github.io/My-Website/games/balatro.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/balatro.png", category:"puzzle" },
+  { id:"bankrobbery2", name:"Bank Robbery 2", url:"https://jeremyryanknight2012.github.io/My-Website/games/bankrobbery2.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/bankrobbery2.png", category:"action" },
+  { id:"baseballbros", name:"Baseball Bros", url:"https://jeremyryanknight2012.github.io/My-Website/games/baseballbros.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/baseballbros.png", category:"sports" },
+  { id:"basketbros", name:"Basket Bros", url:"https://jeremyryanknight2012.github.io/My-Website/games/basketbros.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/basketbros.png", category:"sports" },
+  { id:"basketrandom", name:"Basket Random", url:"https://jeremyryanknight2012.github.io/My-Website/games/basketrandom.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/basketrandom.png", category:"sports" },
+  { id:"bendyandtheinkmachine", name:"Bendy and the Ink Machine", url:"https://jeremyryanknight2012.github.io/My-Website/games/bendy.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/bendy.png", category:"horror" },
+  { id:"thebindingofisaac", name:"The Binding of Isaac", url:"https://jeremyryanknight2012.github.io/My-Website/games/bindingofisaac.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/bindingofisaac.png", category:"adventure" },
+  { id:"bitlife", name:"Bitlife", url:"https://jeremyryanknight2012.github.io/My-Website/games/bitlife.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/bitlife.png", category:"puzzle" },
+  { id:"buckshotroulette", name:"Buckshot Roulette", url:"https://jeremyryanknight2012.github.io/My-Website/games/buckshotroulette.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/buckshotroulette.png", category:"horror" },
+  { id:"buildnow", name:"Build Now", url:"https://jeremyryanknight2012.github.io/My-Website/games/buildnow.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/buildnow.png", category:"action" },
+  { id:"callofduty", name:"Call of Duty", url:"https://jeremyryanknight2012.github.io/My-Website/games/callofduty.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/callofduty.png", category:"action" },
+  { id:"cookieclicker", name:"Cookie Clicker", url:"https://jeremyryanknight2012.github.io/My-Website/games/cookieclicker.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/cookieclicker.png", category:"puzzle" },
+  { id:"coreball", name:"Coreball", url:"https://jeremyryanknight2012.github.io/My-Website/games/coreball.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/coreball.png", category:"puzzle" },
+  { id:"crossyroad", name:"Crossy Road", url:"https://jeremyryanknight2012.github.io/My-Website/games/crossyroad.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/crossyroad.png", category:"adventure" },
+  { id:"cuphead", name:"Cuphead", url:"https://jeremyryanknight2012.github.io/My-Website/games/cuphead.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/cuphead.png", category:"adventure" },
+  { id:"cuttherope", name:"Cut the Rope", url:"https://jeremyryanknight2012.github.io/My-Website/games/cuttherope.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/cuttherope.png", category:"puzzle" },
+  { id:"doodlejump", name:"Doodle Jump", url:"https://jeremyryanknight2012.github.io/My-Website/games/doodlejump.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/doodlejump.png", category:"adventure" },
+  { id:"doom", name:"Doom", url:"https://jeremyryanknight2012.github.io/My-Website/games/doom.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/doom.png", category:"action" },
+  { id:"doom2", name:"Doom 2", url:"https://jeremyryanknight2012.github.io/My-Website/games/doom2.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/doom2.png", category:"action" },
+  { id:"drifthunters", name:"Drift Hunters", url:"https://jeremyryanknight2012.github.io/My-Website/games/drifthunters.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/drifthunters.png", category:"sports" },
+  { id:"drivemad", name:"Drive Mad", url:"https://jeremyryanknight2012.github.io/My-Website/games/drivemad.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/drivemad.png", category:"adventure" },
+  { id:"endoparasitic", name:"Endoparasitic", url:"https://jeremyryanknight2012.github.io/My-Website/games/endoparasitic.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/endoparasitic.png", category:"horror" },
+  { id:"escaperoad", name:"Escape Road", url:"https://jeremyryanknight2012.github.io/My-Website/games/escaperoad.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/escaperoad.png", category:"action" },
+  { id:"fallout", name:"Fallout", url:"https://jeremyryanknight2012.github.io/My-Website/games/fallout.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/fallout.png", category:"adventure" },
+  { id:"flappybird", name:"Flappy Bird", url:"https://jeremyryanknight2012.github.io/My-Website/games/flappybird.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/flappybird.png", category:"adventure" },
+  { id:"fnaf1", name:"FNAF 1", url:"https://jeremyryanknight2012.github.io/My-Website/games/fnaf1.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/fnaf1.png", category:"horror" },
+  { id:"fnaf2", name:"FNAF 2", url:"https://jeremyryanknight2012.github.io/My-Website/games/fnaf2.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/fnaf2.png", category:"horror" },
+  { id:"fnaf3", name:"FNAF 3", url:"https://jeremyryanknight2012.github.io/My-Website/games/fnaf3.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/fnaf3.png", category:"horror" },
+  { id:"fnaf4", name:"FNAF 4", url:"https://jeremyryanknight2012.github.io/My-Website/games/fnaf4.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/fnaf4.png", category:"horror" },
+  { id:"fnaf4halloween", name:"FNAF 4 Halloween Edition", url:"https://jeremyryanknight2012.github.io/My-Website/games/fnaf4halloween.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/fnaf4halloween.png", category:"horror" },
+  { id:"footballbros", name:"Football Bros", url:"https://jeremyryanknight2012.github.io/My-Website/games/footballbros.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/footballbros.png", category:"sports" },
+  { id:"fruitninja", name:"Fruit Ninja", url:"https://jeremyryanknight2012.github.io/My-Website/games/fruitninja.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/fruitninja.png", category:"action" },
+  { id:"geometrydash", name:"Geometry Dash", url:"https://jeremyryanknight2012.github.io/My-Website/games/geometrydash.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/geometrydash.png", category:"adventure" },
+  { id:"granny1", name:"Granny", url:"https://jeremyryanknight2012.github.io/My-Website/games/granny1.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/granny1.png", category:"horror" },
+  { id:"granny2", name:"Granny Chapter 2", url:"https://jeremyryanknight2012.github.io/My-Website/games/granny2.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/granny2.png", category:"horror" },
+  { id:"granny3", name:"Granny Chapter 3", url:"https://jeremyryanknight2012.github.io/My-Website/games/granny3.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/granny3.png", category:"horror" },
+  { id:"halflife", name:"Half-Life", url:"https://jeremyryanknight2012.github.io/My-Website/games/halflife.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/halflife.png", category:"action" },
+  { id:"hollowknight", name:"Hollow Knight", url:"https://jeremyryanknight2012.github.io/My-Website/games/hollowknight.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/hollowknight.png", category:"adventure" },
+  { id:"jetpackjoyride", name:"Jetpack Joyride", url:"https://jeremyryanknight2012.github.io/My-Website/games/jetpackjoyride.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/jetpackjoyride.png", category:"adventure" },
+  { id:"johnnytrigger", name:"Johnny Trigger", url:"https://jeremyryanknight2012.github.io/My-Website/games/johnnytrigger.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/johnnytrigger.png", category:"action" },
+  { id:"kindergarten", name:"Kindergarten", url:"https://jeremyryanknight2012.github.io/My-Website/games/kindergarten.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/kindergarten.png", category:"adventure" },
+  { id:"kindergarten2", name:"Kindergarten 2", url:"https://jeremyryanknight2012.github.io/My-Website/games/kindergarten2.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/kindergarten2.png", category:"adventure" },
+  { id:"kindergarten3", name:"Kindergarten 3", url:"https://jeremyryanknight2012.github.io/My-Website/games/kindergarten3.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/kindergarten3.png", category:"adventure" },
+  { id:"learntofly", name:"Learn to Fly", url:"https://jeremyryanknight2012.github.io/My-Website/games/learntofly.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/learntofly.png", category:"adventure" },
+  { id:"melonplayground", name:"Melon Playground", url:"https://jeremyryanknight2012.github.io/My-Website/games/melonplayground.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/melonplayground.png", category:"puzzle" },
+  { id:"minecraft", name:"Minecraft", url:"https://jeremyryanknight2012.github.io/My-Website/games/minecraft.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/minecraft.png", category:"adventure" },
+  { id:"nazizombies", name:"Nazi Zombies", url:"https://jeremyryanknight2012.github.io/My-Website/games/nazizombies.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/nazizombies.png", category:"action" },
+  { id:"papersplease", name:"Papers Please", url:"https://jeremyryanknight2012.github.io/My-Website/games/papersplease.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/papersplease.png", category:"puzzle" },
+  { id:"pixelgun3d", name:"Pixel Gun 3D", url:"https://jeremyryanknight2012.github.io/My-Website/games/pixelgun.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/pixelgun.png", category:"action" },
+  { id:"poppyplaytime", name:"Poppy Playtime", url:"https://jeremyryanknight2012.github.io/My-Website/games/poppyplaytime.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/poppyplaytime.png", category:"horror" },
+  { id:"freddyfazbearspizzeriasimulator", name:"Freddy Fazbear's Pizzeria Simulator", url:"https://jeremyryanknight2012.github.io/My-Website/games/pizzeriasimulator.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/pizzeriasimulator.png", category:"horror" },
+  { id:"plantsvszombies", name:"Plants vs Zombies", url:"https://jeremyryanknight2012.github.io/My-Website/games/plantsvszombies.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/plantsvszombies.png", category:"puzzle" },
+  { id:"plantsvszombies2", name:"Plants vs Zombies 2", url:"https://jeremyryanknight2012.github.io/My-Website/games/plantsvszombies2.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/plantsvszombies2.png", category:"puzzle" },
+  { id:"pokemon", name:"Pokemon", url:"https://jeremyryanknight2012.github.io/My-Website/games/pokemon.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/pokemon.png", category:"adventure" },
+  { id:"raft", name:"Raft", url:"https://jeremyryanknight2012.github.io/My-Website/games/raft.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/raft.png", category:"adventure" },
+  { id:"ragdollarchers", name:"Ragdoll Archers", url:"https://jeremyryanknight2012.github.io/My-Website/games/ragdollarchers.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/ragdollarchers.png", category:"action" },
+  { id:"retrobowlcollege", name:"Retro Bowl College", url:"https://jeremyryanknight2012.github.io/My-Website/games/retrobowlcollege.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/retrobowlcollege.png", category:"sports" },
+  { id:"schoolboyrunaway", name:"Schoolboy Runaway", url:"https://jeremyryanknight2012.github.io/My-Website/games/schoolboyrunaway.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/schoolboyrunaway.png", category:"adventure" },
+  { id:"sisterlocation", name:"Sister Location", url:"https://jeremyryanknight2012.github.io/My-Website/games/sisterlocation.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/sisterlocation.png", category:"horror" },
+  { id:"slenderman", name:"Slenderman", url:"https://jeremyryanknight2012.github.io/My-Website/games/slenderman.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/slenderman.png", category:"horror" },
+  { id:"slimerancher", name:"Slime Rancher", url:"https://jeremyryanknight2012.github.io/My-Website/games/slimerancher.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/slimerancher.png", category:"adventure" },
+  { id:"slitherio", name:"Slither.io", url:"https://jeremyryanknight2012.github.io/My-Website/games/slitherio.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/slitherio.png", category:"action" },
+  { id:"slope", name:"Slope", url:"https://jeremyryanknight2012.github.io/My-Website/games/slope.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/slope.png", category:"adventure" },
+  { id:"smashkarts", name:"Smash Karts", url:"https://jeremyryanknight2012.github.io/My-Website/games/smashkarts.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/smashkarts.png", category:"action" },
+  { id:"snowrider", name:"Snow Rider", url:"https://jeremyryanknight2012.github.io/My-Website/games/snowrider.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/snowrider.png", category:"adventure" },
+  { id:"superhot", name:"SUPERHOT", url:"https://jeremyryanknight2012.github.io/My-Website/games/superhot.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/superhot.png", category:"action" },
+  { id:"supermario64", name:"Super Mario 64", url:"https://jeremyryanknight2012.github.io/My-Website/games/supermario64.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/supermario64.png", category:"adventure" },
+  { id:"supermariobros", name:"Super Mario Bros", url:"https://jeremyryanknight2012.github.io/My-Website/games/supermariobros.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/supermariobros.png", category:"adventure" },
+  { id:"survivalrace", name:"Survival Race", url:"https://jeremyryanknight2012.github.io/My-Website/games/survivalrace.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/survivalrace.png", category:"sports" },
+  { id:"templerun2", name:"Temple Run 2", url:"https://jeremyryanknight2012.github.io/My-Website/games/templerun2.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/templerun2.png", category:"adventure" },
+  { id:"terraria", name:"Terraria", url:"https://jeremyryanknight2012.github.io/Terraria", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/terraria.png", category:"adventure" },
+  { id:"theyarecoming", name:"They are Coming", url:"https://jeremyryanknight2012.github.io/My-Website/games/theyarecoming.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/theyarecoming.png", category:"action" },
+  { id:"tinyfishing", name:"Tiny Fishing", url:"https://jeremyryanknight2012.github.io/My-Website/games/tinyfishing.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/tinyfishing.png", category:"adventure" },
+  { id:"tombofthemask", name:"Tomb of the Mask", url:"https://jeremyryanknight2012.github.io/My-Website/games/tombofthemask.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/tombofthemask.png", category:"adventure" },
+  { id:"ultimatecustomnight", name:"Ultimate Custom Night", url:"https://jeremyryanknight2012.github.io/My-Website/games/ultimatecustomnight.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/ultimatecustomnight.png", category:"horror" },
+  { id:"undertale", name:"Undertale", url:"https://jeremyryanknight2012.github.io/My-Website/games/undertale.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/undertale.png", category:"adventure" }
+];
+
+let currentCategory = 'all';
+
+// ============================================
+// MOVIES DATA
+// ============================================
+const TOP_MOVIES = [
+  { id:"thesimpsonsmovie", name:"The Simpsons Movie", url:"https://jeremyryanknight2012.github.io/My-Website/movies/simpsonsmovie.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/simpsonsmovie.png" },
+  { id:"jurassicpark",      name:"Jurassic Park",      url:"https://jeremyryanknight2012.github.io/My-Website/movies/jurassicpark.html",   thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/jurassicpark.png" }
+];
+const ALL_MOVIES = [
+  { id:"acharliebrownchristmas", name:"A Charlie Brown Christmas", url:"https://jeremyryanknight2012.github.io/My-Website/movies/acharliebrownchristmas.html", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/acharliebrownchristmas.png" },
+  { id:"avengersendgame",        name:"Avengers Endgame",          url:"https://jeremyryanknight2012.github.io/My-Website/movies/avengersendgame.html",         thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/avengersendgame.png" }
+];
+
+// ============================================
+// TV SHOWS DATA
+// ============================================
+const ALL_TVSHOWS = [
+  { name:"Adventure Time",           url:"https://drive.google.com/drive/folders/1OwoKydzUQUUp6n-Nh7CCAQXGLfchU8Ta", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/adventuretime.png" },
+  { name:"Amazing World of Gumball", url:"https://drive.google.com/drive/folders/1jhdpF65hUXwCRjOZKqquWB4z8L1ZpII7", thumb:"https://jeremyryanknight2012.github.io/My-Website/thumbnails/amazingworldofgumball.png" }
+];
+
+// ============================================
+// RENDER FUNCTIONS
+// ============================================
+function buildGameCard(g) {
+  const isFav = favorites.some(f => f.id === g.id); const d = document.createElement('div'); d.className = 'game';
+  d.innerHTML = `<button class="favorite-btn${isFav?' active':''}" data-fav-id="${g.id}" onclick="event.stopPropagation();toggleFavorite('${g.id}','${g.name}','${g.url}','${g.thumb}','game')">${isFav?'⭐':'☆'}</button><img class="thumb" src="${g.thumb}" alt="${g.name}" loading="lazy"><strong>${g.name}</strong><button class="game-btn" data-url="${g.url}" data-title="${g.name}" data-id="${g.id}" data-thumb="${g.thumb}">Launch</button>`;
+  return d;
+}
+function renderGames() {
+  const topScroller = document.getElementById('topGamesScroller'), allScroller = document.getElementById('allGamesScroller');
+  const topFrag = document.createDocumentFragment(), allFrag = document.createDocumentFragment();
+  TOP_GAMES.forEach(g => topFrag.appendChild(buildGameCard(g)));
+  const filtered = currentCategory === 'all' ? ALL_GAMES : ALL_GAMES.filter(g => g.category === currentCategory);
+  filtered.forEach(g => allFrag.appendChild(buildGameCard(g)));
+  topScroller.innerHTML = ''; topScroller.appendChild(topFrag); allScroller.innerHTML = ''; allScroller.appendChild(allFrag);
+}
+function filterGamesByCategory(category, btn) {
+  currentCategory = category; document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active')); if (btn) btn.classList.add('active'); renderGames();
+}
+function buildMovieCard(m) {
+  const isFav = favorites.some(f => f.id === m.id); const d = document.createElement('div'); d.className = 'movie';
+  d.innerHTML = `<button class="favorite-btn${isFav?' active':''}" data-fav-id="${m.id}" onclick="event.stopPropagation();toggleFavorite('${m.id}','${m.name}','${m.url}','${m.thumb}','movie')">${isFav?'⭐':'☆'}</button><img class="thumb" src="${m.thumb}" loading="lazy"><strong>${m.name}</strong><button class="movie-btn" data-url="${m.url}" data-title="${m.name}" data-id="${m.id}" data-thumb="${m.thumb}">Watch</button>`;
+  return d;
+}
+function renderMovies() {
+  const topS = document.getElementById('topMoviesScroller'), allS = document.getElementById('allMoviesScroller');
+  const tf = document.createDocumentFragment(), af = document.createDocumentFragment();
+  TOP_MOVIES.forEach(m => tf.appendChild(buildMovieCard(m))); ALL_MOVIES.forEach(m => af.appendChild(buildMovieCard(m)));
+  topS.innerHTML = ''; topS.appendChild(tf); allS.innerHTML = ''; allS.appendChild(af);
+}
+function renderTVShows() {
+  const s = document.getElementById('allTVShowsScroller'); s.innerHTML = ''; const frag = document.createDocumentFragment();
+  ALL_TVSHOWS.forEach(t => { const d = document.createElement('div'); d.className = 'tvshow'; d.innerHTML = `<img class="thumb" src="${t.thumb}" alt="${t.name}" loading="lazy"><strong>${t.name}</strong><button class="tvshow-btn" onclick="location.href='${t.url}'">Watch</button>`; frag.appendChild(d); });
+  s.appendChild(frag);
+}
+
+renderGames(); renderMovies(); renderTVShows();
+
+// ============================================
+// SEARCH — debounced
+// ============================================
+let searchUsed = false;
+function markSearchUsed() { if (!searchUsed) { searchUsed = true; unlockBadge('searcher'); } }
+function debounce(fn, ms) { let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); }; }
+
+document.getElementById('games-search').addEventListener('input', debounce(e => {
+  markSearchUsed(); const term = e.target.value.toLowerCase();
+  const filtered = ALL_GAMES.filter(g => g.name.toLowerCase().includes(term) && (currentCategory === 'all' || g.category === currentCategory));
+  const allS = document.getElementById('allGamesScroller'), empty = document.getElementById('gamesEmpty');
+  if (!filtered.length) { empty.style.display='block'; allS.innerHTML=''; return; } empty.style.display='none';
+  const frag = document.createDocumentFragment(); filtered.forEach(g => frag.appendChild(buildGameCard(g))); allS.innerHTML=''; allS.appendChild(frag);
+}, 200));
+document.getElementById('games-clear').addEventListener('click', () => { document.getElementById('games-search').value=''; document.getElementById('gamesEmpty').style.display='none'; renderGames(); });
+document.getElementById('movies-search').addEventListener('input', debounce(e => {
+  markSearchUsed(); const v = e.target.value.toLowerCase(); const f = ALL_MOVIES.filter(m => m.name.toLowerCase().includes(v));
+  const allS = document.getElementById('allMoviesScroller'), empty = document.getElementById('moviesEmpty');
+  empty.style.display = f.length?'none':'block'; allS.innerHTML=''; const frag = document.createDocumentFragment(); f.forEach(m => frag.appendChild(buildMovieCard(m))); allS.appendChild(frag);
+}, 200));
+document.getElementById('movies-clear').addEventListener('click', () => { document.getElementById('movies-search').value=''; document.getElementById('moviesEmpty').style.display='none'; renderMovies(); });
+document.getElementById('tvshows-search').addEventListener('input', debounce(e => {
+  markSearchUsed(); const v = e.target.value.toLowerCase(); const f = ALL_TVSHOWS.filter(t => t.name.toLowerCase().includes(v));
+  const s = document.getElementById('allTVShowsScroller'); s.innerHTML=''; const frag = document.createDocumentFragment();
+  f.forEach(t => { const d = document.createElement('div'); d.className='tvshow'; d.innerHTML=`<img class="thumb" src="${t.thumb}" alt="${t.name}" loading="lazy"><strong>${t.name}</strong><button class="tvshow-btn" onclick="location.href='${t.url}'">Watch</button>`; frag.appendChild(d); });
+  s.appendChild(frag);
+}, 200));
+document.getElementById('tvshows-clear').addEventListener('click', () => { document.getElementById('tvshows-search').value=''; renderTVShows(); });
+
+// ============================================
+// PLAYER OVERLAY
+// ============================================
+const player = document.getElementById('player'), frame = document.getElementById('playerFrame'), nameEl = document.getElementById('playerName');
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.game-btn, .movie-btn'); if (!btn) return;
+  const id = btn.dataset.id || btn.dataset.title, title = btn.dataset.title, url = btn.dataset.url, thumb = btn.dataset.thumb;
+  const type = btn.classList.contains('game-btn') ? 'game' : 'movie';
+  if (id && title && url && thumb) addToRecentlyPlayed(id, title, url, thumb, type);
+  if (type === 'movie') unlockBadge('movie-starter');
+  checkSpeedRunner();
+  nameEl.textContent = title; frame.src = url; player.classList.add('open');
+  try { if (!document.fullscreenElement) player.requestFullscreen(); } catch {}
+});
+document.getElementById('closeBtn').onclick = () => { player.classList.remove('open'); frame.src = ''; if (document.fullscreenElement) document.exitFullscreen(); };
+
+// ============================================
+// UTILITY
+// ============================================
+function openWaterGame() { const win = window.open("about:blank"); const iframe = win.document.createElement("iframe"); iframe.style.cssText = "width:100%;height:100%;border:none;"; iframe.src = "https://cgxlyxnlynjpbmdiywnrc3rhcnrtewvkdwnhdglvbml0d2fzc29zawdtv2.familyguy.in/signin.html"; win.document.body.style.margin = "0"; win.document.body.appendChild(iframe); }
+function openUnblockedGoogle() { const win = window.open("about:blank"); const iframe = win.document.createElement("iframe"); iframe.style.cssText = "width:100%;height:100%;border:none;"; iframe.src = "https://browse.familyguy.in"; win.document.body.style.margin = "0"; win.document.body.appendChild(iframe); }
+
+// ============================================
+// REQUEST FORM
+// ============================================
+document.getElementById('requestForm').addEventListener('submit', function(e) {
+  e.preventDefault(); const statusEl = document.getElementById('status'); statusEl.className=''; statusEl.textContent='Sending...';
+  if (!window.emailjs) { statusEl.textContent='❌ Email service not loaded yet.'; statusEl.classList.add('status-bad'); return; }
+  emailjs.sendForm('service_4caoubc', 'template_67jfhnb', this).then(
+    () => { statusEl.textContent='✅ Request sent!'; statusEl.classList.add('status-ok'); this.reset(); },
+    err => { statusEl.textContent='❌ Failed. Try again.'; statusEl.classList.add('status-bad'); console.error(err); }
+  );
+});
+
+// ============================================
+// AUTH SYSTEM
+// ============================================
+async function hashPassword(pw) { const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)); return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join(''); }
+function setAuthStatus(msg, type) { const el = document.getElementById('auth-status-msg'); if (!el) return; el.textContent=msg; el.className='auth-status-msg show '+(type||'error'); }
+function clearAuthStatus() { const el = document.getElementById('auth-status-msg'); if (el) { el.textContent=''; el.className='auth-status-msg'; } }
+
+async function loginUser() {
+  clearAuthStatus(); const username = document.getElementById('login-username').value.trim(), password = document.getElementById('login-password').value;
+  if (!username) { setAuthStatus('⚠️ Enter a username.', 'warning'); return; } if (!password) { setAuthStatus('🔒 Password required.', 'error'); return; }
+  db.ref("users/"+username).once("value", async snap => {
+    if (!snap.exists()) { setAuthStatus('❌ User not found.', 'error'); return; }
+    const data = snap.val(); if (!data.passwordHash) { setAuthStatus('❌ No password on this account.', 'error'); return; }
+    if (await hashPassword(password) !== data.passwordHash) { setAuthStatus('❌ Wrong password.', 'error'); return; }
+    window.myName = username; localStorage.setItem("nova_user", username);
+    setAuthStatus('✅ Logged in as '+username+'!', 'success'); document.getElementById('login-password').value = '';
+    updateProfileDisplay(); loadCoinData(); loadBannerData(); startCoinEarning(); checkAdminAccess(); listenForImagePopups();
+    showNotification('Logged in!', 'success');
+  });
+}
+
+async function registerUser() {
+  clearAuthStatus(); const username = document.getElementById('login-username').value.trim(), password = document.getElementById('login-password').value;
+  if (!username) { setAuthStatus('⚠️ Enter a username.', 'warning'); return; } if (!password || password.length < 4) { setAuthStatus('⚠️ Password must be 4+ chars.', 'warning'); return; }
+  db.ref("users/"+username).once("value", async snap => {
+    if (snap.exists()) { setAuthStatus('❌ Username taken.', 'error'); return; }
+    const ph = await hashPassword(password);
+    await db.ref("users/"+username).set({ status:"online", pfp:"https://via.placeholder.com/120", customStatus:"", friends:{}, coins:0, purchasedGames:[], passwordHash:ph });
+    window.myName = username; localStorage.setItem("nova_user", username);
+    setAuthStatus('✅ Welcome, '+username+'!', 'success'); document.getElementById('login-password').value = '';
+    updateProfileDisplay(); loadCoinData(); loadBannerData(); startCoinEarning(); checkAdminAccess(); listenForImagePopups();
+    showNotification('Registered!', 'success'); unlockBadge('welcome');
+  });
+}
+
+// ============================================
+// ADMIN FUNCTIONS
+// ============================================
+function adminFeedback(id, msg, ok) { const el = document.getElementById(id); if (!el) return; el.textContent = msg; el.className = 'admin-feedback '+(ok?'ok':'err'); setTimeout(() => { el.textContent=''; el.className='admin-feedback'; }, 3500); }
+function banUser() { if (window.myName !== ADMIN_USERNAME) return; const u = document.getElementById('ban-username-input').value.trim(); if (!u) { adminFeedback('ban-feedback','Enter username.',false); return; } db.ref("users/"+u).once("value", snap => { if (!snap.exists()) { adminFeedback('ban-feedback','User not found.',false); return; } db.ref("users/"+u+"/banned").set(true); db.ref("users/"+u+"/status").set("offline"); document.getElementById('ban-username-input').value=''; adminFeedback('ban-feedback','✅ '+u+' banned.',true); }); }
+function sendGlobalMessage() { if (window.myName !== ADMIN_USERNAME) return; const msg = document.getElementById('global-message-input').value.trim(); if (!msg) { adminFeedback('global-msg-feedback','Enter message.',false); return; } const ts = Date.now(); db.ref("globalNotifications").push({ message:msg, from:ADMIN_USERNAME, timestamp:ts }); db.ref("messages/GLOBAL_CHAT").push({ sender:'[ADMIN]', text:'📢 '+msg, timestamp:ts, seen:{} }); document.getElementById('global-message-input').value=''; adminFeedback('global-msg-feedback','✅ Global message sent!',true); }
+function giveCredits() { if (window.myName !== ADMIN_USERNAME) return; const u = document.getElementById('credit-username-input').value.trim(), amt = parseInt(document.getElementById('credit-amount-input').value); if (!u || isNaN(amt) || amt <= 0) { adminFeedback('credit-feedback','Enter valid data.',false); return; } db.ref("users/"+u+"/coins").once("value", snap => { db.ref("users/"+u+"/coins").set((snap.val()||0)+amt); document.getElementById('credit-username-input').value=''; document.getElementById('credit-amount-input').value=''; adminFeedback('credit-feedback','✅ Gave '+amt+' coins to '+u+'.',true); }); }
+function setUserLuck() { if (window.myName !== ADMIN_USERNAME) return; const u = document.getElementById('luck-username-input').value.trim(), luck = parseFloat(document.getElementById('luck-value-input').value); if (!u || isNaN(luck)) { adminFeedback('luck-feedback','Enter valid data.',false); return; } db.ref("users/"+u+"/luckMultiplier").set(luck); document.getElementById('luck-username-input').value=''; adminFeedback('luck-feedback','✅ Luck set to '+luck+'x for '+u+'.',true); }
+function setUserTag() { if (window.myName !== ADMIN_USERNAME) return; const u = document.getElementById('tag-username-input').value.trim(), name = document.getElementById('tag-name-input').value.trim(), color = document.getElementById('tag-color-input').value; if (!u || !name) { adminFeedback('tag-feedback','Enter username and tag.',false); return; } db.ref("users/"+u+"/tag").set({ name:name.toUpperCase(), color }); document.getElementById('tag-username-input').value=''; document.getElementById('tag-name-input').value=''; adminFeedback('tag-feedback','✅ Tag set.',true); }
+function removeUserTag() { if (window.myName !== ADMIN_USERNAME) return; const u = document.getElementById('tag-username-input').value.trim(); if (!u) { adminFeedback('tag-feedback','Enter username.',false); return; } db.ref("users/"+u+"/tag").remove(); document.getElementById('tag-username-input').value=''; adminFeedback('tag-feedback','✅ Tag removed.',true); }
+function triggerImagePopup() { if (window.myName !== ADMIN_USERNAME) return; const target = document.getElementById('popup-target-input').value.trim(), duration = parseInt(document.getElementById('popup-duration-input').value) || 5, imageUrl = document.getElementById('popup-url-input').value.trim(); if (!target || !imageUrl) { adminFeedback('popup-feedback','Fill all fields.',false); return; } const data = { imageUrl, duration, timestamp:Date.now(), from:ADMIN_USERNAME }; if (target.toLowerCase() === 'everyone') db.ref("popups/global").set(data); else db.ref("popups/users/"+target).set(data); document.getElementById('popup-target-input').value=''; document.getElementById('popup-url-input').value=''; adminFeedback('popup-feedback','✅ Popup sent to '+target+'.',true); }
+function handleLimitedImage(input) { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = e => { limitedImageBase64 = e.target.result; document.getElementById('limited-preview-img').src = e.target.result; document.getElementById('limited-image-preview').style.display = 'block'; }; reader.readAsDataURL(file); }
+function submitLimitedSkin() { if (window.myName !== ADMIN_USERNAME) return; const name = document.getElementById('limited-name-input').value.trim(), duration = parseInt(document.getElementById('limited-duration-input').value), unit = document.getElementById('limited-duration-unit').value, price = parseInt(document.getElementById('limited-price-input').value) || 0; if (!name || !limitedImageBase64 || isNaN(duration)) { adminFeedback('limited-feedback','Fill all fields.',false); return; } const expiresAt = Date.now() + (unit==='hours' ? duration*3600000 : duration*60000); db.ref("limitedShop/"+Date.now()).set({ name, image:limitedImageBase64, price, expiresAt, createdBy:ADMIN_USERNAME }); document.getElementById('limited-name-input').value=''; document.getElementById('limited-duration-input').value=''; document.getElementById('limited-price-input').value='0'; document.getElementById('limited-image-preview').style.display='none'; limitedImageBase64=null; adminFeedback('limited-feedback','✅ "'+name+'" added!',true); }
+
+// ============================================
+// IMAGE POPUP LISTENER
+// ============================================
+function listenForImagePopups() {
+  if (!window.myName) return;
+  function showImagePopup(url, duration) { const overlay = document.getElementById('image-popup-overlay'), img = document.getElementById('image-popup-img'); img.src = url; overlay.classList.add('show'); overlay.onclick = () => overlay.classList.remove('show'); setTimeout(() => overlay.classList.remove('show'), duration*1000); }
+  db.ref("popups/global").on("value", snap => { if (!snap.exists()) return; const d = snap.val(); if (d && Date.now()-d.timestamp < 10000) showImagePopup(d.imageUrl, d.duration); });
+  db.ref("popups/users/"+window.myName).on("value", snap => { if (!snap.exists()) return; const d = snap.val(); if (d && Date.now()-d.timestamp < 10000) { showImagePopup(d.imageUrl, d.duration); db.ref("popups/users/"+window.myName).remove(); } });
+}
+
+// ============================================
+// CHAT LOGIC
+// ============================================
+function switchRailTab(tab) {
+  currentRailTab = tab; document.querySelectorAll('.rail-icon').forEach(el => el.classList.remove('active'));
+  const railEl = document.getElementById('rail-'+tab); if (railEl) railEl.classList.add('active');
+  const fl = document.getElementById('friend-list'), gl = document.getElementById('group-list'), gbl = document.getElementById('groups-label');
+  if (tab === 'friends') { fl.style.display='block'; gl.style.display='none'; gbl.style.display='none'; }
+  else if (tab === 'groups') { fl.style.display='none'; gl.style.display='block'; gbl.style.display='flex'; }
+  else { fl.style.display='block'; gl.style.display='block'; gbl.style.display='flex'; }
+}
+function setupChat() { if (!window.myName) { showNotification('Please login first.', 'warning'); return; } db.ref("users/"+window.myName+"/status").set("online"); db.ref("users/"+window.myName+"/status").onDisconnect().set("offline"); listenFriends(); listenGroups(); updateRightPanel(null); }
+function listenFriends() {
+  db.ref("users/"+window.myName+"/friends").on("value", snap => {
+    const list = document.getElementById("friend-list"); list.innerHTML=""; myFriends=[];
+    snap.forEach(f => {
+      const fn = f.key; myFriends.push(fn); const eid = `friend-entry-${fn}`;
+      const div = document.createElement("div"); div.className="chat-entry"; div.id=eid;
+      div.innerHTML=`<div class="chat-entry-avatar" id="fl-av-${fn}" style="cursor:pointer;" onclick="event.stopPropagation();viewUserProfile('${fn}','chat')">${fn.charAt(0).toUpperCase()}<div class="online-dot" id="fl-dot-${fn}" style="display:none;"></div></div><div class="chat-entry-info" onclick="openChat('${fn}',document.getElementById('${eid}'),'private')"><div class="chat-entry-name">${fn}</div><div class="chat-entry-preview" id="fl-prev-${fn}">Click to chat</div></div><div class="chat-entry-meta"><button class="chat-remove-btn" onclick="event.stopPropagation();unfriend('${fn}')" title="Remove">✖</button></div>`;
+      list.appendChild(div);
+      db.ref("users/"+fn+"/pfp").on("value", s => { const av = document.getElementById(`fl-av-${fn}`); if (av && s.val() && s.val()!=='https://via.placeholder.com/120') av.innerHTML=`<img src="${s.val()}" alt="${fn}"><div class="online-dot" id="fl-dot-${fn}" style="display:none;"></div>`; });
+      db.ref("users/"+fn+"/status").on("value", s => { const dot = document.getElementById(`fl-dot-${fn}`); if (dot) dot.style.display = s.val()==='online'?'block':'none'; });
+    });
+    if (myFriends.length >= 5) unlockBadge('social-butterfly'); updateRightPanel(activeChat);
+  });
+}
+function listenGroups() {
+  db.ref("groups").on("value", snap => {
+    const box = document.getElementById("group-list"); box.innerHTML=""; const lbl = document.getElementById('groups-label'); let hasGroups = false;
+    snap.forEach(g => {
+      const data = g.val(); if (!data.members || !data.members[window.myName]) return;
+      hasGroups=true; const gid=g.key, eid=`group-entry-${gid}`;
+      const div=document.createElement("div"); div.className="chat-entry"; div.id=eid;
+      div.innerHTML=`<div class="chat-entry-avatar" style="background:rgba(147,51,234,0.3);color:#a855f7;">G</div><div class="chat-entry-info" onclick="openChat('${gid}',document.getElementById('${eid}'),'group')"><div class="chat-entry-name">${data.name}</div><div class="chat-entry-preview">Group chat</div></div><div class="chat-entry-meta"><button class="chat-remove-btn" onclick="event.stopPropagation();leaveGroup('${gid}')" title="Leave">✖</button></div>`;
+      box.appendChild(div);
+    });
+    if (lbl) lbl.style.display = hasGroups?'flex':'none';
+  });
+}
+function openChat(id, el, type) {
+  activeChat=id; chatType=type;
+  document.querySelectorAll(".chat-entry").forEach(i => i.classList.remove("active-chat"));
+  if (el) el.classList.add("active-chat");
+  document.getElementById('chat-empty-state').style.display='none';
+  const av = document.getElementById('chat-active-view'); av.style.display='flex';
+  const topAv=document.getElementById('topbar-avatar'), topName=document.getElementById('active-chat-user'), topStatus=document.getElementById('topbar-status');
+  const grpBtn=document.getElementById("make-group-btn"), mngBtn=document.getElementById("manage-group-btn");
+  grpBtn.style.display = type==="private"?"block":"none"; mngBtn.style.display="none";
+  if (type==="global") { topAv.innerHTML='#'; topName.textContent='Public Channel'; topStatus.innerHTML='<span class="status-dot"></span> Live'; document.getElementById("rail-public").classList.add('active'); }
+  else if (type==="private") {
+    topName.textContent=id; topAv.innerHTML=id.charAt(0).toUpperCase(); topStatus.innerHTML='<span class="status-dot"></span> Loading...';
+    db.ref("users/"+id+"/pfp").on("value", s => { if (s.val()&&s.val()!=='https://via.placeholder.com/120') topAv.innerHTML=`<img src="${s.val()}" alt="${id}">`; });
+    db.ref("users/"+id+"/status").on("value", s => { const on=s.val()==='online'; topStatus.innerHTML=`<span class="status-dot" style="background:${on?'var(--online)':'var(--offline)'}"></span> ${on?'Online':'Offline'}`; });
+  } else if (type==="group") {
+    db.ref("groups/"+id).on("value", s => { const d=s.val(); if (!d) return; topName.textContent='Group: '+d.name; topAv.innerHTML='G'; topStatus.innerHTML='<span class="status-dot" style="background:rgba(147,51,234,0.8)"></span> Group Chat'; if (d.owner===window.myName) mngBtn.style.display="block"; });
+  }
+  const chatId = type==="global"?"GLOBAL_CHAT":type==="group"?id:[window.myName,id].sort().join("_");
+  db.ref("messages/"+chatId).off();
+  const box=document.getElementById("chat-msgs"); box.innerHTML='';
+  const sep=document.createElement('div'); sep.className='msg-date-sep'; sep.textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}); box.appendChild(sep);
+  db.ref("messages/"+chatId).limitToLast(50).on("child_added", snap => { renderMessage(box,snap.key,snap.val()); box.scrollTop=box.scrollHeight; });
+  updateRightPanel(id); document.getElementById('chat-input').focus();
+}
+function renderMessage(box, key, d) {
+  const isMe = d.sender===window.myName; const div=document.createElement("div"); div.className=`nova-msg${isMe?' is-me':''}`;
+  const time=d.timestamp?new Date(d.timestamp).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'';
+  if (!isMe) {
+    div.innerHTML=`<div class="nova-msg-avatar" id="msg-av-${key}" onclick="viewUserProfile('${d.sender}','chat')">${d.sender?d.sender.charAt(0).toUpperCase():'?'}</div><div class="nova-msg-body"><div class="nova-msg-header"><span class="nova-msg-sender" onclick="viewUserProfile('${d.sender}','chat')">${d.sender}</span><span class="nova-msg-time">${time}</span></div><div class="nova-msg-bubble">${escapeHtml(d.text)}</div></div>`;
+    db.ref("users/"+d.sender+"/pfp").once("value", s => { const av=document.getElementById(`msg-av-${key}`); if (av&&s.val()&&s.val()!=='https://via.placeholder.com/120') av.innerHTML=`<img src="${s.val()}" alt="${d.sender}">`; });
+  } else {
+    const seen=d.seen&&Object.keys(d.seen).length>1;
+    div.innerHTML=`<div class="nova-msg-body"><div class="nova-msg-header"><span class="nova-msg-time">${time}</span><span class="nova-msg-sender">You</span></div><div class="nova-msg-bubble">${escapeHtml(d.text)}</div><div class="nova-msg-status">${seen?'✓✓ Seen':'✓ Sent'}</div></div><div class="nova-msg-avatar" style="cursor:default;">${window.myName?window.myName.charAt(0).toUpperCase():'Y'}</div>`;
+  }
+  box.appendChild(div);
+}
+function escapeHtml(text) { const m={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}; return (text||'').replace(/[&<>"']/g, c => m[c]); }
+function handleChatKey(e) { if (e.key==='Enter'&&!e.shiftKey) { e.preventDefault(); sendMsg(); } }
+function autoResizeInput(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,100)+'px'; }
+function sendMsg() {
+  const inp=document.getElementById("chat-input"), text=inp.value.trim(); if (!activeChat||!text) return;
+  if (!window.myName) { showNotification('Please login first!','warning'); return; }
+  inp.value=''; inp.style.height='auto';
+  const chatId=chatType==="global"?"GLOBAL_CHAT":chatType==="group"?activeChat:[window.myName,activeChat].sort().join("_");
+  db.ref("messages/"+chatId).push({ sender:window.myName, text, timestamp:Date.now(), seen:{[window.myName]:true} });
+  unlockBadge('first-message'); chatMessageCount++; localStorage.setItem('nova_chat_count', chatMessageCount.toString()); if (chatMessageCount>=10) unlockBadge('chat-active');
+}
+function updateRightPanel(chatId) {
+  const panel=document.getElementById('right-panel-body'); if (!panel) return;
+  if (!chatId) { panel.innerHTML='<div style="color:var(--muted);font-size:12px;text-align:center;margin-top:20px;">Select a chat to see info</div>'; return; }
+  if (chatType==='private') {
+    panel.innerHTML=`<div class="right-panel-stat"><span class="stat-label">Chatting with</span><span class="stat-value">${chatId}</span></div><div class="right-panel-stat" id="rp-status-stat"><span class="stat-label">Status</span><span class="stat-value">—</span></div><div style="margin-top:14px;"><div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.15em;color:var(--muted);padding:0 0 7px;">Actions</div><div style="display:flex;flex-direction:column;gap:7px;"><button class="btn" style="width:100%;" onclick="sendFriendRequestToUser()">+ Add Friend</button><button class="btn" style="width:100%;" onclick="viewUserProfile('${chatId}','chat')">View Profile</button><button class="btn" style="width:100%;background:rgba(255,68,68,0.15);border-color:rgba(255,68,68,0.4);" onclick="unfriend('${chatId}')">Remove Friend</button></div></div>`;
+    db.ref("users/"+chatId+"/status").on("value", s => { const stat=document.getElementById('rp-status-stat'); if (stat) { const on=s.val()==='online'; stat.innerHTML=`<span class="stat-label">Status</span><span class="stat-value" style="color:${on?'var(--online)':'var(--muted)'}">${on?'Online':'Offline'}</span>`; } });
+  } else if (chatType==='global') {
+    panel.innerHTML=`<div class="right-panel-stat"><span class="stat-label">Channel</span><span class="stat-value"># Public</span></div><div style="margin-top:14px;"><div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.15em;color:var(--muted);padding:0 0 7px;">Online Friends</div><div id="rp-online-friends"></div></div>`;
+    const box=document.getElementById('rp-online-friends'); if (box) myFriends.forEach(f => { const mc=document.createElement('div'); mc.className='member-card'; mc.innerHTML=`<div class="member-avatar">${f.charAt(0).toUpperCase()}</div><div><div class="member-name">${f}</div><div class="member-status" id="rp-st-${f}">...</div></div>`; box.appendChild(mc); db.ref("users/"+f+"/status").on("value", s => { const el=document.getElementById(`rp-st-${f}`); if (el) el.textContent=s.val()==='online'?'🟢 Online':'⚫ Offline'; }); });
+  } else { panel.innerHTML='<div class="right-panel-stat"><span class="stat-label">Group Chat</span><span class="stat-value">Active</span></div>'; }
+}
+function createGroup() { const gn=prompt("Enter Group Name:"); if (!gn) return; db.ref("groups/group_"+Date.now()).set({ name:gn, owner:window.myName, members:{[window.myName]:true,[activeChat]:true} }); showNotification('Group created!','success'); }
+function changeChatBG() { const url=prompt("Enter Background Image URL:"); if (url) document.getElementById("chat-pane").style.background=`url('${url}') center/cover`; }
+function viewProfileFromChat() { if (chatType==='private'&&activeChat) viewUserProfile(activeChat,'chat'); }
+function filterFriends() { const s=document.getElementById("friend-search").value.toLowerCase(); document.querySelectorAll("#friend-list .chat-entry").forEach(el => el.style.display=el.textContent.toLowerCase().includes(s)?'flex':'none'); }
+function addFriend() { const f=prompt("Enter username:"); if (f&&f!==window.myName) { db.ref("requests/"+f.toLowerCase()+"/"+window.myName).set(true); showNotification('Friend request sent!','success'); } }
+function unfriend(name) { if (!confirm(`Remove ${name}?`)) return; db.ref("users/"+window.myName+"/friends/"+name).remove(); db.ref("users/"+name+"/friends/"+window.myName).remove(); if (activeChat===name) { activeChat=null; chatType="none"; document.getElementById('chat-empty-state').style.display='flex'; document.getElementById('chat-active-view').style.display='none'; } }
+function leaveGroup(gid) { if (!confirm("Leave this group?")) return; db.ref("groups/"+gid+"/members/"+window.myName).remove(); if (activeChat===gid) { activeChat=null; chatType="none"; document.getElementById('chat-empty-state').style.display='flex'; document.getElementById('chat-active-view').style.display='none'; } }
+
+// ============================================
+// USER PROFILE
+// ============================================
+function viewUserProfile(username, fromPage) {
+  if (!username) return; viewedUserName=username; previousPage=fromPage||'chat';
+  db.ref("users/"+username).once("value", snap => {
+    if (!snap.exists()) { showNotification('User not found','error'); return; }
+    const d=snap.val();
+    document.getElementById('user-profile-username').textContent=username;
+    document.getElementById('user-profile-status').textContent=d.status==='online'?'Online':'Offline';
+    document.getElementById('user-profile-pic').src=d.pfp||'https://via.placeholder.com/120';
+    document.getElementById('user-profile-custom-status').textContent=d.customStatus||'';
+    // Apply their banner
+    const ubanner = document.getElementById('user-profile-banner');
+    if (ubanner) applyBannerToProfile(d.activeBanner || null, 'user-profile-banner');
+    showPage('user-profile');
+  });
+}
+function goBackFromUserProfile() { showPage(previousPage||'chat'); }
+function sendFriendRequestToUser() { if (!window.myName) { showNotification('Please login first','warning'); return; } if (!viewedUserName) return; db.ref("requests/"+viewedUserName+"/"+window.myName).set(true); showNotification(`Request sent to ${viewedUserName}!`,'success'); }
+function messageUser() { if (!window.myName) { showNotification('Please login first','warning'); return; } if (!viewedUserName) return; showPage('chat'); setTimeout(() => { let found=false; document.querySelectorAll('#friend-list .chat-entry').forEach(item => { if (item.textContent.includes(viewedUserName)) { item.click(); found=true; } }); if (!found) showNotification('Add them as friend first!','warning'); }, 400); }
+
+// ============================================
+// PROFILE
+// ============================================
+function logoutUser() {
+  if (window.myName) db.ref("users/"+window.myName+"/status").set("offline");
+  stopCoinEarning(); window.myName=null; localStorage.removeItem("nova_user"); localStorage.removeItem("nexus_user");
+  novaCoins=0; purchasedGames=[]; ownedBanners=[]; activeBanner=null;
+  updateCoinDisplay(); updateProfileDisplay(); clearAuthStatus(); checkAdminAccess();
+  applyBannerToProfile(null, 'profile-banner');
+  showNotification('Logged out','success');
+}
+function updateProfileDisplay() {
+  if (window.myName) {
+    document.getElementById('profile-username').textContent=window.myName;
+    document.getElementById('profile-status').textContent='Online';
+    db.ref("users/"+window.myName+"/pfp").on("value", s => { document.getElementById('profile-pic').src=s.val()||"https://via.placeholder.com/120"; });
+    db.ref("users/"+window.myName+"/customStatus").on("value", s => { document.getElementById('status-input').placeholder=s.val()||"What's on your mind?"; });
+  } else {
+    document.getElementById('profile-username').textContent='Guest';
+    document.getElementById('profile-status').textContent='Offline';
+    document.getElementById('profile-pic').src='https://via.placeholder.com/120';
+  }
+}
+function uploadProfilePic(event) { if (!window.myName) { showNotification('Login first','warning'); return; } const file=event.target.files[0]; if (!file) return; const reader=new FileReader(); reader.onload=e => { db.ref("users/"+window.myName+"/pfp").set(e.target.result); document.getElementById('profile-pic').src=e.target.result; showNotification('Profile pic updated!','success'); unlockBadge('profile-editor'); }; reader.readAsDataURL(file); }
+function loadProfile() {
+  if (!window.myName) return;
+  db.ref("requests/"+window.myName).on("value", snap => {
+    const list=document.getElementById('requests-list'); list.innerHTML='';
+    if (!snap.exists()||snap.numChildren()===0) { list.innerHTML='<p class="empty">No pending requests</p>'; return; }
+    snap.forEach(req => {
+      const r=req.key, div=document.createElement('div'); div.className='request-item';
+      div.innerHTML=`<div class="request-user" style="cursor:pointer;" onclick="viewUserProfile('${r}','profile')"><img class="avatar-circle" src="https://via.placeholder.com/34" id="req-pfp-${r}"><span>${r}</span></div><div class="request-actions"><button class="accept-btn" onclick="event.stopPropagation();acceptRequest('${r}')">Accept</button><button class="decline-btn" onclick="event.stopPropagation();declineRequest('${r}')">Decline</button></div>`;
+      list.appendChild(div);
+      db.ref("users/"+r+"/pfp").once("value", s => { const img=document.getElementById(`req-pfp-${r}`); if (img&&s.val()) img.src=s.val(); });
+    });
+  });
+}
+function acceptRequest(r) { db.ref("users/"+window.myName+"/friends/"+r).set(true); db.ref("users/"+r+"/friends/"+window.myName).set(true); db.ref("requests/"+window.myName+"/"+r).remove(); showNotification(`Now friends with ${r}!`,'success'); unlockBadge('first-friend'); }
+function declineRequest(r) { db.ref("requests/"+window.myName+"/"+r).remove(); showNotification('Request declined','success'); }
 </script>
 </body>
 </html>
