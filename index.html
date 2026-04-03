@@ -28,72 +28,6 @@
       overflow: hidden;
     }
 
-    .bg-container {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      overflow: hidden; z-index: 0; pointer-events: none;
-    }
-    .gradient-wave {
-      position: absolute; width: 100%; height: 100%;
-      background:
-        radial-gradient(circle at 20% 50%, rgba(91, 141, 239, 0.12) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(0, 255, 136, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 40% 20%, rgba(147, 51, 234, 0.08) 0%, transparent 50%);
-    }
-    .orb {
-      position: absolute; border-radius: 50%; filter: blur(60px);
-      opacity: 0.18; pointer-events: none; animation: floatOrb 30s ease-in-out infinite;
-    }
-    .orb-1 {
-      width: 350px; height: 350px;
-      background: radial-gradient(circle, rgba(91, 141, 239, 0.5), transparent 70%);
-      top: 5%; left: 5%; animation-duration: 35s;
-    }
-    .orb-2 {
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(0, 255, 136, 0.4), transparent 70%);
-      bottom: 5%; right: 5%; animation-duration: 40s; animation-delay: -15s;
-    }
-    @keyframes floatOrb {
-      0%, 100% { transform: translate(0, 0); }
-      50% { transform: translate(80px, -80px); }
-    }
-    .grid-overlay {
-      position: absolute; width: 100%; height: 100%;
-      background-image:
-        linear-gradient(rgba(91, 141, 239, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(91, 141, 239, 0.04) 1px, transparent 1px);
-      background-size: 80px 80px; opacity: 0.4;
-    }
-    .scanline {
-      position: absolute; width: 100%; height: 2px;
-      background: linear-gradient(90deg, transparent 0%, rgba(91, 141, 239, 0.3) 50%, transparent 100%);
-      animation: scanlineMove 8s linear infinite;
-    }
-    @keyframes scanlineMove { 0% { top: -2px; } 100% { top: 100%; } }
-    .energy-ring {
-      position: absolute; top: 50%; left: 50%;
-      border: 1px solid rgba(91, 141, 239, 0.15);
-      border-radius: 50%;
-      animation: energyExpand 10s ease-out infinite;
-    }
-    .energy-ring:nth-child(2) { animation-delay: 5s; }
-    @keyframes energyExpand {
-      0%   { width: 80px;  height: 80px;  opacity: 0.6; transform: translate(-50%, -50%); }
-      100% { width: 900px; height: 900px; opacity: 0;   transform: translate(-50%, -50%); }
-    }
-    .particles { position: absolute; width: 100%; height: 100%; }
-    .particle {
-      position: absolute; width: 2px; height: 2px;
-      border-radius: 50%;
-      animation: particleFloat linear infinite;
-    }
-    @keyframes particleFloat {
-      0%   { transform: translateY(100vh); opacity: 0; }
-      10%  { opacity: 0.8; }
-      90%  { opacity: 0.8; }
-      100% { transform: translateY(-100vh) translateX(var(--drift, 0px)); opacity: 0; }
-    }
-
     header {
       position: relative; z-index: 10;
       display: flex; align-items: center; padding: 0 24px;
@@ -101,6 +35,7 @@
       border-bottom: 1px solid var(--border);
       background: rgba(10, 14, 26, 0.9);
     }
+
     .brand {
       font-size: 15px;
       font-weight: 700;
@@ -108,6 +43,7 @@
       text-transform: uppercase;
       color: var(--text);
     }
+
     .brand-dot {
       display: inline-block;
       width: 6px; height: 6px;
@@ -123,12 +59,15 @@
       position: relative; z-index: 1;
       height: calc(100vh - 52px);
       display: flex;
-      align-items: center; justify-content: center;
+      flex-direction: column;
+      align-items: center; 
+      justify-content: center;
+      gap: 16px;
     }
 
     .launch-btn {
       position: relative;
-      display: inline-flex; align-items: center; gap: 12px;
+      display: inline-flex; align-items: center; justify-content: center;
       padding: 14px 32px;
       font-size: 13px; font-weight: 700;
       letter-spacing: 0.08em;
@@ -137,6 +76,7 @@
       background: var(--accent);
       border: none; border-radius: 8px;
       cursor: pointer;
+      width: 200px;
     }
   </style>
 </head>
@@ -148,10 +88,11 @@
 
   <div class="page">
     <button class="launch-btn" onclick="openNova()">Nova</button>
+    <button class="launch-btn" onclick="openGnMath()">Gn-Math</button>
   </div>
 
 <script>
-// UPDATED FUNCTION (about:blank iframe version)
+// Nova button
 function openNova() {
   var win = window.open();
   if (!win) {
@@ -167,6 +108,48 @@ function openNova() {
 
   win.document.body.style.margin = "0";
   win.document.body.appendChild(iframe);
+}
+
+// Gn-Math button (base64 loader)
+function openGnMath() {
+  var win = window.open();
+  if (!win) {
+    alert('Pop-up blocked — please allow pop ups and come back');
+    return;
+  }
+
+  win.document.open();
+  win.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <body style="margin:0">
+    <script>
+      launch();
+      function launch() {
+        try {
+          fetch("https://cdn.jsdelivr.net/gh/gn-math/gn-math-DONTDMCAG@main/singlefile.html?t=" + Date.now())
+          .then(response => response.text())
+          .then(html => {
+            document.documentElement.innerHTML = html.replace("new URL(url, location.origin).hostname", "''");
+            document.querySelectorAll('script').forEach(oldScript => {
+              const newScript = document.createElement('script');
+              if (oldScript.src) {
+                newScript.src = oldScript.src;
+              } else {
+                newScript.textContent = oldScript.textContent;
+              }
+              document.body.appendChild(newScript);
+            });
+          });
+        } catch (error) {
+          console.error('error:', error);
+        }
+      }
+    <\/script>
+    </body>
+    </html>
+  `);
+  win.document.close();
 }
 </script>
 
