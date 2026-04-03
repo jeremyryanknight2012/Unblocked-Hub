@@ -87,7 +87,7 @@
   </header>
 
   <div class="page">
-    <button class="launch-btn" onclick="openNova()">Nova</button>
+    <button class="launch-btn" onclick="openNova()">Nova (My Site)</button>
     <button class="launch-btn" onclick="openGnMath()">Gn-Math</button>
   </div>
 
@@ -110,47 +110,24 @@ function openNova() {
   win.document.body.appendChild(iframe);
 }
 
-// Gn-Math button (base64 loader)
-function openGnMath() {
+// Gn-Math button
+function openGNMATH() {
   var win = window.open();
   if (!win) {
     alert('Pop-up blocked — please allow pop ups and come back');
     return;
   }
 
-  win.document.open();
-  win.document.write(`
-    <!DOCTYPE html>
-    <html>
-    <body style="margin:0">
-    <script>
-      launch();
-      function launch() {
-        try {
-          fetch("https://cdn.jsdelivr.net/gh/gn-math/gn-math-DONTDMCAG@main/singlefile.html?t=" + Date.now())
-          .then(response => response.text())
-          .then(html => {
-            document.documentElement.innerHTML = html.replace("new URL(url, location.origin).hostname", "''");
-            document.querySelectorAll('script').forEach(oldScript => {
-              const newScript = document.createElement('script');
-              if (oldScript.src) {
-                newScript.src = oldScript.src;
-              } else {
-                newScript.textContent = oldScript.textContent;
-              }
-              document.body.appendChild(newScript);
-            });
-          });
-        } catch (error) {
-          console.error('error:', error);
-        }
-      }
-    <\/script>
-    </body>
-    </html>
-  `);
-  win.document.close();
+  var iframe = win.document.createElement('iframe');
+  iframe.style.width = "100%";
+  iframe.style.height = "100%";
+  iframe.style.border = "none";
+  iframe.src = "https://jeremyryanknight2012.github.io/gn-m41h/";
+
+  win.document.body.style.margin = "0";
+  win.document.body.appendChild(iframe);
 }
+
 </script>
 
 </body>
